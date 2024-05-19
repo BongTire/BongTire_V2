@@ -24,3 +24,10 @@ export interface IPost{
 // 받고 보낼때 둘 다 해당 interface를 기반으로 
 
 //WirterEmail은 있으면 주셈
+export interface IPostCategory{
+    PTCD: string | null
+    PCCD: string
+    isAnswer: number
+    isThumbnail: number
+    isSecret: number
+}

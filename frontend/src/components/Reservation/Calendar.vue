@@ -14,8 +14,8 @@
     </div>
     <div v-for="week in props.conf" class="flex">
       <div v-for="day in week" class="flex">
-        <div :class="`w-16 h-14  flex flex-col items-center justify-center hover:bg-slate-50 rounded-lg cursor-pointer`"
-          @click="store.setCalendar(day)"
+        <div :class="`w-16 h-14  flex flex-col items-center justify-center hover:bg-slate-50 rounded-lg cursor-pointer ${selectCalendar === day.CalendarId ? 'bg-orange-600 text-white' : null}`"
+          @click="clickCalendar(day)"
         >
           <p :class="`flex justify-center items-center ${day?.reservationPossible===0 ? 'text-gray-300' : null}
             ${day?.reservationPossible===1 && day?.isHoliday === 1 ? 'text-red-600':null}
@@ -40,6 +40,7 @@ import { useReservationStore } from '@store/reservation.ts'
 
 const store = useReservationStore();
   interface IDate{
+    CalendarId?: number | null
     year: number
     month: number
     day: number
@@ -53,7 +54,16 @@ const store = useReservationStore();
     }
   })
 
-  console.log(props.conf)
+  // 캘린더 ID를 기준으로 computed로 반응성 유지
+  const selectCalendar = computed(()=>store.getCalendar)
+
+  const clickCalendar = (day) =>{
+    if(day.reservationPossible === 0){
+      // TODO 경고 조치 alert 띄우기
+      return 
+    }
+    store.setCalendar(day)
+  }
 
 
 </script>

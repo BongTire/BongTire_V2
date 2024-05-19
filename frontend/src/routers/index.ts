@@ -14,6 +14,7 @@ import Board from "../views/Board.vue";
 import BoardDetail from "../views/BoardDetail.vue";
 import Reservation from "../views/Reservation.vue";
 import Login from "../views/Login.vue"
+import Edit from '../views/Edit.vue'
 
 // Admin
 import Dashboard from "../views/admin/Dashboard.vue";
@@ -23,6 +24,7 @@ import AdminReservation from "../views/admin/Reservation.vue";
 import Tire from "../views/admin/Tire.vue";
 import Wheel from "../views/admin/Wheel.vue";
 import User from "../views/admin/User.vue";
+
 
 const routes = [
   {
@@ -71,6 +73,12 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
+    meta: { layout: PublicLayout },
+  },
+  {
+    path: "/edit",
+    name: "Edit",
+    component: Edit,
     meta: { layout: PublicLayout },
   },
   {

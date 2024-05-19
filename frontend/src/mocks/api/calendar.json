@@ -8,6 +8,7 @@
             {
                 "CalendarId": 119,
                 "OperationTimeId": 4,
+                "year": 2024,
                 "month": 4,
                 "day": 28,
                 "dayOfWeek": "일",
@@ -18,6 +19,7 @@
             {
                 "CalendarId": 120,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 4,
                 "day": 29,
                 "dayOfWeek": "월",
@@ -28,6 +30,7 @@
             {
                 "CalendarId": 121,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 4,
                 "day": 30,
                 "dayOfWeek": "화",
@@ -38,6 +41,7 @@
             {
                 "CalendarId": 122,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 1,
                 "dayOfWeek": "수",
@@ -48,6 +52,7 @@
             {
                 "CalendarId": 123,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 2,
                 "dayOfWeek": "목",
@@ -58,6 +63,7 @@
             {
                 "CalendarId": 124,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 3,
                 "dayOfWeek": "금",
@@ -68,6 +74,7 @@
             {
                 "CalendarId": 125,
                 "OperationTimeId": 2,
+                "year": 2024,
                 "month": 5,
                 "day": 4,
                 "dayOfWeek": "토",
@@ -80,6 +87,7 @@
             {
                 "CalendarId": 126,
                 "OperationTimeId": 3,
+                "year": 2024,
                 "month": 5,
                 "day": 5,
                 "dayOfWeek": "일",
@@ -90,6 +98,7 @@
             {
                 "CalendarId": 127,
                 "OperationTimeId": 3,
+                "year": 2024,
                 "month": 5,
                 "day": 6,
                 "dayOfWeek": "월",
@@ -100,6 +109,7 @@
             {
                 "CalendarId": 128,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 7,
                 "dayOfWeek": "화",
@@ -110,6 +120,7 @@
             {
                 "CalendarId": 129,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 8,
                 "dayOfWeek": "수",
@@ -120,6 +131,7 @@
             {
                 "CalendarId": 130,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 9,
                 "dayOfWeek": "목",
@@ -130,6 +142,7 @@
             {
                 "CalendarId": 131,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 10,
                 "dayOfWeek": "금",
@@ -140,6 +153,7 @@
             {
                 "CalendarId": 132,
                 "OperationTimeId": 2,
+                "year": 2024,
                 "month": 5,
                 "day": 11,
                 "dayOfWeek": "토",
@@ -152,6 +166,7 @@
             {
                 "CalendarId": 133,
                 "OperationTimeId": 4,
+                "year": 2024,
                 "month": 5,
                 "day": 12,
                 "dayOfWeek": "일",
@@ -162,6 +177,7 @@
             {
                 "CalendarId": 134,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 13,
                 "dayOfWeek": "월",
@@ -172,6 +188,7 @@
             {
                 "CalendarId": 135,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 14,
                 "dayOfWeek": "화",
@@ -182,6 +199,7 @@
             {
                 "CalendarId": 136,
                 "OperationTimeId": 3,
+                "year": 2024,
                 "month": 5,
                 "day": 15,
                 "dayOfWeek": "수",
@@ -192,6 +210,7 @@
             {
                 "CalendarId": 137,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 16,
                 "dayOfWeek": "목",
@@ -202,6 +221,7 @@
             {
                 "CalendarId": 138,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 17,
                 "dayOfWeek": "금",
@@ -212,6 +232,7 @@
             {
                 "CalendarId": 139,
                 "OperationTimeId": 2,
+                "year": 2024,
                 "month": 5,
                 "day": 18,
                 "dayOfWeek": "토",
@@ -224,6 +245,7 @@
             {
                 "CalendarId": 140,
                 "OperationTimeId": 4,
+                "year": 2024,
                 "month": 5,
                 "day": 19,
                 "dayOfWeek": "일",
@@ -234,6 +256,7 @@
             {
                 "CalendarId": 141,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 20,
                 "dayOfWeek": "월",
@@ -244,6 +267,7 @@
             {
                 "CalendarId": 142,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 21,
                 "dayOfWeek": "화",
@@ -254,6 +278,7 @@
             {
                 "CalendarId": 143,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 22,
                 "dayOfWeek": "수",
@@ -264,6 +289,7 @@
             {
                 "CalendarId": 144,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 23,
                 "dayOfWeek": "목",
@@ -274,6 +300,7 @@
             {
                 "CalendarId": 145,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 24,
                 "dayOfWeek": "금",
@@ -284,6 +311,7 @@
             {
                 "CalendarId": 146,
                 "OperationTimeId": 2,
+                "year": 2024,
                 "month": 5,
                 "day": 25,
                 "dayOfWeek": "토",
@@ -296,6 +324,7 @@
             {
                 "CalendarId": 147,
                 "OperationTimeId": 4,
+                "year": 2024,
                 "month": 5,
                 "day": 26,
                 "dayOfWeek": "일",
@@ -306,6 +335,7 @@
             {
                 "CalendarId": 148,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 27,
                 "dayOfWeek": "월",
@@ -316,6 +346,7 @@
             {
                 "CalendarId": 149,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 28,
                 "dayOfWeek": "화",
@@ -326,6 +357,7 @@
             {
                 "CalendarId": 150,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 29,
                 "dayOfWeek": "수",
@@ -336,6 +368,7 @@
             {
                 "CalendarId": 151,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 30,
                 "dayOfWeek": "목",
@@ -346,6 +379,7 @@
             {
                 "CalendarId": 152,
                 "OperationTimeId": 1,
+                "year": 2024,
                 "month": 5,
                 "day": 31,
                 "dayOfWeek": "금",
@@ -356,6 +390,7 @@
             {
                 "CalendarId": 153,
                 "OperationTimeId": 2,
+                "year": 2024,
                 "day": 1,
                 "month": 6,
                 "dayOfWeek": "토",
@@ -368,6 +403,7 @@
             {
                 "CalendarId": 154,
                 "OperationTimeId": 4,
+                "year": 2024,
                 "day": 2,
                 "month": 6,
                 "dayOfWeek": "일",
