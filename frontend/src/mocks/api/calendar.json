@@ -1,0 +1,380 @@
+{
+    "status": {
+        "code": 2000,
+        "message": "캘린더 데이터를 성공적으로 조회했습니다."
+    },
+    "data": [
+        [
+            {
+                "CalendarId": 119,
+                "OperationTimeId": 4,
+                "month": 4,
+                "day": 28,
+                "dayOfWeek": "일",
+                "isHoliday": 0,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 120,
+                "OperationTimeId": 1,
+                "month": 4,
+                "day": 29,
+                "dayOfWeek": "월",
+                "isHoliday": 0,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 121,
+                "OperationTimeId": 1,
+                "month": 4,
+                "day": 30,
+                "dayOfWeek": "화",
+                "isHoliday": 0,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 122,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 1,
+                "dayOfWeek": "수",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 123,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 2,
+                "dayOfWeek": "목",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 124,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 3,
+                "dayOfWeek": "금",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 125,
+                "OperationTimeId": 2,
+                "month": 5,
+                "day": 4,
+                "dayOfWeek": "토",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            }
+        ],
+        [
+            {
+                "CalendarId": 126,
+                "OperationTimeId": 3,
+                "month": 5,
+                "day": 5,
+                "dayOfWeek": "일",
+                "isHoliday": 1,
+                "holidayName": "어린이날",
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 127,
+                "OperationTimeId": 3,
+                "month": 5,
+                "day": 6,
+                "dayOfWeek": "월",
+                "isHoliday": 1,
+                "holidayName": "대체공휴일(어린이날)",
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 128,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 7,
+                "dayOfWeek": "화",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 129,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 8,
+                "dayOfWeek": "수",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 130,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 9,
+                "dayOfWeek": "목",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 131,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 10,
+                "dayOfWeek": "금",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 132,
+                "OperationTimeId": 2,
+                "month": 5,
+                "day": 11,
+                "dayOfWeek": "토",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            }
+        ],
+        [
+            {
+                "CalendarId": 133,
+                "OperationTimeId": 4,
+                "month": 5,
+                "day": 12,
+                "dayOfWeek": "일",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 134,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 13,
+                "dayOfWeek": "월",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 135,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 14,
+                "dayOfWeek": "화",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 136,
+                "OperationTimeId": 3,
+                "month": 5,
+                "day": 15,
+                "dayOfWeek": "수",
+                "isHoliday": 1,
+                "holidayName": "부처님오신날",
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 137,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 16,
+                "dayOfWeek": "목",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 138,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 17,
+                "dayOfWeek": "금",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 139,
+                "OperationTimeId": 2,
+                "month": 5,
+                "day": 18,
+                "dayOfWeek": "토",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            }
+        ],
+        [
+            {
+                "CalendarId": 140,
+                "OperationTimeId": 4,
+                "month": 5,
+                "day": 19,
+                "dayOfWeek": "일",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 141,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 20,
+                "dayOfWeek": "월",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 142,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 21,
+                "dayOfWeek": "화",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 143,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 22,
+                "dayOfWeek": "수",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 144,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 23,
+                "dayOfWeek": "목",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 145,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 24,
+                "dayOfWeek": "금",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 146,
+                "OperationTimeId": 2,
+                "month": 5,
+                "day": 25,
+                "dayOfWeek": "토",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            }
+        ],
+        [
+            {
+                "CalendarId": 147,
+                "OperationTimeId": 4,
+                "month": 5,
+                "day": 26,
+                "dayOfWeek": "일",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 0
+            },
+            {
+                "CalendarId": 148,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 27,
+                "dayOfWeek": "월",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 149,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 28,
+                "dayOfWeek": "화",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 150,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 29,
+                "dayOfWeek": "수",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 151,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 30,
+                "dayOfWeek": "목",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 152,
+                "OperationTimeId": 1,
+                "month": 5,
+                "day": 31,
+                "dayOfWeek": "금",
+                "isHoliday": null,
+                "holidayName": null,
+                "reservationPossible": 1
+            },
+            {
+                "CalendarId": 153,
+                "OperationTimeId": 2,
+                "day": 1,
+                "month": 6,
+                "dayOfWeek": "토",
+                "isHoliday": 0,
+                "holidayName": null,
+                "reservationPossible": 1
+            }
+        ],
+        [
+            {
+                "CalendarId": 154,
+                "OperationTimeId": 4,
+                "day": 2,
+                "month": 6,
+                "dayOfWeek": "일",
+                "isHoliday": 0,
+                "holidayName": null,
+                "reservationPossible": 0
+            }
+        ]
+    ]
+}

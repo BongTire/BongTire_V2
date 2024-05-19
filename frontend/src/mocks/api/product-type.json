@@ -1,0 +1,817 @@
+{
+    "status": {
+        "code": 2000,
+        "message": "ProductType 데이터 전송 성공"
+    },
+    "data": [
+        {
+            "PCCDId": 10,
+            "PCCD": "P0601",
+            "title": "타이어",
+            "icon": "http://61.80.5.166/images/systemIcon/Car/tire-icon.png",
+            "brand": [
+                {
+                    "BrandId": 32,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Hankook/Logo.png",
+                    "name": "한국 타이어",
+                    "origin": 1,
+                    "nation": "한국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 33,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Kumho/Logo.png",
+                    "name": "금호 타이어",
+                    "origin": 1,
+                    "nation": "한국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 34,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Nexen/Logo.png",
+                    "name": "넥센 타이어",
+                    "origin": 1,
+                    "nation": "한국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 35,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Michelin/Logo.png",
+                    "name": "미쉐린",
+                    "origin": 0,
+                    "nation": "프랑스",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 36,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Bridgestone/Logo.png",
+                    "name": "브리지 스톤",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 37,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Continental/Logo.png",
+                    "name": "컨티넨탈",
+                    "origin": 0,
+                    "nation": "독일",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 38,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Firestone/Logo.png",
+                    "name": "파이어스톤",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 39,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Goodyear/Logo.png",
+                    "name": "굿이어",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 40,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Pirelli/Logo.png",
+                    "name": "피렐리",
+                    "origin": 0,
+                    "nation": "이탈리아",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 41,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/yokohama/Logo.png",
+                    "name": "요코하마",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 42,
+                    "PCCD": [
+                        "P0601"
+                    ],
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/dunlop/Logo.png",
+                    "name": "던롭",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                }
+            ]
+        },
+        {
+            "PCCDId": 11,
+            "PCCD": "P0602",
+            "title": "휠",
+            "icon": "http://61.80.5.166/images/systemIcon/Car/wheel-icon.png",
+            "brand": [
+                {
+                    "BrandId": 1,
+                    "PCCD": [
+                        "C0701",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "제네시스",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Genesis/Logo.png",
+                    "origin": 1,
+                    "nation": "한국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 2,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "현대",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Hyundai/Logo.png",
+                    "origin": 1,
+                    "nation": "한국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 3,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "기아",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/KIA/Logo.png",
+                    "origin": 1,
+                    "nation": "한국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 4,
+                    "PCCD": [
+                        "C0701",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "KGM",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/KGM/Logo.png",
+                    "origin": 1,
+                    "nation": "한국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 5,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "르노삼성",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Renault/Logo.png",
+                    "origin": 1,
+                    "nation": "한국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 6,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "벤츠",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Benz/Logo.png",
+                    "origin": 0,
+                    "nation": "독일",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 7,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "BMW",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/BMW/Logo.png",
+                    "origin": 0,
+                    "nation": "독일",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 8,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "아우디",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Audi/Logo.png",
+                    "origin": 0,
+                    "nation": "독일",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 9,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "에스턴마틴",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/AstonMartin/Logo.png",
+                    "origin": 0,
+                    "nation": "영국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 10,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "벤틀리",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Bentley/Logo.png",
+                    "origin": 0,
+                    "nation": "영국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 11,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "캐딜락",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Cadillac/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 12,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "쉐보레",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Chevrolet/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 13,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "페라리",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Ferrari/Logo.png",
+                    "origin": 0,
+                    "nation": "이탈리아",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 14,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "포드",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Ford/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 15,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "GM",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/GM/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 16,
+                    "PCCD": [
+                        "C0701",
+                        "P0602"
+                    ],
+                    "name": "GMC",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/GMC/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 17,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "혼다",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Honda/Logo.png",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 18,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "지프",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Jeep/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 19,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "람보르기니",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Lamborghini/Logo.png",
+                    "origin": 0,
+                    "nation": "이탈리아",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 20,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "랜드로버",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/LandRover/Logo.png",
+                    "origin": 0,
+                    "nation": "영국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 21,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "렉서스",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Lexus/Logo.png",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 22,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "링컨",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Lincoln/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 23,
+                    "PCCD": [
+                        "C0701",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "마세라티",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Maserati/Logo.png",
+                    "origin": 0,
+                    "nation": "영국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 24,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "미니",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Mini/Logo.png",
+                    "origin": 0,
+                    "nation": "영국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 25,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "닛산",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Nissan/Logo.png",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 26,
+                    "PCCD": [
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "폴스타",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Polestar/Logo.png",
+                    "origin": 0,
+                    "nation": "스웨덴",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 27,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "포르쉐",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Porche/Logo.png",
+                    "origin": 0,
+                    "nation": "독일",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 28,
+                    "PCCD": [
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "테슬라",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Tesla/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 29,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "토요타",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Toyota/Logo.png",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 30,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "폭스바겐",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Volkswagen/Logo.png",
+                    "origin": 0,
+                    "nation": "독일",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 31,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "볼보",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Volvo/Logo.png",
+                    "origin": 0,
+                    "nation": "스웨덴",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 44,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "미쓰비시",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Mitsubishi/Logo.png",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 45,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "인피니티",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Infiniti/Logo.png",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 46,
+                    "PCCD": [
+                        "C0701",
+                        "C0702",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "스바루",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Subaru/Logo.png",
+                    "origin": 0,
+                    "nation": "일본",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 47,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "알파로메오",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Alfaromeo/Logo.png",
+                    "origin": 0,
+                    "nation": "이탈리아",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 48,
+                    "PCCD": [
+                        "C0701",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "롤스로이스",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Rollsroyce/Logo.png",
+                    "origin": 0,
+                    "nation": "영국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 49,
+                    "PCCD": [
+                        "C0701",
+                        "P0602"
+                    ],
+                    "name": "파가니",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Pagani/Logo.png",
+                    "origin": 0,
+                    "nation": "이탈리아",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 50,
+                    "PCCD": [
+                        "C0701",
+                        "P0602"
+                    ],
+                    "name": "코닉세그",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Koenigsegg/Logo.png",
+                    "origin": 0,
+                    "nation": "스웨덴",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 51,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "푸조",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Nissan/Logo.png",
+                    "origin": 0,
+                    "nation": "프랑스",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 52,
+                    "PCCD": [
+                        "C0701",
+                        "P0602"
+                    ],
+                    "name": "부가티",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Bugatti/Logo.png",
+                    "origin": 0,
+                    "nation": "이탈리아",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 53,
+                    "PCCD": [
+                        "C0701",
+                        "P0602"
+                    ],
+                    "name": "마이바흐",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Maybach/Logo.png",
+                    "origin": 0,
+                    "nation": "독일",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 54,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "크라이슬러",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Chrysler/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 55,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "P0602"
+                    ],
+                    "name": "닷지",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Dodge/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 56,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "피아트",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Fiat/Logo.png",
+                    "origin": 0,
+                    "nation": "이탈리아",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 57,
+                    "PCCD": [
+                        "C0701",
+                        "P0602"
+                    ],
+                    "name": "사브",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Saab/Logo.png",
+                    "origin": 0,
+                    "nation": "스웨덴",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 58,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "로터스",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Lotus/Logo.png",
+                    "origin": 0,
+                    "nation": "영국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 59,
+                    "PCCD": [
+                        "C0701",
+                        "P0602"
+                    ],
+                    "name": "폰티악",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Pontiac/Logo.png",
+                    "origin": 0,
+                    "nation": "미국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 60,
+                    "PCCD": [
+                        "C0701",
+                        "C0703",
+                        "C0704",
+                        "P0602"
+                    ],
+                    "name": "재규어",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Car/Jaguar/Logo.png",
+                    "origin": 0,
+                    "nation": "영국",
+                    "deletedAt": null
+                },
+                {
+                    "BrandId": 61,
+                    "PCCD": [
+                        "P0602"
+                    ],
+                    "name": "BBS",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Wheel/BBS/Logo.png",
+                    "origin": 0,
+                    "nation": "독일",
+                    "deletedAt": null
+                }
+            ]
+        },
+        {
+            "PCCDId": 26,
+            "PCCD": "P0603",
+            "title": "오일",
+            "icon": "http://61.80.5.166/images/systemIcon/Car/car-oil-icon.png",
+            "brand": []
+        }
+    ]
+}

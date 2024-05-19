@@ -1,0 +1,48 @@
+{
+    "status":{
+        "code":2000,
+        "message": "성공적으로 게시판을 조회했습니다."
+    },
+    "data":[
+        {
+            "PostId": 9,
+            "PTCD": "P0202",
+            "PCCD": "N0402",
+            "title": "오픈 이벤트 입니다",
+            "content": "<p>새로운 홈페이지 오픈 했어요~</p><p>많관부~</p>",
+            "WriterId": 1,
+            "WriterName": "관리자",
+            "WriterEmail": "bongtire@naver.com",
+            "viewers": 0,
+            "isPin": 0,
+            "isActive": 1,
+            "isThumbnail": 1,
+            "thumbnail": "https://img4.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202301/02/ROADTEST/20230102103349077bszo.jpg",
+            "isAnswer": 0,
+            "isSecret" : 0,
+            "answer": "",
+            "createdAt": "2024-05-09T13:27:36.000Z",
+            "updatedAt": "2024-05-09T13:27:36.000Z"
+        },
+        {
+            "PostId": 10,
+            "PTCD": "P0202",
+            "PCCD": "N0402",
+            "title": "전기차 타이어 세일",
+            "content": "<p>전기차 타이어 전품목 세일 진행합니다!</p>",
+            "WriterId": 1,
+            "WriterName": "관리자",
+            "WriterEmail": "bongtire@naver.com",
+            "viewers": 0,
+            "isPin": 0,
+            "isActive": 1,
+            "isThumbnail": 1,
+            "thumbnail": "https://img.etoday.co.kr/pto_db/2021/08/20210819184348_1657095_600_242.jpg",
+            "isAnswer": 0,
+            "isSecret" : 0,
+            "answer": "",
+            "createdAt": "2024-05-09T13:27:36.000Z",
+            "updatedAt": "2024-05-09T13:27:36.000Z"
+        }
+    ]
+}

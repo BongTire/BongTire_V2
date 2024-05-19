@@ -1,0 +1,625 @@
+{
+    "status": {
+        "code": 2000,
+        "message": "데이터를 성공적으로 전송했습니다."
+    },
+    "data": [
+        {
+            "CarId": 576,
+            "BrandId": 1,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "BH",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 577,
+            "BrandId": 1,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "DH",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 578,
+            "BrandId": 1,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "EQ900",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": "http://61.80.5.166/images/PCCD/Car/Genesis/[2018]eq900.png",
+            "year": 2018,
+            "deletedAt": null
+        },
+        {
+            "CarId": 579,
+            "BrandId": 1,
+            "drivingMethodPCCD": [
+                "T1001",
+                "T1003"
+            ],
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "G70",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": "http://61.80.5.166/images/PCCD/Car/Genesis/[2024]g70.png",
+            "year": 2024,
+            "deletedAt": null
+        },
+        {
+            "CarId": 580,
+            "BrandId": 1,
+            "drivingMethodPCCD": [
+                "T1001"
+            ],
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "G80",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": "http://61.80.5.166/images/PCCD/Car/Genesis/[2024]g80.png",
+            "year": 2024,
+            "deletedAt": null
+        },
+        {
+            "CarId": 581,
+            "BrandId": 1,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "제네시스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 582,
+            "BrandId": 1,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "제네시스 쿠페",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 583,
+            "BrandId": 1,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "제네시스쿠페",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 413,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "AMG",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 414,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "A클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 415,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "B클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 416,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "CLA클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 417,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "CLS클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 418,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "C클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 419,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "E클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 420,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "GLA클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 421,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "GLK클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 422,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "G클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 423,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "M클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 424,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "SLK클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 425,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "SL클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 426,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "S클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 427,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "AMG클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 428,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "CLK클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 429,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "R클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 430,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "SLR",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 431,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "GL클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 432,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "CL클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 433,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "AMG GT",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 434,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "GLC클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 435,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "GLE클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 436,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "B클래스(MyB)",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 437,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "CLA 클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 438,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "CLS 클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 439,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "GLS클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        },
+        {
+            "CarId": 440,
+            "BrandId": 6,
+            "drivingMethodPCCD": null,
+            "PCCD": [
+                "C0701"
+            ],
+            "name": "SLC클래스",
+            "codeName": null,
+            "powerTrain": [
+                "내연기관"
+            ],
+            "displacement": null,
+            "image": null,
+            "year": 0,
+            "deletedAt": null
+        }
+    ]
+}

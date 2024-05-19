@@ -1,0 +1,68 @@
+{
+    "status":{
+        "code":2000,
+        "message": "성공적으로 게시판을 조회했습니다."
+    },
+    "data":[
+        {
+            "PostId": 1,
+            "PTCD": "",
+            "PCCD": "C0501",
+            "title": "질문 있습니다만..",
+            "content": "<p>질문좀 해도 되나욤</p>",         
+            "WriterId": -1,
+            "WriterName": "",
+            "WriterEmail": "",             
+            "isPin": 0,
+            "isActive": 1,
+            "isSecret": 1,
+            "isAnswer": 1,
+            "isThumbnail": 1,
+            "thumnbail": "",
+            "viewers": 0,
+            "answer": "",
+            "createDate": "2024-05-10T16:01:21.000Z",
+            "updateDate": "2024-05-10T16:01:21.000Z"
+        },
+        {
+            "PostId": 1,
+            "PTCD": "",
+            "PCCD": "C0501",
+            "title": "질문 있습니다만..",
+            "content": "<p>질문좀 해도 되나욤</p>",         
+            "WriterId": -1,
+            "WriterName": "관리자",
+            "WriterEmail": "bongtire@naver.com",             
+            "isPin": 0,
+            "isActive": 1,
+            "isSecret": 1,
+            "isAnswer": 1,
+            "isThumbnail": 1,
+            "thumnbail": "",
+            "viewers": 0,
+            "answer": "",
+            "createDate": "2024-05-10T16:01:21.000Z",
+            "updateDate": "2024-05-10T16:01:21.000Z"
+        },
+        {
+            "PostId": 1,
+            "PTCD": "",
+            "PCCD": "C0501",
+            "title": "질문 있습니다만..",
+            "content": "<p>질문좀 해도 되나욤</p>",         
+            "WriterId": -1,
+            "WriterName": "관리자",
+            "WriterEmail": "bongtire@naver.com",
+            "isPin": 0,
+            "isActive": 1,
+            "isSecret": 1,
+            "isAnswer": 1,
+            "isThumbnail": 1,
+            "thumnbail": "",
+            "viewers": 0,
+            "answer": "",
+            "createDate": "2024-05-10T16:01:21.000Z",
+            "updateDate": "2024-05-10T16:01:21.000Z"
+        }
+    ]
+}

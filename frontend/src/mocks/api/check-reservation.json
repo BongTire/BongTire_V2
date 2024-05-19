@@ -1,0 +1,67 @@
+{
+    "status": {
+        "code":2000,
+        "message": "예약 조희를 성공했습니다."
+    },
+    "data":[
+        {
+            "ReservationMasterId": 18,
+            "ReservationTimeId": 1025,
+            "CalendarId": 152,
+            "OperationTimeId": 1,
+            "date": "20240531",
+            "UserId": null,
+            "OwnCarId" : null,
+            "reservationCode": "20240531-800-18",
+            "paymentMethod": "0",
+            "request": "",
+            "totalPrice": 176000,
+            "isCancel": 0,
+            "isComplete": 0,
+            "isReceive": 0,
+            "name": "진민",
+            "number": "01096178357",
+            "time": 1200,
+            "product": [                                    
+                {
+                    "ReservationProductId": 1,
+                    "ProductId": 2,
+                    "amount": 0,
+                    "laborCost": 0,
+                    "price": 120890,                                        
+                    "PCCD": "P0601",
+                    "drivingMethodPCCD": null,
+                    "brandName": "금호 타이어",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Kumho/Logo.png",
+                    "productName": "크루젠 프리미엄 ",
+                    "image": "http://61.80.5.166/images/PCCD/Product/Tire/m/28.jpg",
+                    "isActive": 1,
+                    "isRecommand": 1,
+                    "isSecond": 0,
+                    "isVisible": 1,
+                    "tireSize": "235/70R16",
+                    "tireLocation": [1,0,1,0]
+                },
+                {
+                    "ReservationProductId": 1,
+                    "ProductId": 2,
+                    "amount": 0,
+                    "laborCost": 0,
+                    "price": 120890,                                        
+                    "PCCD": "P0601",
+                    "drivingMethodPCCD": null,
+                    "brandName": "금호 타이어",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Kumho/Logo.png",
+                    "productName": "크루젠 프리미엄 ",
+                    "image": "http://61.80.5.166/images/PCCD/Product/Tire/m/28.jpg",
+                    "isActive": 1,
+                    "isRecommand": 1,
+                    "isSecond": 0,
+                    "isVisible": 1,
+                    "tireSize": "235/70R16",
+                    "tireLocation": [0,1,0,1]
+                }                     
+            ]
+        }
+    ]
+}
