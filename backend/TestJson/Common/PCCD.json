@@ -1,0 +1,175 @@
+{
+    "data" : [
+        {
+            "PTCDId": null,
+            "firstName": "메뉴",
+            "firstCodeName" : "menu",
+            "secondName": "메뉴",
+            "secondCodeName": "menu",
+            "PCCD": "M0101",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "메인",
+            "firstCodeName" : "main",
+            "secondName": "즐겨찾기",
+            "secondCodeName": "fav",
+            "PCCD": "M0201",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "메인",
+            "firstCodeName" : "main",
+            "secondName": "상품 요약 리스트",
+            "secondCodeName": "salesproduct",
+            "PCCD": "M0202",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "소개",
+            "firstCodeName" : "intro",
+            "secondName": "가게",
+            "secondCodeName": "store",
+            "PCCD": "I0301",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "소개",
+            "firstCodeName" : "intro",
+            "secondName": "직원",
+            "secondCodeName": "employee",
+            "PCCD": "I0302",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "공지사항",
+            "firstCodeName" : "notification",
+            "secondName": "공지사항",
+            "secondCodeName": "notification",
+            "PCCD": "N0401",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "공지사항",
+            "firstCodeName" : "notification",
+            "secondName": "이벤트",
+            "secondCodeName": "event",
+            "PCCD": "N0402",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "고객센터",
+            "firstCodeName" : "customerservice",
+            "secondName": "Q&A",
+            "secondCodeName": "qna",
+            "PCCD": "C0501",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "고객센터",
+            "firstCodeName" : "customerservice",
+            "secondName": "F&Q",
+            "secondCodeName": "fnq",
+            "PCCD": "C0502",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "상품",
+            "firstCodeName" : "product",
+            "secondName": "타이어",
+            "secondCodeName": "tire",
+            "PCCD": "P0601",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "상품",
+            "firstCodeName" : "product",
+            "secondName": "휠",
+            "secondCodeName": "wheel",
+            "PCCD": "P0602",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "자동차",
+            "firstCodeName" : "car",
+            "secondName": "내연기관",
+            "secondCodeName": "ice",
+            "PCCD": "C0701",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "자동차",
+            "firstCodeName" : "car",
+            "secondName": "하이브리드",
+            "secondCodeName": "hev",
+            "PCCD": "C0702",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "자동차",
+            "firstCodeName" : "car",
+            "secondName": "플러그인하이브리드",
+            "secondCodeName": "phev",
+            "PCCD": "C0703",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "자동차",
+            "firstCodeName" : "car",
+            "secondName": "전기차",
+            "secondCodeName": "ev",
+            "PCCD": "C0704",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "자동차",
+            "firstCodeName" : "car",
+            "secondName": "수소",
+            "secondCodeName": "hydrogen",
+            "PCCD": "C0705",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "예약",
+            "firstCodeName" : "reservation",
+            "secondName": "본점",
+            "secondCodeName": "first",
+            "PCCD": "R0801",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "필터",
+            "firstCodeName" : "filter",
+            "secondName": "타이어",
+            "secondCodeName": "tire",
+            "PCCD": "F0901",
+            "icon": null
+        },
+        {
+            "PTCDId": null,
+            "firstName": "필터",
+            "firstCodeName" : "filter",
+            "secondName": "휠",
+            "secondCodeName": "wheel",
+            "PCCD": "F0902",
+            "icon": null
+        }
+    ]
+}

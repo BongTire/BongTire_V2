@@ -1,0 +1,30 @@
+{
+	"data": {
+        "id": 1,
+            "content": {
+                "PTCD" : "P0203",
+                "PCCD" : "C0501",
+                "title": "제목1",
+                "content" : "여기가 바로 내용이유",
+                "startDate": "20230202",
+                "duration": 10,
+                "endDate": "20230212",
+                "createDate": "20230202",
+                "updateDate": "20230202",
+                "writer": {
+                    "id": 1,
+                    "name": "관리자",
+                    "email": "example@naver.com",
+                    "provider": "local"
+                }
+            },
+            "isPin" : false,
+            "isActive" : true,
+            "isSecret" : true,
+            "isThumbnail" : false,
+            "isAnswer" : true,
+            "viewers" : 4,
+            "thumbnail" : "",
+            "answer" :"대답!"
+        }
+}

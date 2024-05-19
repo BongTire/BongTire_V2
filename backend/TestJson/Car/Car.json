@@ -1,0 +1,12 @@
+{
+    "data" : {
+        "CarId" : null,
+        "BrandId" : 25,
+        "codeName" : "GN7",
+        "name" : "그랜저",
+        "type" : "세단",
+        "image": "http://61.80.5.166/images/PCCD/Car/Hyundai/[2024]grandeur.png",
+        "powerTrain": ["내연기관", "HEV"],
+        "PCCD" : ["C0701", "C0702"]
+    }
+}

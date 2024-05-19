@@ -1,0 +1,33 @@
+{
+    "data":[
+        {
+            "TireId": "",
+            "BrandId": "",
+            "PCCD": "",
+            "driveMethodPCCD": "",
+            "mCode" : "",
+            "productName": "",
+            "tireSize" : "",
+            "price": "",
+            "discountRate": "",
+            "discountPrice": "",
+            "amount": "",
+            "image": "",
+            "patternCode" : "",
+            "maxSpeed" : "",
+            "maxWeight" : "",
+            "origin" : "",
+            "xl" : "",
+            "ply": "",
+            "numberOfDataUpdate": "",
+            "sales": "",
+            "viewers": "",
+            "content": "",
+            "feature": "",
+            "isSecond": "",
+            "isVisible": "",
+            "isActive": "",
+            "isContinue": ""
+        }
+    ]
+}

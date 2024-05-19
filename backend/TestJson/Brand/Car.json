@@ -1,0 +1,10 @@
+{
+    "data" : {
+        "BrandId" : null,
+        "name" : "현대",
+        "PCCD" : ["C0701","C0702", "C0704"],
+        "brandLogo" : "http://61.80.5.166/images/PCCD/Car/Hyundai/Logo.png",
+        "origin" : true,
+        "nation": "한국"
+    }
+}
