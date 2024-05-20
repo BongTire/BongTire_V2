@@ -1,0 +1,78 @@
+{
+    "status": {
+        "code": 2000,
+        "message": "PTCD를 성공적으로 가져왔습니다."
+    },
+    "data": [
+        {
+            "PTCDId": 1,
+            "menuTypeName": "menu",
+            "menuTypeCode": "M01",
+            "pageTypeName": "menu",
+            "PTCD": "M0101",
+            "createdAt": "2024-04-20T07:35:10.000Z",
+            "updatedAt": "2024-04-20T07:35:10.000Z",
+            "deletedAt": null
+        },
+        {
+            "PTCDId": 2,
+            "menuTypeName": "page",
+            "menuTypeCode": "P02",
+            "pageTypeName": "card",
+            "PTCD": "P0202",
+            "createdAt": "2024-04-20T07:35:10.000Z",
+            "updatedAt": "2024-04-20T07:35:10.000Z",
+            "deletedAt": null
+        },
+        {
+            "PTCDId": 3,
+            "menuTypeName": "page",
+            "menuTypeCode": "P02",
+            "pageTypeName": "list",
+            "PTCD": "P0203",
+            "createdAt": "2024-04-20T07:35:10.000Z",
+            "updatedAt": "2024-04-20T07:35:10.000Z",
+            "deletedAt": null
+        },
+        {
+            "PTCDId": 4,
+            "menuTypeName": "page",
+            "menuTypeCode": "P02",
+            "pageTypeName": "page",
+            "PTCD": "P0204",
+            "createdAt": "2024-04-20T07:35:10.000Z",
+            "updatedAt": "2024-04-20T07:35:10.000Z",
+            "deletedAt": null
+        },
+        {
+            "PTCDId": 5,
+            "menuTypeName": "product",
+            "menuTypeCode": "P03",
+            "pageTypeName": "lcard",
+            "PTCD": "P0301",
+            "createdAt": "2024-04-20T07:35:10.000Z",
+            "updatedAt": "2024-04-20T07:35:10.000Z",
+            "deletedAt": null
+        },
+        {
+            "PTCDId": 6,
+            "menuTypeName": "reservation",
+            "menuTypeCode": "P04",
+            "pageTypeName": "reservation",
+            "PTCD": "P0401",
+            "createdAt": "2024-04-20T07:35:10.000Z",
+            "updatedAt": "2024-04-20T07:35:10.000Z",
+            "deletedAt": null
+        },
+        {
+            "PTCDId": 7,
+            "menuTypeName": "main",
+            "menuTypeCode": "M05",
+            "pageTypeName": "main",
+            "PTCD": "M0501",
+            "createdAt": "2024-04-20T07:35:10.000Z",
+            "updatedAt": "2024-04-20T07:35:10.000Z",
+            "deletedAt": null
+        }
+    ]
+}

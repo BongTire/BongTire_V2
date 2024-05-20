@@ -1,0 +1,148 @@
+{
+    "status": {
+        "code": 2000,
+        "message": "성공적으로 조회 했습니다."
+    },
+    "data": [
+        {
+            "type": "select",
+            "filters": { 
+                "name": "브랜드",
+                "value": [
+                    {
+                        "BrandId": 32,
+                        "name": "한국 타이어",
+                        "codeName": "hankook",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Hankook/Logo.png",
+                        "origin": true,
+                        "nation": "한국",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 33,
+                        "name": "금호 타이어",
+                        "codeName": "kumhotire",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Kumho/Logo.png",
+                        "origin": true,
+                        "nation": "한국",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 34,
+                        "name": "넥센 타이어",
+                        "codeName": "nexentire",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Nexen/Logo.png",
+                        "origin": true,
+                        "nation": "한국",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 35,
+                        "name": "미쉐린",
+                        "codeName": "michelin",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Michelin/Logo.png",
+                        "origin": false,
+                        "nation": "프랑스",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 36,
+                        "name": "브리지 스톤",
+                        "codeName": "bridgestone",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Bridgestone/Logo.png",
+                        "origin": false,
+                        "nation": "일본",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 37,
+                        "name": "컨티넨탈",
+                        "codeName": "continental",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Continental/Logo.png",
+                        "origin": false,
+                        "nation": "독일",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 38,
+                        "name": "파이어스톤",
+                        "codeName": "firestone",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Firestone/Logo.png",
+                        "origin": false,
+                        "nation": "미국",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 39,
+                        "name": "굿이어",
+                        "codeName": "goodyear",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Goodyear/Logo.png",
+                        "origin": false,
+                        "nation": "미국",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 40,
+                        "name": "피렐리",
+                        "codeName": "pirelli",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Pirelli/Logo.png",
+                        "origin": false,
+                        "nation": "이탈리아",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 41,
+                        "name": "요코하마",
+                        "codeName": "yokohama",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/yokohama/Logo.png",
+                        "origin": false,
+                        "nation": "일본",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    },
+                    {
+                        "BrandId": 42,
+                        "name": "던롭",
+                        "codeName": "dunlop",
+                        "PCCD": "[\"P0601\"]",
+                        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/dunlop/Logo.png",
+                        "origin": false,
+                        "nation": "일본",
+                        "createdAt": "2024-04-14T10:27:54.000Z",
+                        "updatedAt": "2024-04-14T10:27:54.000Z",
+                        "deletedAt": null
+                    }
+                ]
+            }
+        }
+    ]
+}

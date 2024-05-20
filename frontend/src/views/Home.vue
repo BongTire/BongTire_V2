@@ -1,5 +1,6 @@
 <template>
-    <div class="w-full max-w-7xl m-auto">
+    <Loading v-if="homeLoading" class=""/>
+    <div v-else class="w-full max-w-7xl m-auto">
         <div class="flex justify-between">
             <favWiget v-for="fav in favWigetData"  :conf="fav"/>
         </div>
@@ -13,10 +14,12 @@
 </template>
 
 <script lang="ts" setup>
-import { getTest } from '@api/test.js';
+import { fetchGetData } from '@api/reservation.js';
 import IntroService from '@component/Main/IntroService.vue';
 import IntroProduct from '@component/Main/IntroProduct.vue';
 import favWiget from '@component/Main/FavWiget.vue';
+import Loading from '@component/Common/Loading.vue'
+import { IApiReturn } from '../util/type/api.ts'
 
 const favWigetData = [
     {
@@ -62,6 +65,12 @@ const favWigetData = [
         icon: `/src/assets/image/systemIcon/Car/car-repair-icon.png`
     },
 ]
+
+const homeLoading = ref(false)
+
+
+
+
 
 
 

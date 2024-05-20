@@ -57,5 +57,14 @@ export interface IProductType{
     title: string | null
     icon: string | null
     brand?: IBrand[] | null
+}
 
+export interface IFilter{
+    type: string | null
+    filters:IFilterValue
+}
+
+interface IFilterValue{
+    name: string | null
+    value: any[]
 }

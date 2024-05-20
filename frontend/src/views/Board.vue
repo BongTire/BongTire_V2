@@ -23,7 +23,7 @@
         </div>
         </div>
     </div>
-    <PostList :conf="visibleBoardTest" v-if="isList"/>
+    <PostList :conf="visibleBoard" v-if="isList"/>
     <PostCard :conf="visibleBoard" v-else/>
   </div>
 </template>
@@ -35,17 +35,20 @@ import {
     PencilSquareIcon
   } from '@heroicons/vue/24/outline'
 import { IPost } from '../util/type/post';
+import { IFetchType } from '../util/type/common'
+import { fetchGetData } from '../api/reservation'
+
 
 import boardCard from '../mocks/api/board-card.json'
 import boardList from '../mocks/api/board-list.json'
 
 const route = useRoute()
 
-const pccd = computed(()=>route.query.pccd ?? 'P0401')
+const pccd = computed(()=>route.query.pccd ?? 'N0401')
 
 const CardTabs = [
-  { name: '공지사항', href: '/board?pccd=P0401', PCCD: 'P0401' },
-  { name: '이벤트', href: '/board?pccd=P0402', PCCD: 'P0402' },
+  { name: '공지사항', href: '/board?pccd=N0401', PCCD: 'N0401' },
+  { name: '이벤트', href: '/board?pccd=N0402', PCCD: 'N0402' },
 ]
 
 const ListTabs = [
@@ -62,11 +65,26 @@ const isList = computed(()=>{
 
 const originBoard = ref<IPost[]>()
 const visibleBoard = ref<IPost[]>()
-const visibleBoardTest = ref<Post[]>()
 
-onMounted(()=>{
-  visibleBoard.value = [...boardCard.data]
-  visibleBoardTest.value = [...boardList.data]
+onMounted(async ()=>{
+  
+  if(isList.value){
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/list','P0202' ,pccd.value)
+    originBoard.value = await postPromise
+  }else{
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/card','P0203' ,pccd.value)
+    originBoard.value = await postPromise
+  }
+
+  console.log(originBoard.value)
+
+  const postLoading = computed(()=>{
+    if(originBoard.value) return false
+    else return true
+  })
+
+  visibleBoard.value = [...originBoard.value]
+  
 })
 
 

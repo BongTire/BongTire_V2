@@ -33,3 +33,11 @@ export interface IMenu{
     isFavMenu: number
     isVisible: number
 }
+export interface IFetchType{
+    status:{
+        code: number
+        message: string
+    }
+    data: any
+    total?: number | null
+}

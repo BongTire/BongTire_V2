@@ -25,7 +25,7 @@
               <div class="p-4">
                 <div v-for="item in products" :key="item.name" class="group relative flex gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
                   <div class="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                    <component :is="item.icon" class="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
+                    <component :is="item.icon" class="h-6 w-6 text-gray-600 group-hover:text-orange-600" aria-hidden="true" />
                   </div>
                   <div class="flex-auto">
                     <a :href="item.href" class="block font-semibold text-gray-900">
@@ -46,7 +46,7 @@
           </transition>
         </Popover>
 
-        <a href="/board?pccd=P0402" class="text-sm font-semibold leading-6 text-gray-900">이벤트</a>
+        <a href="/board?pccd=N0402" class="text-sm font-semibold leading-6 text-gray-900">이벤트</a>
         <a href="/reservation" class="text-sm font-semibold leading-6 text-gray-900">예약</a>
 
         <Popover class="relative">
@@ -92,7 +92,7 @@
                 </DisclosurePanel>
               </Disclosure>
 
-              <a href="/board?pccd=P0402" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">이벤트</a>
+              <a href="/board?pccd=N0402" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">이벤트</a>
               <a href="/reservation" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">예약</a>
 
               <Disclosure as="div" class="-mx-3" v-slot="{ open }">
@@ -168,10 +168,30 @@
     XMarkIcon,
   } from '@heroicons/vue/24/outline'
   import { ChevronDownIcon, PhoneIcon } from '@heroicons/vue/20/solid'
+  import { useCommonStore } from '@store/common.ts'
+  import { IPCCD, IPTCD,  IFetchType} from '../util/type/common'
+  import {fetchGetData} from '../api/reservation'
+
+  const PTCD = ref<IPTCD[]>([])
+  const PCCD = ref<IPCCD[]>([])
+
+  const store = useCommonStore()
+
+  onMounted(async () => {
+        const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd')
+        PCCD.value = await pccdPromise
+
+        const ptcdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/ptcd')
+        PTCD.value = await ptcdPromise
+
+        store.initCommon(PTCD.value, PCCD.value)
+  })
+  
+
 
   const products = [
-    { name: '타이어', description: '다양한 종류의 타이어', href: '/tire', icon: ShoppingCartIcon },
-    { name: '휠', description: '다양한 종류의 저렴한 가격', href: '/wheel', icon: ShoppingCartIcon },
+    { name: '타이어', description: '다양한 종류의 타이어', href: '/tire?pccd=P0601', icon: ShoppingCartIcon },
+    { name: '휠', description: '다양한 종류의 저렴한 가격', href: '/wheel?pccd=P0602', icon: ShoppingCartIcon },
   ]
   const callsToAction = [
     { name: '타이어 검색', href: '#', icon: MagnifyingGlassIcon },
@@ -179,7 +199,7 @@
   ]
   const company = [
     { name: '가게 소개', href: '#' },
-    { name: '공지사항', href: '/board?pccd=P0401' },
+    { name: '공지사항', href: '/board?pccd=N0401' },
     { name: '문의사항', href: '/board?pccd=C0501' },
   ]
 

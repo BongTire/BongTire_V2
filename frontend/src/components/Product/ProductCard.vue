@@ -4,7 +4,7 @@
         <h2 class="sr-only">Products</h2>
   
         <div class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
-          <div v-for="product in props.conf" :key="product.id" class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+          <div v-for="product in props.conf" :key="product.id" class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white cursor-pointer">
             <div class="h-96 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-80 flex justify-center items-center">
               <img :src="product.image ? product.image : defaultImage" :alt="product.imageAlt" :class="`${product.image ? 'h-3/4 sm:h-3/4' : 'w-3/4 sm:w-3/4' }  object-cover object-center`" />
             </div>
@@ -39,6 +39,7 @@
   
   <script setup lang="ts">
 
+  import {IProduct} from '@type/product'
   const defaultImage = 'src/assets/image/Company/BongTireLogo.png'
 
     const props = defineProps({
@@ -46,6 +47,8 @@
             type: Array as PropType<IProduct> | undefined,
         }
     })
+
+    console.log(props.conf)
 
 
   </script>

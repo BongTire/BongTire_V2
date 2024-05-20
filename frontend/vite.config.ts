@@ -20,7 +20,8 @@ export default defineConfig({
       '@image': path.resolve(__dirname, 'src/assets/image'),
       '@component' : path.resolve(__dirname, 'src/components'),
       '@api' : path.resolve(__dirname, 'src/api'),
-      '@store' : path.resolve(__dirname, 'src/stores')
+      '@store' : path.resolve(__dirname, 'src/stores'),
+      '@type' : path.resolve(__dirname, 'src/util/type')
     }
   },
   server: {

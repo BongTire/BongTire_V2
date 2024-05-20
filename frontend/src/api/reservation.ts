@@ -1,12 +1,17 @@
 import client from ".";
 
-const getCalendar = (ptcd:string, pccd:string) =>{
-    return client.get('/reservation/calendar',{
-        params:{
+const fetchGetData = async <T>(url: string, ptcd:string, pccd:string):Promise<T> =>{
+
+
+    const response = await client.get<T>(url, {
+        withCredentials:true, 
+        params: {
             ptcd: ptcd,
             pccd: pccd
         }
     })
+
+    return response.data
 }
 
-export{ getCalendar}
+export{ fetchGetData }
