@@ -1,0 +1,39 @@
+{
+    "status": {
+        "code": 2000,
+        "message": "타이어 데이터를 찾기 성공했습니다."
+    },
+    "data": {
+        "id": 1,
+        "BrandId": 34,
+        "PCCD": "P0601",
+        "drivingMethodPCCD": null,
+        "mCode": null,
+        "productName": "ROADIAN GTX",
+        "tireSize": "245/45R19V",
+        "price": 172150,
+        "amount": 0,
+        "discountRate": 20,
+        "discountPrice": 137720,
+        "image": "http://61.80.5.166/images/PCCD/Product/Tire/m/45.jpg",
+        "patternCode": null,
+        "maxSpeed": null,
+        "origin": null,
+        "xl": null,
+        "ply": null,
+        "numberOfDataUpdate": 0,
+        "sales": 0,
+        "viewers": 0,
+        "isSecond": 0,
+        "content": "국내 최고 수준의 마일리지 성능을 가진 사계절용 타이어",
+        "feature": null,
+        "isActive": 1,
+        "isRecommanded": 0,
+        "createdAt": "2024-05-03T00:00:00.000Z",
+        "updatedAt": "2024-05-14T14:46:34.000Z",
+        "brandName": "넥센 타이어",
+        "brandOrigin": 1,
+        "brandNation": "한국",
+        "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Nexen/Logo.png"
+    }
+}

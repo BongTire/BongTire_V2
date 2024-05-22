@@ -20,6 +20,7 @@ export default {
         'kakao' : '#FEE500'
       },
       height:{
+        '100' : '28rem',
         '128': '32rem',
         '256': '40rem'
       }

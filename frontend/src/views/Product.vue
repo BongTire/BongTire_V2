@@ -109,8 +109,9 @@
 
       <!-- Product grid -->
       <Loading v-if="productLoading && filterLoading"/>
+      <!-- 상품 박스 -->
       <div v-else class="mt-6 lg:col-span-2 lg:mt-0 xl:col-span-3">
-        <ProductCard :conf="product" />
+        <ProductCard :conf="product" @moveDetailPage="moveDetailPage" />
       </div>
     </div>
   </main>
@@ -136,6 +137,8 @@ import { fetchGetData } from '../api/reservation'
 import{ IProduct } from '../util/type/product'
 
 const route = useRoute();
+const router = useRouter()
+
 const PCCD = computed(()=>{return route.query.pccd})  
 const mobileFiltersOpen = ref(false)
 const product:IProduct[] = ref([])
@@ -171,6 +174,9 @@ onMounted(async () => {
   })
 })
 
+const moveDetailPage = (id:number) =>{
+  router.push(`/product/${id}`)
+}
 
 
 

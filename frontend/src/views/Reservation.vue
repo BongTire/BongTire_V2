@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="w-1/2">
-
+      <ProductInfo/>
     </div>
   </div>
   

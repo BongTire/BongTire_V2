@@ -13,7 +13,8 @@ export const useCommonStore = defineStore('common', {
 
   }),
   getters: {
-    getPCCD: state=>{return state.PCCD}
+    getPCCD: state=>{return state.PCCD},
+    getProductType: state=>{ return state.PCCD.filter(item => item['PCCD'] && item['PCCD'].includes('P06')) }
   },
   // 상태값을 바꾸고 싶을 떄! 
   // 여기서 this 쓰는거 유의하기!

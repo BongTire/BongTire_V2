@@ -10,6 +10,9 @@ import list from './api/board-list.json'
 import PTCD from './api/ptcd.json'
 import PCCD from './api/pccd.json'
 
+import tireDetail from './api/tire-detail.json'
+import wheelDetail from './api/wheel-detail.json'
+
 export const handlers = [
   // Intercept "GET https://example.com/user" requests...
   http.get(import.meta.env.VITE_APP_API_URL+'/user', () => {
@@ -41,6 +44,27 @@ export const handlers = [
     // ...and respond to them using this JSON response.
     
   }),
+
+  http.get(import.meta.env.VITE_APP_API_URL+'/product/:id', ({request}) => {
+    const url = new URL(request.url)
+
+    const PCCD = url.searchParams.get('pccd')
+    const id = request.id
+
+    console.log(id)
+    if(PCCD === 'P0601'){
+      return HttpResponse.json(tireDetail)
+    }else if(PCCD === 'P0602'){
+      return HttpResponse.json(wheelDetail)
+    }
+
+
+    
+    return HttpResponse.json(error)
+    // ...and respond to them using this JSON response.
+    
+  }),
+
 
 
 

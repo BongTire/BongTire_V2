@@ -1,6 +1,7 @@
 // src/stores/counter.js
 import { defineStore } from 'pinia'
 import { ICalendar, IReservationTime } from '../util/type/reservation'
+import { IProduct } from '../util/type/product'
 
 export const useReservationStore = defineStore('reservation', {
   // 화살표 함수는 객체 반환시 소괄호 사용 (= return기능)
@@ -30,7 +31,8 @@ export const useReservationStore = defineStore('reservation', {
     getCalendar: state => {
       return state.CalendarId
     },
-    getReservationTime: state=>{return state.ReservationTimeId}
+    getReservationTime: state=>{return state.ReservationTimeId},
+    getReservationProduct: state=>{return state.product}
   },
   // 상태값을 바꾸고 싶을 떄! 
   // 여기서 this 쓰는거 유의하기!
@@ -48,8 +50,30 @@ export const useReservationStore = defineStore('reservation', {
       this.ReservationTimeId = time?.ReservationTimeId ?? -1
       this.time = time?.startTime ?? -1
     },
-    setReservationProduct(){
+    setReservationProduct(product:IProduct){
+      console.log(product)
 
+      const productData = {
+        ReservationProductId: null,
+        ProductId: product.id,
+        PCCD: product.PCCD,
+        amount: product.amount,
+        price: product.price,
+        tireLocation: product.tireLocation,
+        laborCost: product.laborCost,
+        brandName: product.brandName,
+        brandLogo: product.brandLogo,
+        image: product.image,
+        productName: product.productName,
+        tireSize: product?.tireSize,
+        wheelSize: product?.wheelSize,
+        isRecommanded : product.isRecommanded,
+        isActive: product.isActive,
+        isSecond: product.isSecond,
+        isVisible: product.isVisible ?? 1,
+      }
+
+      this.product.push(productData)
     }
   },
 })
