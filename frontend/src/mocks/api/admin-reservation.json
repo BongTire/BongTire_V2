@@ -1,0 +1,158 @@
+{
+    "status": {
+        "message": "상태 메시지 작성",
+        "code": "상태 코드"
+    },
+    "data": [
+        {
+            "time": 1000,
+            "ReservationMasterId": 17,
+            "ReservationTimeId": 2933,
+            "CalendarId": 136,
+            "OperationTime": 3,
+            "UserId": null,
+            "totalPrice": 176000,
+            "request": "",
+            "isCancel": 0,
+            "isComplete": 0,
+            "isReceive": 0,
+            "reservationCode": "20240515-1000-17",
+            "paymentMethod": "0",
+            "name": "진민",
+            "number": "01096178357",
+            "product":[
+                {       
+                    
+                    "amount": 0,
+                    "laborCost": 0,
+                    "price": 120890,
+                    "ProductId": 2,
+                    "PCCD": "P0601",
+                    "drivingMethodPCCD": null,
+                    "brandName": "금호 타이어",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Kumho/Logo.png",
+                    "productName": "크루젠 프리미엄 ",
+                    "image": "http://61.80.5.166/images/PCCD/Product/Tire/m/28.jpg",
+                    "isActive": 1,
+                    "isRecommand": 1,
+                    "isSecond": 0,
+                    "isVisible": 1,
+                    "tireSize": "235/70R16",
+                    "tireLocation": [ 1,0,1,0 ]
+                }
+            ]
+        },
+        {
+            "UserId": null,
+            "CalendarId": 136,
+            "ReservationMasterId": 1,
+            "OperationTime": 3,
+            "ReservationTimeId": 2934,
+            "reservationCode": "20240515-1000-1",
+            "name": "관리자",
+            "number": "01012341234",
+            "paymentMethod": "0",
+            "request": "asdf",
+            "totalPrice": 10000,
+            "isCancel": 0,
+            "isComplete": 0,
+            "isReceive": 1,
+            "time": 1100,
+            "product": [
+                {
+                    "amount": 0,
+                    "laborCost": 0,
+                    "price": 172150,
+                    "ProductId": 1,
+                    "PCCD": "P0601",
+                    "drivingMethodPCCD": null,
+                    "brandName": "넥센 타이어",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Nexen/Logo.png",
+                    "productName": "ROADIAN GTX",
+                    "image": "http://61.80.5.166/images/PCCD/Product/Tire/m/45.jpg",
+                    "isActive": 1,
+                    "isRecommand": 1,
+                    "isSecond": 0,
+                    "isVisible": 1,
+                    "tireSize": "245/45R19V",
+                    "tireLocation": [ 1,0,1,0]
+                }        
+            ]
+        },
+        {
+            "ReservationMasterId": 5,
+            "UserId": null,
+            "CalendarId": 136,
+            "OperationTime": 3,
+            "ReservationTimeId": 2935,
+            "reservationCode": "20240515-1000-5",
+            "name": "슈퍼맨",
+            "number": "01012341234",
+            "time": 1200,
+            "paymentMethod": "0",
+            "request": "asdf",
+            "totalPrice": 688600,
+            "isCancel": 0,
+            "isComplete": 0,
+            "isReceive": 0,
+            "product":[
+                {
+                    "amount": 0,
+                    "laborCost": 0,
+                    "price": 172150,
+                    "ProductId": 1,
+                    "PCCD": "P0601",
+                    "drivingMethodPCCD": null,
+                    "brandName": "넥센 타이어",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Nexen/Logo.png",
+                    "productName": "ROADIAN GTX",
+                    "image": "http://61.80.5.166/images/PCCD/Product/Tire/m/45.jpg",
+                    "isActive": 1,
+                    "isRecommand": null,
+                    "isSecond": 0,
+                    "isVisible": 1,
+                    "tireSize": "245/45R19V",
+                    "tireLocation": [1,1,1,1]
+                }
+            ]                            
+        },
+        {
+            "ReservationMasterId": 5,
+            "UserId": null,
+            "CalendarId": 136,
+            "OperationTime": 3,
+            "ReservationTimeId": 2935,
+            "reservationCode": "20240515-1000-5",
+            "name": "슈퍼맨",
+            "number": "01012341234",
+            "time": 1200,
+            "paymentMethod": "0",
+            "request": "asdf",
+            "totalPrice": 688600,
+            "isCancel": 0,
+            "isComplete": 0,
+            "isReceive": 0,
+            "product":[
+                {
+                    "amount": 0,
+                    "laborCost": 0,
+                    "price": 172150,
+                    "ProductId": 1,
+                    "PCCD": "P0601",
+                    "drivingMethodPCCD": null,
+                    "brandName": "넥센 타이어",
+                    "brandLogo": "http://61.80.5.166/images/PCCD/Product/Tire/Nexen/Logo.png",
+                    "productName": "ROADIAN GTX",
+                    "image": "http://61.80.5.166/images/PCCD/Product/Tire/m/45.jpg",
+                    "isActive": 1,
+                    "isRecommand": null,
+                    "isSecond": 0,
+                    "isVisible": 1,
+                    "tireSize": "245/45R19V",
+                    "tireLocation": [1,1,1,1]
+                }
+            ]                            
+        }
+
+    ]
+}

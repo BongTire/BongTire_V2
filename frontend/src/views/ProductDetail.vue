@@ -141,7 +141,7 @@
   import { StarIcon } from '@heroicons/vue/20/solid'
   import {IProduct} from '../util/type/product'
   import  {IFetchType} from '../util/type/common'
-import { fetchGetData } from '../api/reservation'
+import { fetchGetData } from '@api/common.ts'
 import { useReservationStore } from '../stores/reservation'
 
 const store  = useReservationStore()
@@ -173,13 +173,12 @@ const tireNWheelCalAmount = () =>{
 const clickReservationBtn = () =>{
 
 
-
   const setProductStore = {
     ...productDetail.value,
     amount: amount,
     tireLocation: tireLocation.value,
     laborCost: 0,
-    price: productDetail.value.discountPrice*amount
+    price: parseInt(productDetail.value.discountPrice)*parseInt(amount.value)
   }
   store.setReservationProduct(setProductStore)
   router.push('/reservation')

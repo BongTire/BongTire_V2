@@ -133,7 +133,7 @@ import {
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, PlusIcon } from '@heroicons/vue/20/solid'
 import { IFetchType } from '../util/type/common'
-import { fetchGetData } from '../api/reservation'
+import { fetchGetData } from '@api/common.ts'
 import{ IProduct } from '../util/type/product'
 
 const route = useRoute();

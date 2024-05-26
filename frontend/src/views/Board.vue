@@ -5,7 +5,10 @@
           <h3 class="text-base font-semibold leading-6 text-gray-900">공지사항</h3>
           <div class="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
               <button type="button" class="ml-3 inline-flex items-center rounded-md bg-orange-600 pl-2 pr-1 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
-                <PencilSquareIcon class="h-6 w-6" aria-hidden="true"/>
+                <RouterLink to="/edit">
+                  <PencilSquareIcon class="h-6 w-6" aria-hidden="true" />
+                </RouterLink>
+
               </button>
           </div>
         </div>
@@ -36,7 +39,7 @@ import {
   } from '@heroicons/vue/24/outline'
 import { IPost } from '../util/type/post';
 import { IFetchType } from '../util/type/common'
-import { fetchGetData } from '../api/reservation'
+import { fetchGetData } from '@api/common.ts'
 
 
 import boardCard from '../mocks/api/board-card.json'

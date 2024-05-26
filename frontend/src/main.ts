@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import './index.css'
 import App from './App.vue'
 import { createPinia } from 'pinia'
+import PrimeVue from 'primevue/config';
+import 'primevue/resources/themes/lara-light-amber/theme.css'
+
 
 
 import router from "./routers"; // 추가
@@ -20,6 +23,7 @@ if (import.meta.env.VITE_MOCK_SERVER_MODE === 'development') {
 
 const pinia = createPinia()
 const app = createApp(App)
+app.use(PrimeVue);
 app.use(pinia)
 app.use(router)
 

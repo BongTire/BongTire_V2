@@ -1,12 +1,13 @@
 <template>
-    <div class="lg:w-44 lg:h-20 md:w-24 md:40 md:flex-col lg:flex-row border rounded-md border-solid border-gray-300 flex justify-around items-center">
-        <div class="">
-            <img class="lg:h-16 md:h-12" :src="FavWigetIcon"  />
+    <div class="overflow-auto sm:mr-5 mr-5 min-w-24 sm:w-44 w-24 h-24 border rounded-md border-solid border-gray-300 flex justify-around items-center">
+      <router-link :to="FavWigetUrl">
+        <div class="flex items-center justify-center">
+            <img class="h-14 sm:h-10 sm:h-14" :src="FavWigetIcon"  />
         </div>
-        
-            <p class="font-medium text-l text-center">{{FavWigetTitle}}</p>
-        
+        <p class="font-medium sm:text-l text-s text-center">{{FavWigetTitle}}</p>
+      </router-link>
     </div>
+
 </template>
 
 <script lang="ts" setup>

@@ -5,4 +5,5 @@ export interface IUser{
     email?: string | null
     password?: string | null
     address?: string | null
+    grade?: number | null
 }

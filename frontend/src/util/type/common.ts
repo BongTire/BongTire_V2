@@ -10,7 +10,7 @@ export interface IPTCD{
 }
 
 export interface IPCCD{
-    PCCDId : number
+    PCCDId : number | null
     firstName: string
     firstCodeName: string
     secondName: string
@@ -40,4 +40,9 @@ export interface IFetchType{
     }
     data: any
     total?: number | null
+}
+
+export interface IMessage{
+    title: string | null
+    message: string | null
 }

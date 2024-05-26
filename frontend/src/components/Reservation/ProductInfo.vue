@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h2>예약 물품</h2>
-    <div v-for="(type, index) in productType" class="flex ">
+  <div class="w-full max-w-md">
+    <h2 class="text-xl">예약 물품</h2>
+    <div v-for="(type, index) in productType" class="flex">
       <div class="h-128 min-w-24 flex flex-col justify-center items-center bg-slate-50">
         <img :src="type.icon" class="h-24">
         <p>{{ type.secondName }}</p>
@@ -20,7 +20,7 @@
 <script lang="ts" setup>
 import { useCommonStore } from '@store/common.ts'
 import { useReservationStore } from '@store/reservation.ts'
-import { IPCCD,  IFetchType} from '../util/type/common'
+import { IPCCD,  IFetchType} from '@type/common'
 import ReservationProductCard from '@component/Reservation/ReservationProductCard.vue'
 
 const store = useCommonStore()

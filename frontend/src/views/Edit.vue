@@ -3,7 +3,7 @@
         <div class="h-36 flex justify-between mx-5" >
             <div class="flex flex-col">
                 <input type="text" class="h-16 sm:w-1/2 w-full pl-2 text-2xl" placeholder="제목">
-                <div class="flex h-12 items-center border border-orange-600 rounded-md">
+                <div class="flex h-12 items-center border border-orange-600 rounded-lg">
                     <div :class="`cursor-pointer sm:w-44 w-20 text-xs sm:text-md h-full flex-1 flex justify-evenly items-center rounded-md hover:bg-orange-500 hover:text-white ${categoryPCCD === 'C0501' ? 'bg-orange-600 text-white' : ''}`"
                         @click="clickCategory(0)"
                     >
@@ -97,7 +97,7 @@ const enabled = ref(false)
 
 const categoryPCCD = computed(()=>store.getPCCD)
 
-const clickCategory = (type) =>{
+const clickCategory = (type: number) =>{
     let category:IPostCategory
 
     if(type===0){
@@ -108,6 +108,7 @@ const clickCategory = (type) =>{
             isThumbnail : 0,
             isSecret : 1
         }
+        enabled.value = true
     }else if(type===1){
         category = {
             PTCD : 'P0202',
@@ -116,6 +117,7 @@ const clickCategory = (type) =>{
             isThumbnail : 1,
             isSecret : 0
         }
+      enabled.value = false
     }else if(type===2){
         category = {
             PTCD : 'P0202',
@@ -124,6 +126,7 @@ const clickCategory = (type) =>{
             isThumbnail : 1,
             isSecret : 0
         }
+      enabled.value = false
     }else{
         return
     }

@@ -13,6 +13,10 @@ import PCCD from './api/pccd.json'
 import tireDetail from './api/tire-detail.json'
 import wheelDetail from './api/wheel-detail.json'
 
+import reseveData from './api/admin-reservation.json'
+import adminTire from './api/tire-admin.json'
+import adminWheel from './api/admin-wheel.json'
+
 export const handlers = [
   // Intercept "GET https://example.com/user" requests...
   http.get(import.meta.env.VITE_APP_API_URL+'/user', () => {
@@ -121,6 +125,18 @@ export const handlers = [
   http.get(import.meta.env.VITE_APP_API_URL+'/common/pccd', ({request}) => {
     return HttpResponse.json(PCCD)
     
+  }),
+  http.get(import.meta.env.VITE_APP_API_URL+'/admin/reservation/reservedata', ({request}) => {
+    return HttpResponse.json(reseveData)
+  }),
+
+
+  http.get(import.meta.env.VITE_APP_API_URL+'/admin/product/tire', ({request}) => {
+    return HttpResponse.json(adminTire)
+  }),
+
+  http.get(import.meta.env.VITE_APP_API_URL+'/admin/product/wheel', ({request}) => {
+    return HttpResponse.json(adminWheel)
   }),
 
 ]

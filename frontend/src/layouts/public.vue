@@ -2,10 +2,10 @@
   <header class="bg-white">
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
       <div class="flex lg:flex-1">
-        <a href="/" class="-m-1.5 p-1.5">
+        <router-link to="/" class="-m-1.5 p-1.5">
           <span class="sr-only">Your Company</span>
           <img class="h-10 w-auto" src="@image/Company/BongTireLogo.png" alt="" />
-        </a>
+        </router-link>
       </div>
       <div class="flex lg:hidden">
         <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" @click="mobileMenuOpen = true">
@@ -28,26 +28,26 @@
                     <component :is="item.icon" class="h-6 w-6 text-gray-600 group-hover:text-orange-600" aria-hidden="true" />
                   </div>
                   <div class="flex-auto">
-                    <a :href="item.href" class="block font-semibold text-gray-900">
+                    <router-link :to="item.href" class="block font-semibold text-gray-900">
                       {{ item.name }}
                       <span class="absolute inset-0" />
-                    </a>
+                    </router-link>
                     <p class="mt-1 text-gray-600">{{ item.description }}</p>
                   </div>
                 </div>
               </div>
               <div class="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                <a v-for="item in callsToAction" :key="item.name" :href="item.href" class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100">
+                <router-link v-for="item in callsToAction" :key="item.name" :to="item.href" class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100">
                   <component :is="item.icon" class="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                   {{ item.name }}
-                </a>
+                </router-link>
               </div>
             </PopoverPanel>
           </transition>
         </Popover>
 
-        <a href="/board?pccd=N0402" class="text-sm font-semibold leading-6 text-gray-900">이벤트</a>
-        <a href="/reservation" class="text-sm font-semibold leading-6 text-gray-900">예약</a>
+        <router-link to="/board?pccd=N0402" class="text-sm font-semibold leading-6 text-gray-900">이벤트</router-link>
+        <router-link to="/reservation" class="text-sm font-semibold leading-6 text-gray-900">예약</router-link>
 
         <Popover class="relative">
           <PopoverButton class="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
@@ -63,17 +63,31 @@
         </Popover>
       </PopoverGroup>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">로그인 <span aria-hidden="true">&rarr;</span></a>
+<!--        <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">로그인 <span aria-hidden="true">&rarr;</span></a>-->
+        <Menu as="div" class="relative">
+          <MenuButton>
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
+              <span class="font-medium leading-none text-white">TW</span>
+            </span>
+          </MenuButton>
+          <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+            <MenuItems class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+              <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
+                <router-link :to="item.href" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">{{ item.name }}</router-link>
+              </MenuItem>
+            </MenuItems>
+          </transition>
+        </Menu>
       </div>
     </nav>
     <Dialog class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
       <div class="fixed inset-0 z-10" />
       <DialogPanel class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
         <div class="flex items-center justify-between">
-          <a href="/" class="-m-1.5 p-1.5">
+          <router-link to="/" class="-m-1.5 p-1.5">
             <span class="sr-only">Your Company</span>
             <img class="h-10 w-auto" src="@image/Company/BongTireLogo.png" alt="" />
-          </a>
+          </router-link>
           <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" @click="mobileMenuOpen = false">
             <span class="sr-only">Close menu</span>
             <XMarkIcon class="h-6 w-6" aria-hidden="true" />
@@ -92,8 +106,8 @@
                 </DisclosurePanel>
               </Disclosure>
 
-              <a href="/board?pccd=N0402" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">이벤트</a>
-              <a href="/reservation" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">예약</a>
+              <router-link to="/board?pccd=N0402" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">이벤트</router-link>
+              <router-link to="/reservation" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">예약</router-link>
 
               <Disclosure as="div" class="-mx-3" v-slot="{ open }">
                 <DisclosureButton class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
@@ -106,7 +120,21 @@
               </Disclosure>
             </div>
             <div class="py-6">
-              <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">로그인</a>
+<!--              <router-link to="/login" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">로그인</router-link>-->
+              <div class="w-full">
+                <div class="flex justify-between items-center mb-3">
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
+                  <span class="font-medium leading-none text-white">TW</span>
+                </span>
+                  <p>관리자 님</p>
+                </div>
+                <div class="w-full flex flex-col justify-center items-center mb-3">
+                  <router-link v-for="user in userNavigation" :to="user.href" class="-mx-3 flex justify-end px-5 block rounded-lg w-full py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                    {{ user.name }}
+                  </router-link>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -160,6 +188,10 @@
     PopoverButton,
     PopoverGroup,
     PopoverPanel,
+    Menu,
+    MenuButton,
+    TransitionChild,
+    TransitionRoot, MenuItems, MenuItem,
   } from '@headlessui/vue'
   import {
     Bars3Icon,
@@ -169,8 +201,8 @@
   } from '@heroicons/vue/24/outline'
   import { ChevronDownIcon, PhoneIcon } from '@heroicons/vue/20/solid'
   import { useCommonStore } from '@store/common.ts'
-  import { IPCCD, IPTCD,  IFetchType} from '../util/type/common'
-  import {fetchGetData} from '../api/reservation'
+  import { IPCCD, IPTCD,  IFetchType} from '@type/common'
+  import {fetchGetData} from '@api/common.ts'
 
   const PTCD = ref<IPTCD[]>([])
   const PCCD = ref<IPCCD[]>([])
@@ -178,16 +210,19 @@
   const store = useCommonStore()
 
   onMounted(async () => {
-        const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd')
+        const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd','','')
         PCCD.value = await pccdPromise
 
-        const ptcdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/ptcd')
+        const ptcdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/ptcd','','')
         PTCD.value = await ptcdPromise
 
         store.initCommon(PTCD.value, PCCD.value)
   })
-  
 
+  const userNavigation = [
+    { name: '관리자 페이지', href: '/admin', grade:0 },
+    { name: '로그아웃', href: '/logout' ,grade:null},
+  ]
 
   const products = [
     { name: '타이어', description: '다양한 종류의 타이어', href: '/tire?pccd=P0601', icon: ShoppingCartIcon },

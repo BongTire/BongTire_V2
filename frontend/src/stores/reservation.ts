@@ -74,6 +74,10 @@ export const useReservationStore = defineStore('reservation', {
       }
 
       this.product.push(productData)
+    },
+    setDeleteProduct(ProductId:number){
+      const index = this.product.findIndex(x=>x.ProductId === ProductId)
+      this.product.splice(index,1)
     }
   },
 })
