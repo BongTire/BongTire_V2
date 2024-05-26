@@ -74,7 +74,7 @@ function onSelect(person) {
 
               <ComboboxOptions v-if="filteredPeople.length > 0" static class="-mb-2 max-h-72 scroll-py-2 overflow-y-auto py-2 text-sm text-gray-800">
                 <ComboboxOption v-for="person in filteredPeople" :key="person.id" :value="person" as="template" v-slot="{ active }">
-                  <li :class="['cursor-default select-none rounded-md px-4 py-2', active && 'bg-indigo-600 text-white']">
+                  <li :class="['cursor-default select-none rounded-md px-4 py-2', active && 'bg-orange-600 text-white']">
                     {{ person.name }}
                   </li>
                 </ComboboxOption>
@@ -82,7 +82,7 @@ function onSelect(person) {
 
               <div v-if="query !== '' && filteredPeople.length === 0" class="px-4 py-14 text-center sm:px-14">
                 <UsersIcon class="mx-auto h-6 w-6 text-gray-400" aria-hidden="true" />
-                <p class="mt-4 text-sm text-gray-900">No people found using that search term.</p>
+                <p class="mt-4 text-sm text-gray-900">상품을 찾을 수가 없습니다</p>
               </div>
             </Combobox>
           </DialogPanel>

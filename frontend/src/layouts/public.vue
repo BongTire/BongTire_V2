@@ -37,7 +37,7 @@
                 </div>
               </div>
               <div class="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                <p v-for="item in callsToAction" :key="item.name" @click="clickMenuBtn(item.state)" class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100">
+                <p v-for="item in callsToAction" :key="item.name" @click="clickMenuBtn(item.state)" class="cursor-pointer flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100">
                   <component :is="item.icon" class="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                   {{ item.name }}
                 </p>
@@ -102,7 +102,7 @@
                   <ChevronDownIcon :class="[open ? 'rotate-180' : '', 'h-5 w-5 flex-none']" aria-hidden="true" />
                 </DisclosureButton>
                 <DisclosurePanel class="mt-2 space-y-2">
-                  <DisclosureButton v-for="item in [...products, ...callsToAction]" :key="item.name" as="p" @click="clickMenuBtn(item.state)" class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ item.name }}</DisclosureButton>
+                  <DisclosureButton v-for="item in [...products, ...callsToAction]" :key="item.name" as="p" @click="clickMenuBtn(item.state)" class="cursor-pointer block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ item.name }}</DisclosureButton>
                 </DisclosurePanel>
               </Disclosure>
 
