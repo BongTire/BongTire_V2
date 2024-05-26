@@ -37,10 +37,10 @@
                 </div>
               </div>
               <div class="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                <router-link v-for="item in callsToAction" :key="item.name" :to="item.href" class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100">
+                <p v-for="item in callsToAction" :key="item.name" @click="clickMenuBtn(item.state)" class="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100">
                   <component :is="item.icon" class="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                   {{ item.name }}
-                </router-link>
+                </p>
               </div>
             </PopoverPanel>
           </transition>
@@ -102,7 +102,7 @@
                   <ChevronDownIcon :class="[open ? 'rotate-180' : '', 'h-5 w-5 flex-none']" aria-hidden="true" />
                 </DisclosureButton>
                 <DisclosurePanel class="mt-2 space-y-2">
-                  <DisclosureButton v-for="item in [...products, ...callsToAction]" :key="item.name" as="a" :href="item.href" class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ item.name }}</DisclosureButton>
+                  <DisclosureButton v-for="item in [...products, ...callsToAction]" :key="item.name" as="p" @click="clickMenuBtn(item.state)" class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">{{ item.name }}</DisclosureButton>
                 </DisclosurePanel>
               </Disclosure>
 
@@ -142,6 +142,7 @@
     </Dialog>
   </header>
   <div>
+    <TireSearch :isOpen="isOpenSearch" @closeSearch="closeSearch" />
     <slot/>
   </div>
   <footer className="bg-white">
@@ -203,6 +204,7 @@
   import { useCommonStore } from '@store/common.ts'
   import { IPCCD, IPTCD,  IFetchType} from '@type/common'
   import {fetchGetData} from '@api/common.ts'
+  import TireSearch from "@component/PopUp/TireSearch.vue";
 
   const PTCD = ref<IPTCD[]>([])
   const PCCD = ref<IPCCD[]>([])
@@ -229,8 +231,8 @@
     { name: '휠', description: '다양한 종류의 저렴한 가격', href: '/wheel?pccd=P0602', icon: ShoppingCartIcon },
   ]
   const callsToAction = [
-    { name: '타이어 검색', href: '#', icon: MagnifyingGlassIcon },
-    { name: '전화 예약', href: '#', icon: PhoneIcon },
+    { name: '타이어 검색', state: 'search', icon: MagnifyingGlassIcon },
+    { name: '전화 예약', state: 'phone', icon: PhoneIcon },
   ]
   const company = [
     { name: '가게 소개', href: '#' },
@@ -266,6 +268,17 @@ const navigation = {
         ],
       }
 
+const isOpenSearch = ref(false)
+const clickMenuBtn = (state:string) =>{
+    if(state==='search'){
+      console.log(1)
+      isOpenSearch.value = true
+    }
+}
+
+const closeSearch = () =>{
+    isOpenSearch.value = false
+}
 
 </script>
 
