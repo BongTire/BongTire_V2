@@ -17,7 +17,7 @@
 
       </div>
     </div>
-    <div class="w-1/2 overflow-y-auto h-screen scrollbar-thumb-gray-500 scrollbar scrollbar-thumb:hover">
+    <div class="w-1/2 overflow-y-auto h-screen w-1/2 scrollbar scrollbar-thumb:hover">
       <ProductInfo/>
     </div>
   </div>

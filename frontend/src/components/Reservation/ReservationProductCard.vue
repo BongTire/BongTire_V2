@@ -1,5 +1,5 @@
 <template>
-  <div class="w-80 h-96 relative border ml-5">
+  <div class="w-80 h-96 relative border ml-5 rounded-md border-gray-200">
     <div class="flex items-center justify-between">
         <img class="h-6" :src="props.conf.brandLogo" >
         <XMarkIcon v-if="productState==='reserve'" @click="clickDeleteProductList" class="w-8 h-8 mt-2 mr-2 rounded-lg hover:bg-slate-100 cursor-pointer "/>
@@ -25,8 +25,8 @@
             <p> {{props.conf?.wheelSize ? props.conf?.wheelSize : null}} </p>
         </div>
     </div>
-    <div class="flex justify-end ">
-        <p > <span class="text-xl text-orange-600"> {{ props.conf.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }} </span> 원</p>
+    <div class="flex justify-end mr-5 ">
+        <p ><span class="text-xl text-orange-600 pb-5"> {{ props.conf.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }} </span> 원</p>
     </div>
   </div>
 </template>

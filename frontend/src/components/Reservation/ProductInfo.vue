@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-md">
+  <div class="w-full max-w-xl overflow-x-auto scrollbar">
     <h2 class="text-xl">예약 물품</h2>
     <div v-for="(type, index) in productType" class="flex">
       <div class="h-128 min-w-24 flex flex-col justify-center items-center bg-slate-50">
