@@ -46,7 +46,7 @@
                   <legend class="w-full px-2">
                     <DisclosureButton
                       class="flex w-full items-center justify-between p-2 text-gray-400 hover:text-gray-500">
-                      <span class="text-sm font-medium text-gray-900">{{ filter.filters.name }}</span>
+                      <span class="text-sm font-medium text-gray-900">{{ filter.name }}</span>
                       <span class="ml-6 flex h-7 items-center">
                         <ChevronDownIcon :class="[open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform']"
                           aria-hidden="true" />
@@ -55,7 +55,7 @@
                   </legend>
                   <DisclosurePanel class="px-4 pb-2 pt-4">
                     <div class="space-y-6">
-                      <div v-for="(option, optionIdx) in filter.filters.value" :key="option.value" class="flex items-center">
+                      <div v-for="(option, optionIdx) in filter.value" :key="option.value" class="flex items-center">
                         <input :id="`${optionIdx}-mobile`" :name="`${optionIdx}`" 
                           type="checkbox"
                           class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
@@ -92,9 +92,9 @@
             <div v-for="(filter, filterIdx) in productFilters" :key="filterIdx"
               :class="filterIdx === 0 ? null : 'pt-10'">
               <fieldset>
-                <legend class="block text-sm font-medium text-gray-900">{{ filter.filters.name }}</legend>
+                <legend class="block text-sm font-medium text-gray-900">{{ filter.name }}</legend>
                 <div class="space-y-3 pt-6">
-                  <div v-for="(option, optionIdx) in filter.filters.value" :key="optionIdx" class="flex items-center">
+                  <div v-for="(option, optionIdx) in filter.value" :key="optionIdx" class="flex items-center">
                     <input :id="`${optionIdx}`" :name="`${optionIdx}[]`"
                       type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                     <label :for="`${optionIdx}`" class="ml-3 text-sm text-gray-600">{{ option.name
@@ -115,6 +115,24 @@
       </div>
     </div>
   </main>
+  <nav v-if="pageTotal>1" class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
+    <div class="-mt-px flex w-0 flex-1">
+      <a href="#" class="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+        <ArrowLongLeftIcon class="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+        Previous
+      </a>
+    </div>
+    <div class="hidden md:-mt-px md:flex">
+
+      <a v-for="page in displayPageArray" href="#" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">{{ page }}</a>
+    </div>
+    <div class="-mt-px flex w-0 flex-1 justify-end">
+      <a href="#" class="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+        Next
+        <ArrowLongRightIcon class="ml-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+      </a>
+    </div>
+  </nav>
 </template>
 
 <script lang="ts" setup >
@@ -131,25 +149,34 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { ChevronDownIcon, PlusIcon } from '@heroicons/vue/20/solid'
+import { ChevronDownIcon, PlusIcon, ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/vue/20/solid'
 import { IFetchType } from '../util/type/common'
-import { fetchGetData } from '@api/common.ts'
+import { fetchGetData, fetchGetTotalData } from '@api/common.ts'
 import{ IProduct } from '../util/type/product'
+import { generatePages, generateDisplayedPages } from '../util/func/common'
 
 const route = useRoute();
 const router = useRouter()
 
 const PCCD = computed(()=>{return route.query.pccd})  
 const mobileFiltersOpen = ref(false)
+
 const product:IProduct[] = ref([])
 const productFilters:IFilter | null = ref(null)
 
-
+const total:number = ref(0)
+const pageTotal:number = ref(0)
+const pageArray:number[] = ref([])
+const currentPage = ref(1)
+const displayPageArray:number[] = ref([])
 
 onMounted(async () => {
 
   const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value)
   product.value = await productPromise;
+
+  const totalPromise:Promise<IFetchType> = fetchGetTotalData<IFetchType>('/product', 'P0301', PCCD.value, 1)
+  total.value = await totalPromise;
 
   if(PCCD.value==='P0601'){
     const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
@@ -160,8 +187,16 @@ onMounted(async () => {
     const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0902')
       productFilters.value = await filterPromise
   }
-  
-  console.log(productFilters.value[0].filters.value)
+  console.log(total.value)
+  console.log(productFilters.value[0])
+  pageTotal.value = total.value/20
+
+  pageArray.value = generatePages(pageTotal.value)
+  console.log(pageArray.value)
+
+  displayPageArray.value = generateDisplayedPages(currentPage.value,pageTotal.value )
+
+  console.log(displayPageArray.value)
 
   const filterLoading = computed(()=>{
     if(filters.value) return false
@@ -177,14 +212,5 @@ onMounted(async () => {
 const moveDetailPage = (id:number) =>{
   router.push(`/product/${id}`)
 }
-
-
-
-
-
-
-
-
-
 
 </script>

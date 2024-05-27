@@ -27,7 +27,7 @@ const tireLoading = computed(()=>{
 
 const tire = ref<IProduct[]>([])
 const state = 'tire'
-const editTireData = ref<IProduct>()
+const editTireData = ref<IProduct>({})
 const isOpenConfirm = ref(false)
 
 

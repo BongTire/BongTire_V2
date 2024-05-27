@@ -1,26 +1,5 @@
-<!--
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
 <template>
-    <!--
-      This example requires updating your template:
-  
-      ```
-      <html class="h-full bg-white">
-      <body class="h-full">
-      ```
-    -->
+
     <div class="flex min-h-full flex-1">
       <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div class="mx-auto w-full max-w-sm lg:w-96">
@@ -32,18 +11,18 @@
   
           <div class="mt-10">
             <div>
-              <form action="#" method="POST" class="space-y-6">
+              <form @submit.prevent="submitLogin" class="space-y-6">
                 <div>
                   <label for="email" class="block text-sm font-medium leading-6 text-gray-900">이메일</label>
                   <div class="mt-2">
-                    <input id="email" name="email" type="email" autocomplete="email" required="" class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
+                    <input v-model="email" id="email" name="email" type="email" autocomplete="email" required="" class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
                   </div>
                 </div>
   
                 <div>
                   <label for="password" class="block text-sm font-medium leading-6 text-gray-900">비밀번호</label>
                   <div class="mt-2">
-                    <input id="password" name="password" type="password" autocomplete="current-password" required="" class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
+                    <input id="password" v-model="password" name="password" type="password" autocomplete="current-password" required="" class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
                   </div>
                 </div>
   
@@ -101,4 +80,32 @@
       </div>
     </div>
   </template>
-  
+<script setup lang="ts">
+import { IFetchType } from '@type/common'
+import { fetchPostData } from '@api/common'
+import { useUserStore } from '@store/user'
+
+const email = ref('')
+const password = ref('')
+const store = useUserStore()
+
+const submitLogin = async () =>{
+
+  const postLoginData = {
+    data:{
+      email: email.value,
+      password: password.value,
+    }
+  }
+
+  const LoginPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/login','','', postLoginData)
+  const response = await LoginPromise
+
+  store.setUserInfo(response)
+  console.log(response)
+
+
+}
+
+
+</script>

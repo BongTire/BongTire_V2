@@ -191,8 +191,8 @@
     PopoverPanel,
     Menu,
     MenuButton,
-    TransitionChild,
-    TransitionRoot, MenuItems, MenuItem,
+    MenuItems,
+    MenuItem,
   } from '@headlessui/vue'
   import {
     Bars3Icon,

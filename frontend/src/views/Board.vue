@@ -72,10 +72,10 @@ const visibleBoard = ref<IPost[]>()
 onMounted(async ()=>{
   
   if(isList.value){
-    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/list','P0202' ,pccd.value)
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0202' ,pccd.value)
     originBoard.value = await postPromise
   }else{
-    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/card','P0203' ,pccd.value)
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0203' ,pccd.value)
     originBoard.value = await postPromise
   }
 

@@ -2,17 +2,11 @@ import axios from "axios";
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 // 응답 인터셉터 처리
 client.interceptors.response.use(
   (response) => {
-    if(response.data.status.code === 4001) {
-      console.log(response.data.status.message)
-    }
     if (response && response.data) {
       return response.data;
     }
