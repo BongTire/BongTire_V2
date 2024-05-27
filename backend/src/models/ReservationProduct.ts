@@ -7,7 +7,7 @@ export default class ReservationProduct extends Model {
     public CalendarId!: number;
     public OperationTimeId!: number;
     public UserId!: number;
-    public ReservationCode!: number;
+    public ReservationCode!: string;
     public PCCD!: string;
     public ProductId!: string;
     public amount!: number;
@@ -44,9 +44,9 @@ export default class ReservationProduct extends Model {
                 allowNull: false,
             },
             ReservationCode: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.STRING(30),
                 allowNull: false,
-                defaultValue: 0,
+                defaultValue: "",
             },
             PCCD: {
                 type: DataTypes.STRING(10),

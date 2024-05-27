@@ -59,22 +59,17 @@ app.set('view engine', 'ejs');
 
 // 라우터 설정
 
-import inputRouter from './routes/input';
-import naverRouter from './routes/auth/naver';
+
+// import naverRouter from './routes/auth/naver';
 import productRouter from './routes/public/product';
-import menuRouter from './routes/public/menu';
 import reservationRouter from './routes/public/reservation';
-import calendarRouter from './routes/public/calendar';
 import localAuthRouter from './routes/auth/local';
 import fileUploadRouter from './routes/public/fileUpload';
-import cardRouter from './routes/public/card';
-import listRouter from './routes/public/list';
 import commonRouter from './routes/public/common';
 import postRouter from './routes/public/post';
 import searchRouter from './routes/public/search';
-import adminMainRouter from './routes/admin/main';
+
 import adminProductTypeRouter from './routes/admin/producttype';
-import adminMenuRouter from './routes/admin/menu';
 import adminProductRouter from './routes/admin/product';
 import adminCarRouter from './routes/admin/car';
 import adminFileUploadRouter from './routes/admin/fileUpload';
@@ -88,23 +83,15 @@ app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/', indexRouter);
-app.use('/input', inputRouter);
-app.use('/auth/naver', naverRouter);
+// app.use('/auth/naver', naverRouter);
 app.use('/api/product', productRouter);
-app.use('/api/menu', menuRouter);
 app.use('/api/reservation', reservationRouter);
-app.use('/api/calendar', calendarRouter);
 app.use('/api/auth/local', localAuthRouter);
 app.use('/api/file-upload', fileUploadRouter);
-app.use('/api/card', cardRouter);
-app.use('/api/list', listRouter);
 app.use('/api/common', commonRouter);
 app.use('/api/post', postRouter);
 app.use('/api/search', searchRouter);
-app.use('/api/admin/main', adminMainRouter);
 app.use('/api/admin/producttype', adminProductTypeRouter);
-app.use('/api/admin/menu', adminMenuRouter);
 app.use('/api/admin/product', adminProductRouter);
 app.use('/api/admin/car', adminCarRouter);
 app.use('/api/admin/file-upload', adminFileUploadRouter);
@@ -126,7 +113,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('dev')); // 개발환경이면
 }
 
-// 서버 실행 npm run start:dev 하면 됨, 저장하면 자동 빌드후 재실행 적용
+// 서버 실행
 app.listen(4000, () => {
   console.log('http://127.0.0.1:4000 app listening on port 4000!');
 });

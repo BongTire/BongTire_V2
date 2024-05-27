@@ -5,7 +5,7 @@ import session, { SessionData } from 'express-session';
 
 
 // JUST USER 로그인 여부 확인
-const isAuthenticatedUser = (req: Request & { session: SessionData & { userId: number } }, res: Response, next: NextFunction) => {
+const isAuthenticatedUser = (req: Request, res: Response, next: NextFunction) => {
   if (req.session && req.session.userId) {
       console.log(req.session.userId);
       // 로그인된 사용자인 경우
@@ -17,7 +17,7 @@ const isAuthenticatedUser = (req: Request & { session: SessionData & { userId: n
 };
 
 // ANDMIN 로그인 여부 확인
-const isAuthenticatedAdmin = (req: Request & { session: SessionData & { userId: number, grade: number } }, res: Response, next: NextFunction) => {
+const isAuthenticatedAdmin = (req: Request , res: Response, next: NextFunction) => {
   if (req.session && req.session.userId) {
       // 로그인된 사용자인 경우
       console.log(req.session.userId);
