@@ -5,6 +5,7 @@ import logger from '../../config/logger';
 import { Json } from 'sequelize/types/utils';
 import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
 import {returnPastOrNot,returnReservationPossible,splitArray,returnCalendarResult,returnResult,returnReservationContent,returnTodayReservation,returnResercationDatasWithDate,returnBasicResult,returnNonPastReservationDatas,returnReservations,returnTodayReservations} from '../../utils/reservationUtil'
+import {returnFormat} from '../../utils/return'
 
 const router: Router = express.Router();
 const Calendar = db.Calendar
@@ -202,11 +203,13 @@ router.get('/calendar',isAuthenticatedAdmin,async function(req:Request,res:Respo
         //logger.info('todayData: '+todayData)
         const returnData = returnCalendarResult(todayData.year,todayData.month,todayData,splitDate)
         //logger.info('splitDate: '+JSON.stringify(splitDate))
-
-        res.json(returnData);
+        const returnFormatData = returnFormat(2000,'성공',returnData)
+        res.json(returnFormatData);
+        
     } catch (error) {
         logger.error(error);
-        res.status(500).send('Internal Server Error');
+        const returnFormatData = returnFormat(4000,'Internal Server Error',error)
+        res.json(returnFormatData);
     }
 })
 
@@ -408,11 +411,13 @@ router.post('/calendar',isAuthenticatedAdmin,async function(req,res){//이번달
         logger.info('todayData: '+todayData)
         const returnData = returnCalendarResult(year,month+1,todayData,splitDate)
         //logger.info('splitDate: '+JSON.stringify(splitDate))
-
-        res.json(returnData);
+        const returnFormatData = returnFormat(2000,'성공',returnData)
+        res.json(returnFormatData);
     } catch (error) {
         logger.error(error);
-        res.status(500).send('Internal Server Error');
+
+        const returnFormatData = returnFormat(5000,'Internal Server Error',error)
+        res.json(returnFormatData);
     }
 })
 
@@ -452,10 +457,14 @@ router.post('/time',isAuthenticatedAdmin,async function(req,res){//해당 날짜
                     operationTimeId: reservationTime[i].OperationTimeId 
                 })
             }
-            res.json(dateData)
+            
+            const returnFormatData = returnFormat(2000,'성공',dateData)
+            res.json(returnFormatData);
             
         } catch (error) {
-            
+            logger.error(error)
+            const returnFormatData = returnFormat(4000,'실패',error)
+            res.json(returnFormatData);
         }
 
     }
@@ -655,14 +664,10 @@ router.post('/inquiry',isAuthenticatedAdmin,async function(req,res){//예약조�
 
 
     } catch (error) {
-        logger.error(error+'에러 입니다')
-        res.json({
-            status:{
-                code: 4000,
-                message: "에러 입니다." + error
-            },
-            data:""
-        })
+        logger.error('에러 입니다'+error)
+        
+        const returnFormatData = returnFormat(4000,"실패",error)
+        res.json(returnFormatData);
     }
 })
 
@@ -695,13 +700,9 @@ router.get('/reservedata',isAuthenticatedAdmin, async function(req: Request, res
         res.json(result);
     } catch (error: any) {
         logger.error('Error: ' + error);
-        res.status(400).json({
-            status: {
-                code: 4000,
-                message: error.message
-            },
-            data: error
-        });
+        
+        const returnFormatData = returnFormat(4000,'실패',error)
+        res.json(returnFormatData);
     }
 });
 
@@ -722,22 +723,19 @@ router.post('/confirmed', isAuthenticatedAdmin, async function(req: Request, res
         );
 
         if (updatedReservation[0] > 0) {
-            res.status(200).json({
-                success: true,
-                message: 'Reservation updated successfully'
-            });
+            
+            const returnFormatData = returnFormat(2000,'Reservation updated successfully',[])
+            res.json(returnFormatData);
         } else {
-            res.status(404).json({
-                success: false,
-                message: 'Reservation not found or not updated'
-            });
+            
+            const returnFormatData = returnFormat(4000,'Reservation not found or not updated',[])
+            res.json(returnFormatData);
         }
     } catch (error) {
         logger.error('/api/admin/reservation/confirmed: ' + error);
-        res.status(500).json({
-            success: false,
-            message: 'An error occurred while updating reservation'
-        });
+        
+        const returnFormatData = returnFormat(5000,'An error occurred while updating reservation',error)
+        res.json(returnFormatData);
     }
 });
 
@@ -788,30 +786,20 @@ router.post('/isActive', isAuthenticatedAdmin, async function(req: Request, res:
             );
 
             if (updatedReservationTime[0] > 0) {
-                res.json({
-                    status: {
-                        code: 2000,
-                        message: 'The reservation time has been activated.'
-                    }
-                });
+                
+                const returnFormatData = returnFormat(2000,'The reservation time has been activated.',[])
+                res.json(returnFormatData);
             } else {
-                res.json({
-                    status: {
-                        code: 4000,
-                        message: 'Failed to activate the reservation time.'
-                    }
-                });
+                
+                const returnFormatData = returnFormat(4000,'Failed to activate the reservation time.',[])
+                res.json(returnFormatData);
             }
         }
     } catch (error :any) {
         logger.error('/isActive Error: ' + error);
-        res.json({
-            status: {
-                code: 4000,
-                message: error.message
-            },
-            data: error
-        });
+        
+        const returnFormatData = returnFormat(4000,'실패',error)
+        res.json(returnFormatData);
     }
 });
 

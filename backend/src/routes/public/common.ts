@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import { Sequelize, DataTypes,QueryTypes } from 'sequelize';
 import logger from '../../config/logger';
 import db from '../../models';
+import {returnFormat} from '../../utils/return'
 
 const PCCD = db.PCCD
 const PTCD = db.PTCD
@@ -13,22 +14,12 @@ const router: Router = express.Router();
 router.get('/ptcd', async (req: Request, res: Response) => {
     try {
         const findData = await PTCD.findAll();
-        res.json({
-            status: {
-                code: 2000,
-                message: "PTCD를 성공적으로 가져왔습니다."
-            },
-            data: findData
-        });
+        
+        const returnFormatData = returnFormat(2000,"PTCD를 성공적으로 가져왔습니다.",findData)
+        res.json(returnFormatData);
     } catch (error) {
-        res.json({
-            status: {
-                code: 4000,
-                message: '불러오는 것을 실패했습니다.'
-            },
-            data: []
-        });
-        logger.error('데이터 업데이트 및 생성 실패의 전체 로직이 실패했습니다. ' + error);
+        const returnFormatData = returnFormat(4000,'불러오는 것을 실패했습니다.',error)
+        res.json(returnFormatData);
     }
 });
 
@@ -36,34 +27,21 @@ router.get('/ptcd', async (req: Request, res: Response) => {
 router.get('/pccd', async (req: Request, res: Response) => {
     try {
         const findData = await PCCD.findAll();
-        res.json({
-            status: {
-                code: 2000,
-                message: "PCCD를 성공적으로 가져왔습니다."
-            },
-            data: findData
-        });
+        const returnFormatData = returnFormat(2000,"PCCD를 성공적으로 가져왔습니다.",findData)
+        res.json(returnFormatData);
     } catch (error) {
-        res.json({
-            status: {
-                code: 4000,
-                message: '불러오는 것을 실패했습니다.'
-            },
-            data: []
-        });
         logger.error('데이터 업데이트 및 생성 실패의 전체 로직이 실패했습니다. ' + error);
+        const returnFormatData = returnFormat(4000,'불러오는 것을 실패했습니다.',error)
+        res.json(returnFormatData);
+        
     }
 });
 
 // 즐겨찾기 데이터를 가져오는 엔드포인트
 router.get('/fav', (req: Request, res: Response) => {
-    res.json({
-        status: {
-            code: 2000,
-            message: '성공적으로 조회 했습니다.'
-        },
-        data: favData
-    });
+    
+    const returnFormatData = returnFormat(2000,'성공적으로 조회 했습니다.',favData)
+    res.json(returnFormatData);
 });
 
 // 즐겨찾기 데이터
@@ -128,29 +106,16 @@ router.get('/product/rank', async (req: Request, res: Response) => {
         );
 
         if (recommendTireDatas.length === 0) {
-            res.json({
-                status: {
-                    code: 4000,
-                    message: '추천타이어를 불러오지 못했습니다.'
-                }
-            });
+            const returnFormatData = returnFormat(4000,'추천타이어를 불러오지 못했습니다.',{})
+            res.json(returnFormatData);
         } else {
-            res.json({
-                status: {
-                    code: 2000,
-                    message: '추천타이어를 불러왔습니다.'
-                },
-                data: recommendTireDatas
-            });
+            const returnFormatData = returnFormat(2000,'추천타이어를 불러왔습니다.',recommendTireDatas)
+            res.json(returnFormatData);
         }
     } catch (error) {
         logger.error('/recommendTire 에러발생: ' + error);
-        res.json({
-            status: {
-                code: 4000,
-                message: '추천타이어를 불러오는데 실패했습니다.'
-            }
-        });
+        const returnFormatData = returnFormat(4000,'추천타이어를 불러오는데 실패했습니다.',error)
+        res.json(returnFormatData);
     }
 });
 

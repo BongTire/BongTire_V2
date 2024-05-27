@@ -4,6 +4,7 @@ import axios from 'axios';
 import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
 import db from '../../models';
 import logger from '../../config/logger';
+import {returnFormat} from '../../utils/return'
 
 const router = express.Router();
 const Brand = db.Brand;
@@ -102,21 +103,14 @@ router.get('/', async (req: Request, res: Response) => {
             logger.info('수입 차량 찾기 성공 ' + importedCars);
         }
 
-        res.json({
-            status: {
-                code: 2000,
-                message: "데이터를 성공적으로 전송했습니다."
-            },
-            data: result
-        });
+        
+        const returnFormatData = returnFormat(2000,'데이터를 성공적으로 전송했습니다.',result)
+        res.json(returnFormatData);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            status: {
-                code: 5000,
-                message: "데이터 전송 중 오류가 발생했습니다."
-            }
-        });
+        const returnFormatData = returnFormat(5000,'데이터 전송 중 오류가 발생했습니다.',null)
+        res.json(returnFormatData);
+        
     }
 });
 
@@ -187,22 +181,14 @@ router.get('/:id', isAuthenticatedAdmin, async (req: Request, res: Response) => 
             logger.error('차량 값이 없습니다');
         }
 
-        res.json({
-            status: {
-                code: 2000,
-                message: "TODO: 해당 로직 수정 바람."
-            },
-            data: result
-        });
+        
+        const returnFormatData = returnFormat(2000,'TODO: 해당 로직 수정 바람.',result)
+        res.json(returnFormatData);
+        
     } catch (error) {
         console.error(error);
-        res.json({
-            status: {
-                code: 4000,
-                message: "TODO: 해당 로직 수정 바람."
-            },
-            data: {}
-        });
+        const returnFormatData = returnFormat(4000,'TODO: 해당 로직 수정 바람.',null)
+        res.json(returnFormatData);
     }
 });
 
@@ -220,13 +206,9 @@ router.post('/', isAuthenticatedAdmin, async (req: Request, res: Response) => {
             const createData = await Car.create(reqCarData);
             logger.info('차량 추가 성공' + createData);
             // TODO: 공통 로직으로 변경 요청
-            res.json({
-                status: {
-                    code: 2000,
-                    message: "데이터 추가에 성공했습니다."
-                },
-                data: []
-            });
+            
+            const returnFormatData = returnFormat(2000,'데이터 추가에 성공했습니다.',null)
+            res.json(returnFormatData);
         } else {
             const existingData = await Car.findByPk(reqCarData.CarId);
             if (existingData) {
@@ -237,24 +219,15 @@ router.post('/', isAuthenticatedAdmin, async (req: Request, res: Response) => {
                 logger.info('차량 추가 성공' + result);
             }
             // TODO: 공통 로직으로 변경 요청
-            res.json({
-                status: {
-                    code: 2000,
-                    message: "데이터 업데이트에 성공했습니다."
-                },
-                data: []
-            });
+            
+            const returnFormatData = returnFormat(2000,'데이터 업데이트에 성공했습니다.',null)
+            res.json(returnFormatData);
         }
     } catch (error) {
         logger.error('차량 추가에 실패했습니다.' + error);
         // TODO: 공통 로직으로 변경 요청
-        res.json({
-            status: {
-                code: 4000,
-                message: "데이터 추가에 실패했습니다."
-            },
-            data: []
-        });
+        const returnFormatData = returnFormat(4000,'데이터 추가에 실패했습니다.',null)
+        res.json(returnFormatData);
     }
 });
 
@@ -272,17 +245,15 @@ router.post('/init', isAuthenticatedAdmin, async (req: Request, res: Response) =
         logger.info(await Car.findAll());
 
         // TODO: 공통 로직으로 변경 요청
-        const result = {
-            status: {
-                code: 2000,
-                message: '차량 초기화 데이터 생성 성공'
-            }
-        };
+       
+        const returnFormatData = returnFormat(2000,'차량 초기화 데이터 생성 성공',null)
+        res.json(returnFormatData);
 
-        res.json(result);
     } catch (error) {
         // TODO: 공통 로직으로 변경 요청
         logger.error('차량 데이터 생성 실패' + error);
+        const returnFormatData = returnFormat(4000,'차량 데이터 생성 실패',null)
+        res.json(returnFormatData);
     }
 });
 router.get('/trim/:id', isAuthenticatedAdmin, async (req: Request, res: Response) => {
@@ -361,23 +332,14 @@ router.get('/trim/:id', isAuthenticatedAdmin, async (req: Request, res: Response
         const groupedDataByYear = transformCarData(findData);
         carTrimData.yearList = [...groupedDataByYear];
 
-        res.json({
-            status: {
-                code: 2000,
-                message: "트림 데이터를 성공적으로 가져왔습니다."
-            },
-            data: { ...carTrimData }
-        });
+        
+        const returnFormatData = returnFormat(2000,"트림 데이터를 성공적으로 가져왔습니다.",{ ...carTrimData })
+        res.json(returnFormatData);
+        
     } catch (error) {
         logger.error('차량 데이터를 가져오는데 실패했습니다.' + error);
-
-        res.json({
-            status: {
-                code: 4000,
-                message: "데이터를 가져오는데 실패했습니다."
-            },
-            data: { ...carTrimData }
-        });
+        const returnFormatData = returnFormat(4000,"데이터를 가져오는데 실패했습니다.",{ ...carTrimData })
+        res.json(returnFormatData);
     }
 });
 
@@ -401,66 +363,49 @@ router.post('/trim', isAuthenticatedAdmin, async (req: Request, res: Response) =
                 .then(result => {
                     logger.info('트림 데이터 업데이트 성공' + result);
                     // TODO: 공통 로직으로 변경 요청
-                    res.json({
-                        status: {
-                            code: 2000,
-                            message: "데이터 업데이트에 성공했습니다."
-                        },
-                        data: []
-                    });
+                    
+                    const returnFormatData = returnFormat(2000,"데이터 업데이트에 성공했습니다.",[])
+                    res.json(returnFormatData);
                 })
                 .catch(error => {
                     logger.error('트림 데이터 업데이트 실패' + error);
                     // TODO: 공통 로직으로 변경 요청
-                    res.json({
-                        status: {
-                            code: 4000,
-                            message: "데이터 업데이트에 실패했습니다."
-                        },
-                        data: []
-                    });
+                    
+                    const returnFormatData = returnFormat(4000,"데이터 업데이트에 실패했습니다.",[])
+                    res.json(returnFormatData);
                 });
         } else {
             return CarTrim.create(carTrimData)
                 .then(result => {
                     logger.info('트림 데이터 추가 성공' + result);
                     // TODO: 공통 로직으로 변경 요청
-                    res.json({
-                        status: {
-                            code: 2000,
-                            message: "데이터 추가에 성공했습니다."
-                        },
-                        data: []
-                    });
+                    
+                    const returnFormatData = returnFormat(2000,"데이터 추가에 성공했습니다.",[])
+                    res.json(returnFormatData);
                 })
                 .catch(error => {
                     logger.error('트림 데이터 추가 실패' + error);
                     // TODO: 공통 로직으로 변경 요청
-                    res.json({
-                        status: {
-                            code: 4000,
-                            message: "데이터 추가에 실패했습니다."
-                        },
-                        data: []
-                    });
+                    
+                    const returnFormatData = returnFormat(4000,"데이터 추가에 실패했습니다.",[])
+                    res.json(returnFormatData);
                 });
         }
     })
     .catch(error => {
         logger.error('트림 데이터 검색 실패' + error);
         // TODO: 공통 로직으로 변경 요청
-        res.json({
-            status: {
-                code: 4000,
-                message: "데이터 검색에 실패했습니다."
-            },
-            data: []
-        });
+        
+        const returnFormatData = returnFormat(4000,"데이터 검색에 실패했습니다.",[])
+        res.json(returnFormatData);
     });
 
         }
     } catch (error) {
         // Handle error
+        logger.error(error)
+        const returnFormatData = returnFormat(4000,"데이터 검색에 실패했습니다..",[])
+        res.json(returnFormatData);
     }
 });
 
@@ -470,23 +415,15 @@ router.post('/trim/init', isAuthenticatedAdmin, async (req: Request, res: Respon
         await CarTrim.bulkCreate(carTrimDatas);
         logger.info(await CarTrim.findAll());
         // TODO: 공통 로직으로 변경 요청
-        res.json({
-            status: {
-                code: 2000,
-                message: '성공'
-            },
-            data: []
-        });
+        
+        const returnFormatData = returnFormat(2000,'성공',[])
+        res.json(returnFormatData);
     } catch (error) {
         logger.error('데이터 생성에 실패했습니다.' + error);
         // TODO: 공통 로직으로 변경 요청
-        res.json({
-            status: {
-                code: 4000,
-                message: '실패'
-            },
-            data: []
-        });
+        
+        const returnFormatData = returnFormat(4000,'실패',[])
+        res.json(returnFormatData);
     }
 });
 

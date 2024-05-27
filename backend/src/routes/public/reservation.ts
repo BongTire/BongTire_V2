@@ -4,6 +4,7 @@ import { Sequelize, DataTypes, QueryTypes } from 'sequelize';
 import logger from '../../config/logger';
 import { Json } from 'sequelize/types/utils';
 import {returnPastOrNot,returnReservationPossible,splitArray,returnCalendarResult,returnResult,returnReservationContent,returnTodayReservation,returnResercationDatasWithDate,returnBasicResult,returnNonPastReservationDatas,returnReservations,pastMonthData, thisMonthData , nextMonthDataArray,availableTime, returnBasicErrorResult} from '../../utils/reservationUtil'
+import {returnFormat} from '../../utils/return'
 
 const router: Router = express.Router();
 const Calendar = db.Calendar
@@ -77,11 +78,14 @@ router.get('/calendar',async function(req:Request,res:Response){//이번달 기�
         //logger.info('todayData: '+todayData)
         const returnData = returnCalendarResult(todayData.year,todayData.month,todayData,splitDate)
         //logger.info('splitDate: '+JSON.stringify(splitDate))
+        const returnFormatData = returnFormat(2000,'성공',returnData)
+        res.json(returnFormatData);
 
-        res.json(returnData);
     } catch (error) {
         logger.error(error);
-        res.status(500).send('Internal Server Error');
+        const returnFormatData = returnFormat(5000,'Internal Server Error',error)
+        res.json(returnFormatData);
+        
     }
 })
 
@@ -158,11 +162,13 @@ router.post('/calendar',async function(req,res){//이번달 기준 예약 가능
         logger.info('todayData: '+todayData)
         const returnData = returnCalendarResult(year,month+1,todayData,splitDate)
         //logger.info('splitDate: '+JSON.stringify(splitDate))
+        const returnFormatData = returnFormat(2000,'성공',returnData)
+        res.json(returnFormatData);
 
-        res.json(returnData);
     } catch (error) {
         logger.error(error);
-        res.status(500).send('Internal Server Error');
+        const returnFormatData = returnFormat(5000,'Internal Server Error',error)
+        res.json(returnFormatData);
     }
 })
 
@@ -176,11 +182,14 @@ router.post('/time',async function(req,res){//해당 날짜에 가능한 시간�
         try {
             let dateData = await availableTime(data)
             const result = returnBasicResult(dateData)
-            res.json(result)
+            const returnFormatData = returnFormat(2000,'성공',result)
+            res.json(returnFormatData);
+            
             
         } catch (error) {
             logger.error(error)
-            res.json(returnBasicErrorResult)
+            const returnFormatData = returnFormat(4000,'실패',error)
+            res.json(returnFormatData);
         }
 
     }
@@ -385,13 +394,8 @@ router.post('/inquiry',async function(req,res){//예약조회
 
     } catch (error) {
         logger.error(error+'에러 입니다')
-        res.json({
-            status:{
-                code: 4000,
-                message: "에러 입니다." + error
-            },
-            data:""
-        })
+        const returnFormatData = returnFormat(4000,'실패',error)
+        res.json(returnFormatData);
     }
 })
 

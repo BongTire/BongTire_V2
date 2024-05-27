@@ -4,6 +4,7 @@ import axios from 'axios';
 import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
 import db from '../../models';
 import logger from '../../config/logger';
+import { returnFormat } from '../../utils/return';
 
 const router = express.Router();
 const Calendar = db.Calendar
@@ -353,18 +354,41 @@ async function generateReservationTimes() {
 }
 
 router.get('/holiday',isAuthenticatedAdmin,async function (req,res){  
-    holidayAPI(String(currentYear));
-    res.send('holiday')  
+    try {
+        await holidayAPI(String(currentYear));
+        const result = returnFormat(2000,'성공',null)
+        res.json(result);
+    } catch (error) {
+        const result = returnFormat(4000,'실패',null)
+        res.json(result);
+    }
+    
 })
 
 router.get('/create',isAuthenticatedAdmin,async function(req,res){
-    // 현재 연도와 내년 연도의 캘린더 데이터 생성
-    createCalendarData(currentYear);
-    //createCalendarData(currentYear + 1);
+    try {
+        //올해 데이터 생성
+        await createCalendarData(currentYear);
+        //createCalendarData(currentYear + 1);
+        const result = returnFormat(2000,'성공',null)
+        res.json(result);
+    } catch (error) {
+        const result = returnFormat(4000,'실패',null)
+        res.json(result);
+    }
+  
 })
 
 router.get('/operationTime',isAuthenticatedAdmin,isAuthenticatedAdmin,async function(req,res){ //영업시간 기본 생성
-    operationTimeCreate();
+    try {
+        operationTimeCreate();
+        const result = returnFormat(2000,'성공',null)
+        res.json(result);
+    } catch (error) {
+        const result = returnFormat(4000,'실패',null)
+        res.json(result);
+    }
+    
 })
 router.get('/reservationTime',isAuthenticatedAdmin, async function(req, res) {
     try {
@@ -630,10 +654,14 @@ router.get('/reservationTime',isAuthenticatedAdmin, async function(req, res) {
             ReservationTime.bulkCreate(weekend), // 주말 데이터 추가
             ReservationTime.bulkCreate(holiday), // 공휴일 데이터 추가
         ]);
-        res.status(200).send('Reservation times created successfully');
+        const result = returnFormat(2000,'Reservation times created successfully',null)
+        res.json(result);
+        
     } catch (error) {
         console.error('Error creating reservation times:', error);
-        res.status(500).send('An error occurred while creating reservation times');
+        const result = returnFormat(5000,'An error occurred while creating reservation times',null)
+        res.json(result);
+        
     }
 });
 
