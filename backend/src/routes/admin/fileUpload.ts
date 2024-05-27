@@ -3,6 +3,7 @@ import path from 'path';
 import multer, { MulterError } from 'multer';
 import logger from '../../config/logger';
 import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
+import {returnFormat} from '../../utils/return'
 const router = express.Router();
 
 // 이미지를 저장할 기본 디렉토리
@@ -50,13 +51,19 @@ router.post('/', isAuthenticatedAdmin, function (req: Request, res: Response) {
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
             // multer 에러 처리
-            return res.status(400).json({ error: 'Multer Error: ' + err.message });
+            
+            const returnFormatData = returnFormat(4000,err.message,[])
+            return res.json(returnFormatData);
         } else if (err) {
             // 기타 에러 처리
-            return res.status(500).json({ error: 'Error: ' + err.message });
+           
+            const returnFormatData = returnFormat(5000,err.message,[])
+            return res.json(returnFormatData);
         }
 
-        res.status(200).json({ message: '이미지를 성공적으로 저장하였습니다.', file: req.file });
+        
+        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file})
+        res.json(returnFormatData);
     });
 });
 
@@ -78,13 +85,17 @@ router.post('/product', isAuthenticatedAdmin, function (req: Request, res: Respo
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
             // multer 에러 처리
-            return res.status(400).json({ error: 'Multer Error: ' + err.message });
+            
+            const returnFormatData = returnFormat(4000,err.message,[])
+            return res.json(returnFormatData);
         } else if (err) {
             // 기타 에러 처리
-            return res.status(500).json({ error: 'Error: ' + err.message });
+            const returnFormatData = returnFormat(5000,err.message,[])
+            return res.json(returnFormatData);
         }
 
-        res.status(200).json({ message: '이미지를 성공적으로 저장하였습니다.', file: req.file, imageURL: imageURL });
+        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageURL: imageURL})
+        res.json(returnFormatData);
     });
 });
 
@@ -105,13 +116,15 @@ router.post('/car', isAuthenticatedAdmin, function (req: Request, res: Response)
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
             // multer 에러 처리
-            return res.status(400).json({ error: 'Multer Error: ' + err.message });
+            const returnFormatData = returnFormat(4000,err.message,[])
+            return res.json(returnFormatData);
         } else if (err) {
             // 기타 에러 처리
-            return res.status(500).json({ error: 'Error: ' + err.message });
+            const returnFormatData = returnFormat(5000,err.message,[])
+            return res.json(returnFormatData);
         }
-
-        res.status(200).json({ message: '이미지를 성공적으로 저장하였습니다.', file: req.file, imageURL: imageURL });
+        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageURL: imageURL})
+        res.json(returnFormatData);
     });
 });
 
@@ -131,13 +144,16 @@ router.post('/pccd', isAuthenticatedAdmin, function (req: Request, res: Response
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
             // multer 에러 처리
-            return res.status(400).json({ error: 'Multer Error: ' + err.message });
+            const returnFormatData = returnFormat(4000,err.message,[])
+            return res.json(returnFormatData);
         } else if (err) {
             // 기타 에러 처리
-            return res.status(500).json({ error: 'Error: ' + err.message });
+            const returnFormatData = returnFormat(5000,err.message,[])
+            return res.json(returnFormatData);
         }
 
-        res.status(200).json({ message: '이미지를 성공적으로 저장하였습니다.', file: req.file, imageURL: imageURL });
+        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageURL: imageURL})
+        res.json(returnFormatData);
     });
 });
 

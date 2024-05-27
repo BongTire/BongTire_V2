@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 import db from '../../models';
 import logger from '../../config/logger';
 import { isAuthenticatedAdmin } from '../../middleware/auth';
+import {returnFormat} from '../../utils/return'
 
 const Tire = db.Tire
 const Wheel = db.Wheel
@@ -21,22 +22,14 @@ router.get('/tire', isAuthenticatedAdmin, async function (req: Request, res: Res
             join Brands B on B.BrandId = T.BrandId 
             where T.deletedAt IS NULL`);
         const data = [...response];
-        res.json({
-            status: {
-                code: 2000,
-                message: '타이어 데이터 찾기의 성공했습니다.'
-            },
-            data
-        });
+        
+        const returnFormatData = returnFormat(2000,'타이어 데이터 찾기의 성공했습니다.',data)
+        res.json(returnFormatData);
     } catch (error) {
         logger.error(error);
-        res.json({
-            status: {
-                code: 4000,
-                message: '타이어 데이터 찾기의 실패 했습니다..'
-            },
-            data: {}
-        });
+        
+        const returnFormatData = returnFormat(4000,'타이어 데이터 찾기의 실패 했습니다..',[])
+        res.json(returnFormatData);
     }
 });
 
@@ -77,24 +70,14 @@ router.post('/tire', isAuthenticatedAdmin, async function (req: Request, res: Re
         try {
             const createData = await Tire.create(tireFormatData);
             logger.info('타이어 데이터 추가 성공' + createData);
-            res.json({
-                status: {
-                    code: 2000,
-                    message: '타이어 데이터 추가 성공'
-                },
-                data: {}
-            });
+            
+            const returnFormatData = returnFormat(2000,'타이어 데이터 추가 성공',[])
+            res.json(returnFormatData);
         } catch (error) {
             logger.error('타이어 데이터 추가 실패' + error);
-            res.json({
-                status: {
-                    code: 4000,
-                    message: '타이어 데이터 추가 실패' + error
-                },
-                data: {
-                    error
-                }
-            });
+            
+            const returnFormatData = returnFormat(4000,'타이어 데이터 추가 실패',{error})
+            res.json(returnFormatData);
         }
     } else {
         try {
@@ -106,22 +89,14 @@ router.post('/tire', isAuthenticatedAdmin, async function (req: Request, res: Re
                 result = await Tire.create(tireFormatData);
             }
             logger.info('타이어 데이터 업데이트 성공' + result);
-            res.json({
-                status: {
-                    code: 2000,
-                    message: '타이어 데이터 업데이트 성공'
-                },
-                data: {}
-            });
+            
+            const returnFormatData = returnFormat(2000,'타이어 데이터 업데이트 성공',[])
+            res.json(returnFormatData);
         } catch (error) {
             logger.error('타이어 데이터 업데이트 실패' + error);
-            res.json({
-                status: {
-                    code: 4000,
-                    message: '데이터 추가에 실패했습니다.'
-                },
-                data: []
-            });
+            
+            const returnFormatData = returnFormat(4000,'데이터 추가에 실패했습니다.',[])
+        res.json(returnFormatData);
         }
     }
 });
@@ -136,23 +111,14 @@ router.get('/tire/brand', isAuthenticatedAdmin, async (req: Request, res: Respon
             }
         });
         const brand = JSON.parse(JSON.stringify(TireBrand));
-        const result = {
-            status: {
-                code: 2000,
-                message: "성공"
-            },
-            data: brand
-        };
-        res.json(result);
+        
+        const returnFormatData = returnFormat(2000,"성공",brand)
+        res.json(returnFormatData);
     } catch (error) {
         logger.error(error);
-        res.json({
-            status: {
-                code: 4000,
-                message: '데이터를 꺼내 오지 못햇습니다.'
-            },
-            data: error
-        });
+       
+        const returnFormatData = returnFormat(4000,'데이터를 꺼내 오지 못햇습니다.',{error})
+        res.json(returnFormatData);
     }
 });
 
@@ -161,22 +127,14 @@ router.get('/wheel', isAuthenticatedAdmin, async function (req: Request, res: Re
         const response = await sequelize.query(`select W.WheelId as id, W.BrandId as BrandId, name as brandName, W.PCCD as PCCD, W.drivingMethodPCCD, W.productName, W.content,  W.wheelSize,W.frontOffset, W.rearOffset, W.price, W.feature, W.amount, W.discountPrice, W.discountRate,  W.sales, W.viewers, W.isSecond, W.isActivate, W.isVisible, W.isContinue ,W.PCD, W.hole
         from Wheels W join Brands B on  B.BrandId = W.BrandId where W.deletedAt IS NULL`);
         const data = [...response];
-        res.json({
-            status: {
-                code: 2000,
-                message: '타이어 데이터 찾기의 성공했습니다.'
-            },
-            data
-        });
+        
+        const returnFormatData = returnFormat(2000,'타이어 데이터 찾기의 성공했습니다.',data)
+        res.json(returnFormatData);
     } catch (error) {
         logger.error(error);
-        res.json({
-            status: {
-                code: 4000,
-                message: '타이어 데이터 찾기의 실패 했습니다..'
-            },
-            data: {}
-        });
+        
+        const returnFormatData = returnFormat(4000,'타이어 데이터 찾기의 실패 했습니다..',[])
+        res.json(returnFormatData);
     }
 });
 
@@ -190,23 +148,15 @@ router.get('/wheel/brand', isAuthenticatedAdmin, async (req: Request, res: Respo
             }
         });
         const brand = JSON.parse(JSON.stringify(WheelBrand));
-        const result = {
-            status: {
-                code: 2000,
-                message: "성공"
-            },
-            data: brand
-        };
-        res.json(result);
+        
+        const returnFormatData = returnFormat(2000,"성공",brand)
+        res.json(returnFormatData);
+        
     } catch (error) {
         logger.error(error);
-        res.json({
-            status: {
-                code: 4000,
-                message: '데이터를 가져오지 못했습니다.'
-            },
-            data: error
-        });
+        
+        const returnFormatData = returnFormat(4000,'데이터를 가져오지 못했습니다.',error)
+        res.json(returnFormatData);
     }
 });
 
@@ -244,24 +194,14 @@ router.post('/wheel', isAuthenticatedAdmin, async (req: Request, res: Response) 
         try {
             const createData = await Wheel.create(wheelFormatData);
             logger.info('휠 데이터 추가 성공' + createData);
-            res.json({
-                status: {
-                    code: 2000,
-                    message: '휠 데이터 추가 성공'
-                },
-                data: {}
-            });
+            
+            const returnFormatData = returnFormat(2000,'휠 데이터 추가 성공',[])
+        res.json(returnFormatData);
         } catch (error) {
             logger.error('휠 데이터 추가 실패' + error);
-            res.json({
-                status: {
-                    code: 4000,
-                    message: '휠 데이터 추가 실패' + error
-                },
-                data: {
-                    error
-                }
-            });
+            
+            const returnFormatData = returnFormat(4000,'휠 데이터 추가 실패',{error})
+        res.json(returnFormatData);
         }
     } else {
         try {
@@ -273,22 +213,14 @@ router.post('/wheel', isAuthenticatedAdmin, async (req: Request, res: Response) 
                 result = await Wheel.create(wheelFormatData);
             }
             logger.info('휠 데이터 업데이트 성공' + result);
-            res.json({
-                status: {
-                    code: 2000,
-                    message: '휠 데이터 업데이트 성공'
-                },
-                data: {}
-            });
+            
+            const returnFormatData = returnFormat(2000,'휠 데이터 업데이트 성공',[])
+        res.json(returnFormatData);
         } catch (error) {
             logger.error('휠 데이터 업데이트 실패' + error);
-            res.json({
-                status: {
-                    code: 4000,
-                    message: "휠 추가에 실패했습니다."
-                },
-                data: []
-            });
+            
+            const returnFormatData = returnFormat(4000,"휠 추가에 실패했습니다.",[])
+        res.json(returnFormatData);
         }
     }
 });

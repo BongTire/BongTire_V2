@@ -3,6 +3,7 @@ import db from '../../models';
 import logger from '../../config/logger';
 import { Sequelize, DataTypes, Op } from 'sequelize';
 import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
+import { returnFormat } from '../../utils/return';
 
 const router: Router = express.Router();
 const Brand = db.Brand;
@@ -21,18 +22,13 @@ router.get('/car', isAuthenticatedAdmin, async (req: Request, res: Response) => 
       },
     });
     const brand = JSON.parse(JSON.stringify(carBrand));
-
-    const result = {
-      status: {
-        code: 2000,
-        message: '성공',
-      },
-      data: brand,
-    };
+    const result = returnFormat(2000,'성공',brand)
     res.json(result);
   } catch (error) {
     logger.error(error);
-    res.status(500).json({ status: { code: 5000, message: '서버 오류' }, data: '' });
+    const result = returnFormat(5000,'서버오류',null)
+    res.json(result);
+    
   }
 });
 
@@ -65,10 +61,14 @@ const insertAndUpdateBrand = async (reqBrandData: any, brandPCCD: any[], res: Re
         logger.info('차량 브랜드 데이터 추가 성공');
       }
     }
-    res.send('POST 성공!');
+    
+    const result = returnFormat(2000,'POST 성공',null)
+    res.json(result);
   } catch (error) {
     logger.error('데이터 삽입 실패' + error);
-    res.send(error);
+    const result = returnFormat(50000,'데이터 삽입 실패',null)
+    res.json(result);
+    
   }
 };
 
@@ -84,27 +84,20 @@ router.post('/init', isAuthenticatedAdmin, async (req: Request, res: Response) =
     Brand.bulkCreate(initBrand)
       .then(() => {
         logger.info(Brand.findAll());
-        const result = {
-          status: {
-            code: 2000,
-            message: '성공',
-          },
-          data: [],
-        };
+        
+        const result = returnFormat(2000,'성공',[])
         res.json(result);
       })
       .catch((error) => {
         logger.error('브랜드 벌크 업데이트 실패' + error);
-        const result = {
-          status: {
-            code: 4000,
-            message: '초기 데이터 생성 실패',
-          },
-        };
+        
+        const result = returnFormat(4000,'초기 데이터 생성 실패',null)
         res.json(result);
       });
   } catch (error) {
     logger.error(error);
+    const result = returnFormat(4000,'실패',null)
+    res.json(result);
   }
 });
 
@@ -134,6 +127,7 @@ const insertBrandPCCDConnectTable = async (brandPCCD: string[], brandId: number 
     }
   } catch (error) {
     logger.error(error);
+    
   }
 };
 

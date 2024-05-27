@@ -6,6 +6,7 @@ import logger from '../../config/logger';
 import db from '../../models'
 import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
 import { IUser } from '../../types/service/user';
+import {returnFormat} from '../../utils/return'
 
 const router = express.Router();
 
@@ -71,24 +72,14 @@ router.post('/signup', async (req: Request, res: Response) => {
             snsId: ''
         });
 
-        res.json(newUser);
-        res.json({
-            status:{
-                code:2000,
-                messeage:'회원가입에 성공하였습니다.'
-            },
-            data:{}
-        })
+        const returnFormatData = returnFormat(2000,'회원가입에 성공하였습니다.',[])
+        res.json(returnFormatData);
     } catch (err ) {
         const error = err as Error
         logger.error(error);
-        res.json({
-            status:{
-                code:5000,
-                messeage:'회원가입에 실패하였습니다.'
-            },
-            data:{}
-        })
+        
+        const returnFormatData = returnFormat(5000,'회원가입에 실패하였습니다.',[])
+        res.json(returnFormatData);
     }
 });
 
@@ -99,14 +90,8 @@ router.post('/login', async (req: Request, res: Response) => {
 
     try {
         if (!email || !password) {
-            return res.json({
-                status:{
-                    code:4000,
-                    messeage:'이메일과 비밀번호를 모두 입력해주세요.'
-                },
-                data:{}
-            })
-            
+            const returnFormatData = returnFormat(4000,'이메일과 비밀번호를 모두 입력해주세요.',[])
+            return res.json(returnFormatData);
         }
 
         const user = await db.User.findOne({
@@ -116,55 +101,33 @@ router.post('/login', async (req: Request, res: Response) => {
         });
 
         if (!user) {
-            return res.json({
-                status:{
-                    code:4000,
-                    messeage:'존재하지 않는 사용자입니다.'
-                },
-                data:{}
-            })
+            const returnFormatData = returnFormat(4000,'존재하지 않는 사용자입니다.',[])
+            return res.json(returnFormatData);
+             
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.json({
-                status:{
-                    code:4000,
-                    messeage:'잘못된 비밀번호입니다.'
-                },
-                data:{}
-            })
+            const returnFormatData = returnFormat(4000,'잘못된 비밀번호입니다.',[])
+            return res.json(returnFormatData);
+            
         }
 
         // 세션에 사용자 정보 저장
         req.session.userId = user.UserId;
         req.session.email = user.email;
         req.session.grade = user.grade;
-        res.json({
-            status:{
-                code:2000,
-                messeage:'로그인에 성공하였습니다.'
-            },
-            data:{
-                email:user.email,
-                UserId: user.UserId,
-                name:user.name,
-                grade:user.grade
-            }
-        })
+
+        const returnFormatData = returnFormat(2000,'로그인에 성공하였습니다.',{email:user.email,UserId: user.UserId,name:user.name,grade:user.grade})
+        res.json(returnFormatData);
 
     } catch (err) {
         const error = err as Error
         logger.error(error);
 
-        res.json({
-            status:{
-                code:5000,
-                messeage:'로그인에 실패하였습니다.'
-            },
-            data:{}
-        })
+        const returnFormatData = returnFormat(5000,'로그인에 실패하였습니다.',[])
+        res.json(returnFormatData);
     }
 });
 
@@ -176,36 +139,23 @@ router.post('/logout', isAuthenticatedUser, (req: Request, res: Response) => {
         delete req.session.email;
         delete req.session.grade;
 
-        res.json({
-            status:{
-                code:2000,
-                messeage:'로그아웃을 성공했습니다.'
-            },
-            data:{}
-        })
+        const returnFormatData = returnFormat(2000,'로그아웃을 성공했습니다.',{})
+        res.json(returnFormatData);
     } catch (err) {
         const error = err as Error
         logger.error('로그아웃 중 오류가 발생했습니다:', error);
-        res.json({
-            status:{
-                code:5000,
-                messeage:'로그아웃에 실패하였습니다.'
-            },
-            data:{}
-        })
+        
+        const returnFormatData = returnFormat(5000,'로그아웃에 실패하였습니다.',error)
+        res.json(returnFormatData);
     }
 });
 
 // 로그인 테스트
 router.get('/logintest', isAuthenticatedUser, (req: Request, res: Response) => {
     console.log(req.session);
-    res.json({
-        status:{
-            code:2000,
-            messeage:'이곳은 보호된 영역입니다.'
-        },
-        data:{email: req.session.email, grade: req.session.grade}
-    })
+    
+    const returnFormatData = returnFormat(2000,'이곳은 보호된 영역입니다.',{email: req.session.email, grade: req.session.grade})
+    res.json(returnFormatData);
 });
 
 export default router;
