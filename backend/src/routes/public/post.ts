@@ -32,11 +32,11 @@ const setListResponse = (posts: any[]): PostResponse => {
       PCCD: data.PCCD ?? "",
       title: data.title ?? "",
       content: data.content ?? "",
-      createDate: data.createdAt ?? "",
-      updateDate: data.updatedAt ?? "",
-      WriterId: data.writerId ?? 0,
-      WriterName: data.writerName ?? "",
-      WriterEmail: data.writerEmail ?? "",
+      createdAt: data.createdAt ?? "",
+      updatedAt: data.updatedAt ?? "",
+      writerId: data.writerId ?? 0,
+      writerName: data.writerName ?? "",
+      writerEmail: data.writerEmail ?? "",
       isPin: data.isPin ?? false,
       isActive: data.isActive ?? false,
       isSecret: data.isSecret,
@@ -375,9 +375,9 @@ router.get('/:postId',async (req: Request, res: Response) =>{//상세조회(1개
     const listDataRaw = await sequelize.query(`
       SELECT 
           *, 
-          Posts.USERID AS WriterId, 
-          Posts.name AS WriterName, 
-          Posts.number AS WriterEmail 
+          Posts.USERID AS writerId, 
+          Posts.name AS writerName, 
+          Posts.number AS writerEmail 
       FROM Posts 
       WHERE PCCD = '${pccd}' AND Posts.deletedAt IS NULL AND Posts.PostId = ${postId}`, { type: QueryTypes.SELECT });
 
@@ -389,9 +389,9 @@ router.get('/:postId',async (req: Request, res: Response) =>{//상세조회(1개
             PCCD: data.PCCD,
             title: data.title,
             content: data.content,
-            WriterId: data.WriterId,
-            WriterName: data.WriterName,
-            WriterEmail: data.WriterEmail,
+            writerId: data.writerId,
+            writerName: data.writerName,
+            writerEmail: data.writerEmail,
             isPin: data.isPin,
             isActive: data.isActive,
             isAnswer: data.isAnswer,

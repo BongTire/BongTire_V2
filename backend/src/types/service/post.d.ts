@@ -4,9 +4,9 @@ export interface IPost{
     PCCD: string
     title: string | null
     content: string | null
-    WriterId : number | null
-    WriterName : string | null
-    WriterEmail?: string | null
+    writerId : number | null
+    writerName : string | null
+    writerEmail?: string | null
     isPin: number
     isActive: number
     isAnswer: number

@@ -38,13 +38,7 @@ router.post('/', isAuthenticatedAdmin, async (req: Request, res: Response) => {
                 await User.create(userData);
             }
             logger.info('유저 데이터 업데이트 성공');
-            res.json({
-                status: {
-                    code: 2000,
-                    message: 
-                },
-                data: {}
-            });
+            
             const returnFormatData = returnFormat(2000,'유저 데이터 업데이트 성공',[])
             res.json(returnFormatData);
         }
