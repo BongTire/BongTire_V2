@@ -181,8 +181,8 @@ router.post('/time',async function(req,res){//해당 날짜에 가능한 시간�
     if(ptcd=='R0401'&& pccd =='R0801'){
         try {
             let dateData = await availableTime(data)
-            const result = returnBasicResult(dateData)
-            const returnFormatData = returnFormat(2000,'성공',result)
+           
+            const returnFormatData = returnFormat(2000,'성공',dateData)
             res.json(returnFormatData);
             
             
