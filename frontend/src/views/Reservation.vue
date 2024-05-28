@@ -2,7 +2,7 @@
   <div class="flex w-full max-w-7xl m-auto">
       <div class="flex flex-col w-1/2">
       <div>
-        <Calendar :conf="visibleCalendar" :date="date"/>
+        <Calendar :conf="visibleCalendar" :date="date" @selectDate="selectDate"/>
       </div>
       <div>
         <Time :conf="visibleTime"/>
@@ -32,36 +32,74 @@ import { ICalendar, IReservationTime } from '../util/type/reservation';
 import { getCalendar } from '@api/common.ts';
 import calendarData from '../mocks/api/calendar.json'
 import timeData from '../mocks/api/reservation-time.json'
+import { IFetchType } from '../util/type/common'
+import { fetchGetData, fetchPostData } from '@api/common.ts'
 
 // 캘린더 관련 변수
-const originCalendar = ref<ICalendar[]>()
 const visibleCalendar = ref<ICalendar[[]]>()
 const today = new Date()
-const date = {
-  year: today.getFullYear(),
-  month: today.getMonth()+1,
-  day: today.getDate()
-}
+const presentYear = ref(today.getFullYear())
+const presentMonth = ref(today.getMonth() + 1)
+const presentDay = ref(today.getDate())
+const date = ref({
+  year: presentYear.value,
+  month: presentMonth.value,
+  day: presentDay.value
+})
 
 // 예약 시간 변수
 const originTime = ref<IReservationTime[]>()
 const visibleTime = ref<IReservationTime[]>()
 
+onMounted(async ()=>{
+  // 캘린더
+  const calendarPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/reservation/calendar','R0401','R0801')
+  const calendarData = await calendarPromise
+  visibleCalendar.value = calendarData.data.date
 
-// await getCalendar('R0401','R0801')
-// .then(result=>{
-//   originCalendar.value = result.data.data
-// })
-// .catch(error=>{
-//   console.log(error)
-// })
+  date.value = {
+    year: calendarData.year,
+    month: calendarData.today.month,
+    day: calendarData.today.day,
+  }
 
-onMounted(()=>{
-  visibleCalendar.value = [...calendarData.data]
-  visibleTime.value = [...timeData.data]
-  // console.log(originCalendar)
+  const postData = {
+    data: date.value
+  }
+  console.log(postData)
+  // 시간
+  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801', postData)
+  const time = await timePromise
+  visibleTime.value = time.data
+
+  const calendarLoading = computed(()=>{
+    if(visibleCalendar.value) false
+    else true
+  })
+
+  const timeLoading = computed(()=>{
+    if(visibleTime.value) false
+    else true
+  })
 })
 
+const selectDate = async (day:ICalendar) =>{
+  console.log(day)
+
+  date.value={
+    ...date.value,
+    month: day.month,
+    day: day.day
+  }
+
+  const postData = {
+    data: date.value
+  }
+
+  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801', postData)
+   const time = await timePromise
+  visibleTime.value = time.data
+}
 
 </script>
 

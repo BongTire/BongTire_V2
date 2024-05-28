@@ -1,5 +1,9 @@
 <template>
+
   <header class="bg-white">
+    <div v-if="successMessage" class="fixed top-5 right-20 ">
+      <Success :message="successMessage"/>
+    </div>
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
       <div class="flex lg:flex-1">
         <router-link to="/" class="-m-1.5 p-1.5">
@@ -63,21 +67,23 @@
         </Popover>
       </PopoverGroup>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-<!--        <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">로그인 <span aria-hidden="true">&rarr;</span></a>-->
-        <Menu as="div" class="relative">
+
+        <Menu v-if="loginInfo?.UserId" as="div" class="relative">
           <MenuButton>
             <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-              <span class="font-medium leading-none text-white">TW</span>
+              <span class="font-medium leading-none text-white">{{ loginInfo?.name ? loginInfo?.name.slice(0,1) : null  }}</span>
             </span>
           </MenuButton>
           <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
             <MenuItems class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
               <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                <router-link :to="item.href" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">{{ item.name }}</router-link>
+                <p @click="clickSubUserMenu(item.href)" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">{{ item.name }}</p>
               </MenuItem>
             </MenuItems>
           </transition>
         </Menu>
+
+        <a v-else href="/login" class="text-sm font-semibold leading-6 text-gray-900">로그인 <span aria-hidden="true">&rarr;</span></a>
       </div>
     </nav>
     <Dialog class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
@@ -120,20 +126,21 @@
               </Disclosure>
             </div>
             <div class="py-6">
-<!--              <router-link to="/login" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">로그인</router-link>-->
-              <div class="w-full">
+
+              <div v-if="loginInfo?.UserId" class="w-full">
                 <div class="flex justify-between items-center mb-3">
                 <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                  <span class="font-medium leading-none text-white">TW</span>
+                  <span class="font-medium leading-none text-white">{{ loginInfo?.name ? loginInfo?.name : null }}</span>
                 </span>
                   <p>관리자 님</p>
                 </div>
                 <div class="w-full flex flex-col justify-center items-center mb-3">
-                  <router-link v-for="user in userNavigation" :to="user.href" class="-mx-3 flex justify-end px-5 block rounded-lg w-full py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                  <p v-for="user in userNavigation" @click="clickSubUserMenu(user.href)" class="-mx-3 flex justify-end px-5 block rounded-lg w-full py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                     {{ user.name }}
-                  </router-link>
+                  </p>
                 </div>
               </div>
+              <router-link v-else  to="/login" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">로그인</router-link>
 
             </div>
           </div>
@@ -202,14 +209,26 @@
   } from '@heroicons/vue/24/outline'
   import { ChevronDownIcon, PhoneIcon } from '@heroicons/vue/20/solid'
   import { useCommonStore } from '@store/common.ts'
+  import { useUserStore } from '@store/user.ts'
   import { IPCCD, IPTCD,  IFetchType} from '@type/common'
-  import {fetchGetData} from '@api/common.ts'
+  import {fetchGetData, fetchPostData} from '@api/common.ts'
   import TireSearch from "@component/PopUp/TireSearch.vue";
+  import Success from '@component/Alert/Success.vue'
+  import { initSesstionStorage } from '../util/func/common'
 
   const PTCD = ref<IPTCD[]>([])
   const PCCD = ref<IPCCD[]>([])
 
   const store = useCommonStore()
+  const userStore = useUserStore()
+  const successMessage = ref('')
+
+  const router = useRouter()
+
+  const loginInfo = ref(sessionStorage.getItem('loginInfo'))
+  loginInfo.value = JSON.parse(loginInfo.value)
+
+  console.log(loginInfo.value)
 
   onMounted(async () => {
         const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd','','')
@@ -274,6 +293,27 @@ const clickMenuBtn = (state:string) =>{
       console.log(1)
       isOpenSearch.value = true
     }
+}
+const clickSubUserMenu = async (url:string)=>{
+  if(url === '/logout'){
+    const logoutPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/logout','','',{data:''})
+    const reponse = await logoutPromise
+
+    if(initSesstionStorage(reponse?.status.code)){
+      window.location.reload()
+      return
+    }
+
+    if(reponse?.status.code / 1000 === 2){
+      console.log(reponse)
+      successMessage.value = reponse?.status.message
+      window.location.reload()
+      sessionStorage.setItem('loginInfo',JSON.stringify({}))
+    }
+
+  }else if(url === '/admin'){
+    router.push('/admin')
+  }
 }
 
 const closeSearch = () =>{

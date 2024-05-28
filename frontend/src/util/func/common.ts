@@ -1,4 +1,5 @@
 import { useRouter} from "vue-router";
+import type { IUser } from '@type/user'
 
 const router = useRouter()
 
@@ -43,3 +44,24 @@ export const generateDisplayedPages = (currentPage, totalPages, visibleRange = 5
 
     return pages;
 };
+
+export const initSesstionStorage = (responseCode: number | null):boolean =>{
+    if(responseCode === 4001){
+        sessionStorage.setItem('loginInfo',JSON.stringify({}))
+        return true
+    }else{
+        return false;
+    }
+}
+
+export const exportUserInfo = ():IUser =>{
+    return sessionStorage.getItem('loginInfo')
+}
+
+export const isAuthenticatedAdmin = (responseCode: number | null) =>{
+    if(responseCode === 4001){
+        sessionStorage.setItem('loginInfo',JSON.stringify({}))
+        alert('로그인이 필요한 서비스 입니다.')
+        window.location.href='/login'
+    }
+}

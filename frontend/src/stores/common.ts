@@ -20,7 +20,7 @@ export const useCommonStore = defineStore('common', {
   // 여기서 this 쓰는거 유의하기!
   actions: {
     async initCommon(ptcd:IPTCD[], pccd:IPCCD[]){        
-        this.PTCD = [...ptcd]
+        this.PTCD = ptcd
         this.PCCD = pccd
     }
 

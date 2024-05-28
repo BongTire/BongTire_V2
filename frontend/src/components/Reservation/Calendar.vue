@@ -54,15 +54,17 @@ const store = useReservationStore();
     }
   })
 
+const emits = defineEmits(['selectDate'])
+
   // 캘린더 ID를 기준으로 computed로 반응성 유지
-  const selectCalendar = computed(()=>store.getCalendar)
+const selectCalendar = computed(()=>store.getCalendar)
 
   const clickCalendar = (day) =>{
     if(day.reservationPossible === 0){
-      // TODO 경고 조치 alert 띄우기
-      return 
+      return
     }
     store.setCalendar(day)
+    emits('selectDate',day)
   }
 
 

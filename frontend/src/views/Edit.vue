@@ -2,7 +2,7 @@
     <div class="flex flex-col w-full max-w-7xl m-auto min-h-svh">
         <div class="h-36 flex justify-between mx-5" >
             <div class="flex flex-col">
-                <input type="text" class="h-16 sm:w-1/2 w-full pl-2 text-2xl" placeholder="제목">
+                <input v-model="title" @input="setTitle" type="text" class="h-16 sm:w-1/2 w-full pl-2 text-2xl" placeholder="제목">
                 <div class="flex h-12 items-center border border-orange-600 rounded-lg">
                     <div :class="`cursor-pointer sm:w-44 w-20 text-xs sm:text-md h-full flex-1 flex justify-evenly items-center rounded-md hover:bg-orange-500 hover:text-white ${categoryPCCD === 'C0501' ? 'bg-orange-600 text-white' : ''}`"
                         @click="clickCategory(0)"
@@ -10,13 +10,13 @@
                         <ChatBubbleLeftRightIcon class="h-4 sm:h-6"/>
                         <p>Q&A</p>
                     </div>
-                    <div :class="`cursor-pointer sm:w-44 w-20 text-xs sm:text-md h-full flex justify-evenly items-center rounded-md hover:bg-orange-500 hover:text-white ${categoryPCCD === 'N0401' ? 'bg-orange-600 text-white' : ''}`"
+                    <div v-if="userInfo?.grade && userInfo?.grade === 0" :class="`cursor-pointer sm:w-44 w-20 text-xs sm:text-md h-full flex justify-evenly items-center rounded-md hover:bg-orange-500 hover:text-white ${categoryPCCD === 'N0401' ? 'bg-orange-600 text-white' : ''}`"
                         @click="clickCategory(1)"
                     >
                         <MegaphoneIcon class="h-4 sm:h-6"/>
                         <p>공지사항</p>
                     </div>
-                    <div :class="`cursor-pointer sm:w-44 w-20 text-xs sm:text-md h-full flex justify-evenly items-center rounded-md hover:bg-orange-500 hover:text-white ${categoryPCCD === 'N0402' ? 'bg-orange-600 text-white' : ''}`"
+                    <div v-if="userInfo?.grade && userInfo?.grade === 0" :class="`cursor-pointer sm:w-44 w-20 text-xs sm:text-md h-full flex justify-evenly items-center rounded-md hover:bg-orange-500 hover:text-white ${categoryPCCD === 'N0402' ? 'bg-orange-600 text-white' : ''}`"
                         @click="clickCategory(2)"
                     >
                         <TagIcon  class="h-4 sm:h-6"/>
@@ -32,14 +32,18 @@
                         <label for="name" class="block text-xs font-medium text-gray-900">성함</label>
                         <input type="text" name="name" id="name"
                             class="block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                            placeholder="성함" />
+                            placeholder="성함"
+                               v-model="userName"
+                        />
                     </div>
                     <div
                         class="relative rounded-md rounded-t-none px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-gray-300 focus-within:z-10 focus-within:ring-2 focus-within:ring-orange-600">
                         <label for="job-title" class="block text-xs font-medium text-gray-900">전화번호</label>
                         <input type="text" name="job-title" id="job-title"
                             class="block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                            placeholder="전화번호" />
+                            placeholder="전화번호"
+                               v-model="phoneNumber"
+                        />
                     </div>
                 </div>
             </div>
@@ -91,9 +95,16 @@ import {
 } from '@heroicons/vue/24/outline'
 import { Switch } from '@headlessui/vue'
 import { usePostStore } from '@store/post.ts'
+import { exportUserInfo } from '../util/func/common'
 
 const store = usePostStore()
 const enabled = ref(false)
+
+const userInfo = exportUserInfo()
+
+const title = ref('')
+const userName = ref(userInfo?.user?.name ?? '')
+const phoneNumber = ref(userInfo?.phoneNumber ?? '')
 
 const categoryPCCD = computed(()=>store.getPCCD)
 
@@ -133,6 +144,13 @@ const clickCategory = (type: number) =>{
     store.setCategory(category)
 }
 
+const setTitle = () => {
+  store.setTitle(title.value)
+}
+
+const setContent = () =>{
+
+}
 
 </script>
 

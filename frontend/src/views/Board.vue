@@ -4,8 +4,8 @@
         <div class="md:flex md:items-center md:justify-between">
           <h3 class="text-base font-semibold leading-6 text-gray-900">공지사항</h3>
           <div class="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
-              <button type="button" class="ml-3 inline-flex items-center rounded-md bg-orange-600 pl-2 pr-1 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
-                <RouterLink to="/edit">
+              <button v-if="(userInfo?.grade && userInfo?.grade === 0) || isList" type="button" class="ml-3 inline-flex items-center rounded-md bg-orange-600 pl-2 pr-1 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
+                <RouterLink to="/edit" >
                   <PencilSquareIcon class="h-6 w-6" aria-hidden="true" />
                 </RouterLink>
 
@@ -26,8 +26,8 @@
         </div>
         </div>
     </div>
-    <PostList :conf="visibleBoard" v-if="isList"/>
-    <PostCard :conf="visibleBoard" v-else/>
+    <PostList :conf="originBoard" v-if="isList" @movePostDetail="movePostDetail"/>
+    <PostCard :conf="originBoard" v-else @movePostDetail="movePostDetail"/>
   </div>
 </template>
 
@@ -40,12 +40,16 @@ import {
 import { IPost } from '../util/type/post';
 import { IFetchType } from '../util/type/common'
 import { fetchGetData } from '@api/common.ts'
+import {exportUserInfo } from '../util/func/common'
 
 
 import boardCard from '../mocks/api/board-card.json'
 import boardList from '../mocks/api/board-list.json'
 
 const route = useRoute()
+const router = useRouter()
+
+const userInfo = exportUserInfo()
 
 const pccd = computed(()=>route.query.pccd ?? 'N0401')
 
@@ -67,28 +71,47 @@ const isList = computed(()=>{
 })
 
 const originBoard = ref<IPost[]>()
-const visibleBoard = ref<IPost[]>()
+
+watch(()=>pccd.value,async ()=>{
+  if(isList.value){
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0203' ,pccd.value)
+    const boardState = await postPromise
+    originBoard.value = boardState.data
+  }else{
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0202' ,pccd.value)
+    const boardState = await postPromise
+    originBoard.value = boardState.data
+  }
+},{ deep: true })
 
 onMounted(async ()=>{
   
   if(isList.value){
-    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0202' ,pccd.value)
-    originBoard.value = await postPromise
-  }else{
     const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0203' ,pccd.value)
-    originBoard.value = await postPromise
+    const boardState = await postPromise
+    originBoard.value = boardState.data
+  }else{
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0202' ,pccd.value)
+    const boardState = await postPromise
+    originBoard.value = boardState.data
   }
 
-  console.log(originBoard.value)
 
   const postLoading = computed(()=>{
     if(originBoard.value) return false
     else return true
   })
-
-  visibleBoard.value = [...originBoard.value]
-  
 })
+
+const movePostDetail = async (post:IPost) =>{
+  const postId = post.id
+
+  if(isList.value){
+    router.push(`/board/${postId}?ptcd=P0203&pccd=${pccd.value}`)
+  }else{
+    router.push(`/board/${postId}?ptcd=P0202&pccd=${pccd.value}`)
+  }
+}
 
 
 </script>

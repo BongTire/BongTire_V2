@@ -1,5 +1,7 @@
 <template>
-
+    <div class="absolute top-20 left-20" v-if="errorMessage" >
+      <Error :message="errorMessage"/>
+    </div>
     <div class="flex min-h-full flex-1">
       <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div class="mx-auto w-full max-w-sm lg:w-96">
@@ -84,10 +86,15 @@
 import { IFetchType } from '@type/common'
 import { fetchPostData } from '@api/common'
 import { useUserStore } from '@store/user'
+import Error from '@component/Alert/Error.vue'
 
+
+const errorMessage = ref('')
 const email = ref('')
 const password = ref('')
 const store = useUserStore()
+const router = useRouter()
+
 
 const submitLogin = async () =>{
 
@@ -101,8 +108,16 @@ const submitLogin = async () =>{
   const LoginPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/login','','', postLoginData)
   const response = await LoginPromise
 
-  store.setUserInfo(response)
+
   console.log(response)
+  if(!response?.status || response?.status?.code/1000 === 4){
+    errorMessage.value = response?.status?.message ?? '로그인 시 오류가 발생했습니다 관리자에 문의 바랍니다'
+  }else{
+    store.setUserInfo(response)
+    sessionStorage.setItem('loginInfo',JSON.stringify(response.data))
+    errorMessage.value = ''
+    window.location.href = '/'
+  }
 
 
 }

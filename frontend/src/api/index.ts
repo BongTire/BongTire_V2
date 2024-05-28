@@ -22,8 +22,11 @@ client.interceptors.response.use(
       }
       if (error.response.status === 401) {
         return {
-          code: "401",
-          message: "401",
+          status: {
+            code: 4001,
+            message: "잘못된 접근 입니다.",
+          },
+          data:''
         };
       }
       if (error.response.status === 403) {

@@ -12,7 +12,9 @@ export const useUserStore = defineStore('user', {
         grade: null
     }),
     getters: {
-
+        getUserId: state => state.UserId,
+        getUserGrade: state => state.UserGrade,
+        getUserName: state => state.UserName,
     },
     actions: {
         setUserInfo(userInfo: IUser) {

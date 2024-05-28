@@ -5,7 +5,7 @@
           <div class="mx-auto flex max-w-4xl justify-between gap-x-6">
             <div class="flex min-w-0 gap-x-4">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                <span class="font-medium leading-none text-white">{{post?.WriterName.slice(0,1)}}</span>
+                <span class="font-medium leading-none text-white">{{post?.writerName.slice(0,1) ?? ''}}</span>
               </span>
               <div class="min-w-0 flex-auto">
                 <p class="text-sm font-semibold leading-6 text-gray-900">
@@ -13,14 +13,14 @@
                     {{ post.title }}
                 </p>
                 <p class="mt-1 flex text-xs leading-5 text-gray-500">
-                  <a :href="`mailto:${post.WriterEmail}`" class="relative truncate hover:underline">{{ post?.WriterName ?? '' }}</a>
+                  <a :href="`mailto:${post.WriterEmail}`" class="relative truncate hover:underline">{{ post?.writerName ?? '' }}</a>
                 </p>
               </div>
             </div>
             <div class="flex shrink-0 items-center gap-x-4">
               <div class="hidden sm:flex sm:flex-col sm:items-end">
                 <p class="mt-1 text-xs leading-5 text-gray-500">
-                  <time :datetime="post.updatedAt">{{ post.updatedAt }}</time>
+                  <time :datetime="post.updatedAt">{{ post.updatedAt.slice(0,10) }}</time>
                 </p>
 
                 <div v-if="post.answer" class="mt-1 flex items-center gap-x-1.5">

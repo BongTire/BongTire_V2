@@ -126,13 +126,13 @@
                 <MenuButton class="-m-1.5 flex items-center p-1.5">
                   <span class="sr-only">Open user menu</span>
                   <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                    <span class="font-medium leading-none text-white">TW</span>
+                    <span class="font-medium leading-none text-white">{{ loginInfo?.user ? loginInfo.user.slice(0,1) : null }}</span>
                   </span>
                 </MenuButton>
                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                   <MenuItems class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                     <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                      <router-link :to="item.href" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">{{ item.name }}</router-link>
+                      <p @click="clickSubUserMenu(item.href)" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">{{ item.name }}</p>
                     </MenuItem>
                   </MenuItems>
                 </transition>
@@ -179,8 +179,9 @@
   } from '@heroicons/vue/24/outline'
   import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
   import {IFetchType, IPCCD, IPTCD} from "@type/common.js";
-  import { fetchGetData } from "@api/common.js";
+  import { fetchGetData, fetchPostData } from "@api/common.js";
   import { useCommonStore } from '@store/common.ts'
+  import { exportUserInfo, initSesstionStorage } from '../util/func/common'
   
   const navigation = ref([
     { name: '대시보드', href: '/admin', icon: HomeIcon, current: true },
@@ -209,6 +210,29 @@
   const store = useCommonStore()
   const PTCD = ref<IPTCD>([])
   const PCCD = ref<IPCCD>([])
+  const loginInfo = exportUserInfo()
+
+  const clickSubUserMenu = async (url:string)=>{
+    if(url === '/logout'){
+      const logoutPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/logout','','',{data:''})
+      const reponse = await logoutPromise
+
+      if(initSesstionStorage(reponse?.status.code)){
+        window.location.reload()
+        return
+      }
+
+      if(reponse?.status.code / 1000 === 2){
+
+        successMessage.value = reponse?.status.message
+        window.location.reload()
+        sessionStorage.setItem('loginInfo',JSON.stringify({}))
+      }
+
+    }else if(url === '/admin'){
+      router.push('/admin')
+    }
+  }
 
 
   onMounted(async () => {

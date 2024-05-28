@@ -11,7 +11,7 @@ const Brand = db.Brand
 const sequelize = db.sequelize
 const router = express.Router();
 
-router.get('/tire', isAuthenticatedAdmin, async function (req: Request, res: Response) {
+router.get('/tire', isAuthenticatedAdmin,async function (req: Request, res: Response) {
     try {
         const response = await sequelize.query(`
             select T.TireId as id, T.BrandId as BrandId, name as brandName, T.PCCD as PCCD, 
@@ -23,7 +23,7 @@ router.get('/tire', isAuthenticatedAdmin, async function (req: Request, res: Res
             where T.deletedAt IS NULL`);
         const data = [...response];
         
-        const returnFormatData = returnFormat(2000,'타이어 데이터 찾기의 성공했습니다.',data)
+        const returnFormatData = returnFormat(2000,'타이어 데이터 찾기의 성공했습니다.',data[0])
         res.json(returnFormatData);
     } catch (error) {
         logger.error(error);
@@ -122,13 +122,13 @@ router.get('/tire/brand', isAuthenticatedAdmin, async (req: Request, res: Respon
     }
 });
 
-router.get('/wheel', isAuthenticatedAdmin, async function (req: Request, res: Response) {
+router.get('/wheel', isAuthenticatedAdmin,async function (req: Request, res: Response) {
     try {
         const response = await sequelize.query(`select W.WheelId as id, W.BrandId as BrandId, name as brandName, W.PCCD as PCCD, W.drivingMethodPCCD, W.productName, W.content,  W.wheelSize,W.frontOffset, W.rearOffset, W.price, W.feature, W.amount, W.discountPrice, W.discountRate,  W.sales, W.viewers, W.isSecond, W.isActivate, W.isVisible, W.isContinue ,W.PCD, W.hole
         from Wheels W join Brands B on  B.BrandId = W.BrandId where W.deletedAt IS NULL`);
         const data = [...response];
         
-        const returnFormatData = returnFormat(2000,'타이어 데이터 찾기의 성공했습니다.',data)
+        const returnFormatData = returnFormat(2000,'타이어 데이터 찾기의 성공했습니다.',data[0])
         res.json(returnFormatData);
     } catch (error) {
         logger.error(error);

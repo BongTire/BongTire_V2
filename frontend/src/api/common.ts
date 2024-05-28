@@ -5,11 +5,12 @@ const fetchGetData = async <T>(url: string, ptcd:string, pccd:string, page:numbe
         withCredentials:true, 
         params: {
             ptcd: ptcd,
-            pccd: pccd
+            pccd: pccd,
+            page: page
         }
     })
 
-    return response.data
+    return response
 }
 
 const fetchGetTotalData = async <T>(url: string, ptcd:string, pccd:string, page:number):Promise<T> =>{
@@ -34,7 +35,20 @@ const fetchPostData = async <T>(url: string, ptcd:string, pccd:string, data:any)
         }
     })
 
-    return response.data
+    return response
 }
 
-export{ fetchGetData, fetchGetTotalData , fetchPostData }
+const fetchGetAdmin = async <T>(url: string, year:number=0, month:number=0, day:number=0):Promise<T> =>{
+    const response = await client.get<T>(url, {
+        withCredentials:true,
+        params: {
+            year: year,
+            month: month,
+            day:day
+        }
+    })
+
+    return response
+}
+
+export{ fetchGetData, fetchGetTotalData , fetchPostData, fetchGetAdmin }

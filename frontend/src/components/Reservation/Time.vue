@@ -40,6 +40,7 @@ const clickTime = (time) =>{
     // TODO 경고 메시지 띄우기
     return 
   }
+  console.log(time)
   store.setReservationTime(time) 
 }
 

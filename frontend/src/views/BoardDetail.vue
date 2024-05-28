@@ -40,7 +40,7 @@
 
   </template>
   
-  <script setup>
+  <script setup lang="ts">
   import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/vue/20/solid'
   import { ref } from 'vue'
 import { FaceSmileIcon as FaceSmileIconOutline, PaperClipIcon } from '@heroicons/vue/24/outline'
@@ -53,6 +53,23 @@ import {
   HeartIcon,
   XMarkIcon,
 } from '@heroicons/vue/20/solid'
+  import { IPost } from '../util/type/post';
+  const route = useRoute()
+  import { IFetchType } from '../util/type/common'
+  import { fetchGetData } from '@api/common.ts'
+
+  const pccd = computed(()=>route.query.pccd ?? 'N0401')
+  const ptcd = computed(()=>route.query.pccd ?? 'N0401')
+
+  const postId = computed(()=>route.param.id)
+  const detail = ref<IPost>()
+
+  onMounted( async ()=>{
+    const detailPromise: Promise<IPost> = await fetchGetData(`/post/${route.params.id}`, ptcd, pccd)
+    detail.value = await detailPromise
+
+  })
+
 
 const moods = [
   { name: 'Excited', value: 'excited', icon: FireIcon, iconColor: 'text-white', bgColor: 'bg-red-500' },

@@ -23,7 +23,7 @@ const CarTrim = db.CarTrim;
  */
 
 // init Get
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', isAuthenticatedAdmin,async (req: Request, res: Response) => {
     const result:any = [
         {
             BrandId: 1,

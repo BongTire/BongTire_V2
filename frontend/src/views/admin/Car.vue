@@ -23,15 +23,18 @@ import carBrandData from '../../mocks/api/car-brand.json'
 import carData from '../../mocks/api/car.json'
 import { IBrand } from '../../util/type/brand';
 import { ICar, ICarList } from '../../util/type/car';
+import { IFetchType } from  '@type/common'
+import { fetchGetData } from '../../api/common'
+import { isAuthenticatedAdmin } from '../../util/func/common'
 
 // 챠량 브랜드 데이터
-const originBrand = ref<IBrand[]>([...carBrandData.data])
+const originBrand = ref<IBrand[]>()
 const visibleKoreanBrand = ref<IBrand[]>()
 const visibleForeignBrand = ref<IBrand[]>()
 
 
 // 차량 리스트 데이터
-const originCar = ref<ICar[]>([...carData.data])
+const originCar = ref<ICar[]>()
 const visibleKoreaCar = ref<ICar[]>()
 const visibleForeignCar = ref<ICar[]>()
 
@@ -55,12 +58,25 @@ const selectBrand = (index: number, state:string) => {
 }
 
 
-onMounted(()=>{
-  visibleKoreanBrand.value = [...originBrand.value.filter((x)=>x.origin===1)]
-  visibleForeignBrand.value = [...originBrand.value.filter((x)=>x.origin===0)]
+onMounted(async ()=>{
 
-  visibleKoreaCar.value = [...originCar.value.filter((x=>x.BrandId===1))]
-  visibleForeignCar.value = [...originCar.value.filter((x=>x.BrandId===6))]
+  const carPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/car','','',0)
+  const carState = await carPromise
+  isAuthenticatedAdmin(carState?.status.code ?? 4001)
+  originCar.value = carState.data
+
+  const carBrandPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/brand/car','','',0)
+  const brandState = await carBrandPromise
+  isAuthenticatedAdmin(brandState?.status.code ?? 4001)
+
+  originBrand.value = brandState.data
+
+
+  visibleKoreanBrand.value = [...brandState.data.value.filter((x)=>x.origin===1)]
+  visibleForeignBrand.value = [...brandState.data.value.filter((x)=>x.origin===0)]
+
+  visibleKoreaCar.value = [...carState.data.value.filter((x=>x.BrandId===1))]
+  visibleForeignCar.value = [...carState.data.value.filter((x=>x.BrandId===6))]
 })
 
 </script>

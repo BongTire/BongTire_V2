@@ -24,8 +24,9 @@
 import ReservationResult from '@component/Admin/ReservationResult.vue'
 import  {IFetchType} from '../../util/type/common'
 import { IReservationMaster } from '../../util/type/reservation'
-import { fetchGetData } from '@api/common.ts'
+import { fetchGetData, fetchGetAdmin } from '@api/common.ts'
 import Loading from '@component/Common/Loading.vue'
+import { isAuthenticatedAdmin } from '../../util/func/common'
 
 
 const stats = [
@@ -39,9 +40,18 @@ const dashboardLoading = computed(()=>{
   else return true
 })
 
+const date = new Date()
+const year = date.getFullYear()
+const month = date.getMonth() + 1
+const day = date.getDate()
+
 onMounted(async () => {
-  const ReserveDataPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/reservation/reservedata', '', '')
-  reserveData.value = await ReserveDataPromise
+  const ReserveDataPromise:Promise<IFetchType> = fetchGetAdmin<IFetchType>('/admin/reservation/reservedata', year, month, day)
+  const reserveState = await ReserveDataPromise
+
+  isAuthenticatedAdmin(reserveState?.status.code)
+  reserveData.value =  reserveState.data
+
 })
 
 

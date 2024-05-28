@@ -14,6 +14,7 @@
 -->
 <template>
   <!-- Mobile filter dialog -->
+
   <TransitionRoot as="template" :show="mobileFiltersOpen">
     <Dialog class="relative z-40 lg:hidden" @close="mobileFiltersOpen = false">
       <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0"
@@ -72,8 +73,8 @@
       </div>
     </Dialog>
   </TransitionRoot>
-
-  <main class="mx-auto max-w-2xl px-4 py-5 sm:px-6 lg:max-w-7xl lg:px-8">
+  <Loading v-if="productLoading && filterLoading && totalLoading"/>
+  <main v-else class="mx-auto max-w-2xl px-4 py-5 sm:px-6 lg:max-w-7xl lg:px-8">
     <div class="border-b border-gray-200 pb-10">
       <h1 class="text-4xl font-bold tracking-tight text-gray-900">상품</h1>
     </div>
@@ -108,36 +109,21 @@
       </aside>
 
       <!-- Product grid -->
-      <Loading v-if="productLoading && filterLoading"/>
       <!-- 상품 박스 -->
-      <div v-else class="mt-6 lg:col-span-2 lg:mt-0 xl:col-span-3">
+      <div class="mt-6 lg:col-span-2 lg:mt-0 xl:col-span-3">
         <ProductCard :conf="product" @moveDetailPage="moveDetailPage" />
       </div>
-    </div>
-  </main>
-  <nav v-if="pageTotal>1" class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
-    <div class="-mt-px flex w-0 flex-1">
-      <a href="#" class="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-        <ArrowLongLeftIcon class="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
-        Previous
-      </a>
-    </div>
-    <div class="hidden md:-mt-px md:flex">
 
-      <a v-for="page in displayPageArray" href="#" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">{{ page }}</a>
     </div>
-    <div class="-mt-px flex w-0 flex-1 justify-end">
-      <a href="#" class="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-        Next
-        <ArrowLongRightIcon class="ml-3 h-5 w-5 text-gray-400" aria-hidden="true" />
-      </a>
-    </div>
-  </nav>
+    <PageNation class="mt-10" :total="total" :currentPage="currentPage" @moveOtherPage="moveOtherPage" />
+  </main>
+
 </template>
 
 <script lang="ts" setup >
 import ProductCard from '@component/Product/ProductCard.vue'
 import Loading from '@component/Common/Loading.vue'
+import PageNation from '@component/Common/PageNation.vue'
 import { ref } from 'vue'
 import {
   Dialog,
@@ -152,8 +138,7 @@ import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, PlusIcon, ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/vue/20/solid'
 import { IFetchType } from '../util/type/common'
 import { fetchGetData, fetchGetTotalData } from '@api/common.ts'
-import{ IProduct } from '../util/type/product'
-import { generatePages, generateDisplayedPages } from '../util/func/common'
+
 
 const route = useRoute();
 const router = useRouter()
@@ -164,7 +149,7 @@ const mobileFiltersOpen = ref(false)
 const product:IProduct[] = ref([])
 const productFilters:IFilter | null = ref(null)
 
-const total:number = ref(0)
+const total:number = ref(-1)
 const pageTotal:number = ref(0)
 const pageArray:number[] = ref([])
 const currentPage = ref(1)
@@ -172,31 +157,23 @@ const displayPageArray:number[] = ref([])
 
 onMounted(async () => {
 
-  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value)
-  product.value = await productPromise;
+  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, 1)
+  const productState = await productPromise;
+  product.value = productState.data
 
-  const totalPromise:Promise<IFetchType> = fetchGetTotalData<IFetchType>('/product', 'P0301', PCCD.value, 1)
-  total.value = await totalPromise;
+  total.value = productState.total
 
   if(PCCD.value==='P0601'){
     const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
-      productFilters.value = await filterPromise
+    const filterState= await filterPromise
+    productFilters.value = filterState.data
   }
   
   if(PCCD.value==='P0602'){
     const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0902')
-      productFilters.value = await filterPromise
+    const filterState= await filterPromise
+    productFilters.value = filterState.data
   }
-  console.log(total.value)
-  console.log(productFilters.value[0])
-  pageTotal.value = total.value/20
-
-  pageArray.value = generatePages(pageTotal.value)
-  console.log(pageArray.value)
-
-  displayPageArray.value = generateDisplayedPages(currentPage.value,pageTotal.value )
-
-  console.log(displayPageArray.value)
 
   const filterLoading = computed(()=>{
     if(filters.value) return false
@@ -207,7 +184,54 @@ onMounted(async () => {
     if(product.value.length === 0) return true
     else false
   })
+
+  const totalLoading = computed(()=>{
+    if(total === -1) true
+    else false
+  })
 })
+
+watch(()=>PCCD.value,async (newValue)=>{
+  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, 1)
+  const productState = await productPromise;
+  product.value = productState.data
+
+  total.value = productState.total
+
+  if(PCCD.value==='P0601'){
+    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
+    const filterState= await filterPromise
+    productFilters.value = filterState.data
+  }
+
+  if(PCCD.value==='P0602'){
+    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0902')
+    const filterState= await filterPromise
+    productFilters.value = filterState.data
+  }
+
+  const filterLoading = computed(()=>{
+    if(filters.value) return false
+    else true
+  })
+
+  const productLoading = computed(()=>{
+    if(product.value.length === 0) return true
+    else false
+  })
+
+  const totalLoading = computed(()=>{
+    if(total === -1) true
+    else false
+  })
+},{ deep: true })
+const moveOtherPage = async (pageNumber:number) =>{
+  console.log(pageNumber)
+  currentPage.value = pageNumber
+  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, pageNumber)
+  const productState = await productPromise;
+  product.value = productState.data
+}
 
 const moveDetailPage = (id:number) =>{
   router.push(`/product/${id}`)

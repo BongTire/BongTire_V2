@@ -39,6 +39,7 @@ const popupData = ref({
 onMounted(async ()=>{
   const tirePromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/tire','','')
   tire.value = await tirePromise
+  console.log(tire.value)
 })
 
 const openEditDialog = ref(false)
