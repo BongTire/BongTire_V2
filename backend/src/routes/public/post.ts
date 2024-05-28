@@ -368,7 +368,8 @@ router.get('/:postId',async (req: Request, res: Response) =>{//상세조회(1개
   const pccd = req.query.pccd ?? "" as string;
   const postId = Number(req.params.postId) ?? -1 as number
 
-  if((ptcd == 'P0203'&&pccd == 'C0501') || (ptcd == 'P0203'&&pccd == 'C0502') || (ptcd == 'P0202'&&pccd == 'C0401')){  //list, card (ptcd=P0203&pccd=C0501 : Q&A / ptcd=P0203&pccd=C0502 : F&Q / ptcd = 'P0202'&&pccd = 'C0401' : notice(card))
+  
+  if((ptcd == 'P0203'&&pccd == 'C0501') || (ptcd == 'P0203'&&pccd == 'C0502') || (ptcd == 'P0202'&&pccd == 'C0401') || (ptcd == 'P0202'&&pccd == 'N0402')){  //list, card (ptcd=P0203&pccd=C0501 : Q&A / ptcd=P0203&pccd=C0502 : F&Q / ptcd = 'P0202'&&pccd = 'C0401' : notice(card))
     //해당글이 비밀글인지 아닌지 알아야함
     const { name, number } = req.body.data || {};
   try {
@@ -435,16 +436,21 @@ router.get('/:postId',async (req: Request, res: Response) =>{//상세조회(1개
     const result = setListResponse([]);
     res.json(result);//여기서 에러가 났는데 result를 줄때 혹시 listData를 뽑고나서 담아서 주게되는일은 발생하지 않는가?
   }    
-  }else if(ptcd == 'P0202'&&pccd == 'N0402'){ //event 용
-    //일단 비워둠. 생각해보니까 세부조회는 그냥 비밀글이랑 아닌거 이것만 나누고 나머지는 다 똑같은거아닌가?
-  }else if(ptcd == "" || pccd == "" || postId == -1){ //ptcd 또는 pccd 또는 postId 가 안넘어왔을때
+  }else if(ptcd == "" || pccd == ""){ //ptcd 또는 pccd가 안넘어왔을때
     res.json({
       status: {
         code: 4000,
-        message: 'ptcd ,pccd 또는 postId가 없습니다.',
+        message: 'ptcd ,pccd가 없습니다.',
       },
     });
 
+  }else{
+    res.json({
+      status: {
+        code: 4000,
+        message: '올바른 접근이 아닙니다.',
+      },
+    });
   }
 })
 
