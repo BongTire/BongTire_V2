@@ -105,8 +105,8 @@ router.get('/', async function (req: Request, res: Response) {
 
       const brandFilter = [
         {
-          type: "select",
-          filter: [
+          name: "브랜드",
+          value:[
             {
               id: 1,
               name: "브랜드",
@@ -114,17 +114,9 @@ router.get('/', async function (req: Request, res: Response) {
               filterPCCD: null,
               isImage: true,
               isBrand: true,
-              value: result
+              ...result
             }
           ]
-        },
-        {
-          type: "slide",
-          filter: {
-            title: "가격",
-            minValue: 0,
-            maxValue: 1000000
-          }
         }
       ];
 
@@ -222,8 +214,8 @@ router.get('/', async function (req: Request, res: Response) {
 
       const brandFilter = [
         {
-          type: "select",
-          filter: [
+          name: "브랜드",
+          value:[
             {
               id: 1,
               name: "브랜드",
@@ -231,17 +223,9 @@ router.get('/', async function (req: Request, res: Response) {
               filterPCCD: null,
               isImage: true,
               isBrand: true,
-              value: result
+              ...result
             }
           ]
-        },
-        {
-          type: "slide",
-          filter: {
-            title: "가격",
-            minValue: 0,
-            maxValue: 1000000
-          }
         }
       ];
 
