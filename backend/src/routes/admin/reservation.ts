@@ -4,7 +4,7 @@ import { Sequelize, DataTypes, QueryTypes } from 'sequelize';
 import logger from '../../config/logger';
 import { Json } from 'sequelize/types/utils';
 import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
-import {returnPastOrNot,returnReservationPossible,splitArray,returnCalendarResult,returnResult,returnReservationContent,returnTodayReservation,returnResercationDatasWithDate,returnBasicResult,returnNonPastReservationDatas,returnReservations,returnTodayReservations} from '../../utils/reservationUtil'
+import {returnPastOrNot,returnReservationPossible,splitArray,returnCalendarResult,returnResult,returnReservationContent,returnTodayReservation,returnResercationDatasWithDate,returnBasicResult,returnNonPastReservationDatas,returnReservations,returnTodayReservations, pastMonthData, thisMonthData, nextMonthDataArray, availableTime} from '../../utils/reservationUtil'
 import {returnFormat} from '../../utils/return'
 
 const router: Router = express.Router();
@@ -44,13 +44,7 @@ router.get('/calendar',isAuthenticatedAdmin,async function(req:Request,res:Respo
         const prevYear = month === 0 ? year - 1 : year;
         const prevMonthDays = new Date(year, month, 0).getDate();
         const prevMonthStart = prevMonthDays - firstDayOfWeek + 1;
-        // const prevMonthData = await Calendar.findAll({
-        //     where:{
-        //         month:prevMonth +1,
-        //         year:prevYear
-        //     },
-        //     order:[['day','ASC']]
-        // })
+       
         let prevMonthData:any[] =await sequelize.query(`SELECT * FROM Calendars join OperationTimes on Calendars.OperationTimeId = OperationTimes.OperationTimeId where Calendars.month = ${prevMonth +1} AND Calendars.year = ${prevYear} AND Calendars.deletedAt IS NULL ORDER BY day ASC`, {type: QueryTypes.SELECT,});
         const todayData:any = await Calendar.findOne({
             where:{
@@ -62,142 +56,24 @@ router.get('/calendar',isAuthenticatedAdmin,async function(req:Request,res:Respo
         })
         logger.info('prevMonthData: '+JSON.stringify(prevMonthData))
         let dayOfWeek;
-        for (let i = 0; i < firstDayOfWeek; i++) {
-            
-            let reservationPossible;
-            let pastOrNot = returnPastOrNot(prevMonthData[prevMonthStart + i -1],todayData)
-            logger.info('pastOrNot: '+JSON.stringify(pastOrNot))
-            if(pastOrNot == true){ //오늘 보다 이전이면
-                logger.info('과거')
-                reservationPossible = false
-            }else if(prevMonthData[prevMonthStart + i -1].OperationTimeId == 4){//휴일
-                logger.info('휴일')
-                reservationPossible = false
-            }else{
-                logger.info('not 휴일')
-                logger.info(`prevMonthData[${prevMonthStart + i -1}]: `+JSON.stringify(prevMonthData[prevMonthStart + i -1].CalendarId))
-                
-                let reservationPossibleDatas = await ReservationTime.findAll({
-                    where:{
-                        CalendarId:Number(prevMonthData[prevMonthStart + i -1].CalendarId)
-                    },
-                    raw:true
-                })
-                logger.info('reservationPossibleDatas: '+JSON.stringify(reservationPossibleDatas))
-                reservationPossible = returnReservationPossible(reservationPossibleDatas)
-            }
-            
-            date.push({
-                CalendarId:prevMonthData[prevMonthStart + i -1].CalendarId,
-                OperationTimeId:prevMonthData[prevMonthStart + i -1].OperationTimeId,
-                isCurrentMonth:false,
-                month: prevMonthData[prevMonthStart + i -1].month,
-                day: prevMonthData[prevMonthStart + i -1].day,
-                dayOfWeek:prevMonthData[prevMonthStart + i -1].dayOfWeek ?? null,
-                isHoliday:prevMonthData[prevMonthStart + i -1].isHoliday ?? null,
-                holidayName:prevMonthData[prevMonthStart + i -1].holidayName ?? null,
-                reservationPossible:reservationPossible,
-            });
-        }
-        logger.info('date: ',date)
+        const pastMonth = await pastMonthData(firstDayOfWeek,prevMonthData,prevMonthStart,todayData)
+        date.push(...pastMonth) //이전달 추가
+        
 
-        // 현재 달 날짜 추가
-        // const monthData = await Calendar.findAll({
-        //     where:{
-        //         month:month+1,
-        //         year:year
-        //     },
-        //     order:[['day','ASC']],
-        //     raw: true,
-        // })
         let monthData:any[] =await sequelize.query(`SELECT * FROM Calendars join OperationTimes on Calendars.OperationTimeId = OperationTimes.OperationTimeId where Calendars.month = ${month+1} AND Calendars.year = ${year} AND Calendars.deletedAt IS NULL ORDER BY day ASC`, {type: QueryTypes.SELECT,});
-        console.log(monthData)
-        for (let i = 0; i < daysInMonth; i++) {
-            let reservationPossible;
-            let pastOrNot = returnPastOrNot(monthData[i],todayData)
-            if(pastOrNot == true){ //오늘 보다 이전이면
-                logger.info('과거')
-                reservationPossible = false
-            }else if(monthData[i].OperationTimeId == 4){//휴일
-                logger.info('휴일')
-                reservationPossible = false
-            }else{
-                logger.info('not 휴일')
-                logger.info(`prevMonthData[${prevMonthStart + i -1}]: `+JSON.stringify(monthData[i].CalendarId))
-                
-                let reservationPossibleDatas = await ReservationTime.findAll({
-                    where:{
-                        CalendarId:Number(monthData[i].CalendarId)
-                    },
-                    raw:true
-                })
-                logger.info('reservationPossibleDatas: '+JSON.stringify(reservationPossibleDatas))
-                reservationPossible = returnReservationPossible(reservationPossibleDatas)
-            }
-            date.push({
-                CalendarId:monthData[i].CalendarId,
-                OperationTimeId:monthData[i].OperationTimeId,
-                isCurrentMonth:true,
-                month:monthData[i].month,
-                day: monthData[i].day ? monthData[i].day:null,
-                dayOfWeek:monthData[i].dayOfWeek ? monthData[i].dayOfWeek:null,
-                isHoliday:monthData[i].isHoliday ? monthData[i].isHoliday:null ,
-                holidayName:monthData[i].holidayName ? monthData[i].holidayName: null,
-                reservationPossible:reservationPossible ? reservationPossible:false, //수정해야함
-            });
-        }
-        console.log(monthData)
+        const thisMonth = await thisMonthData(daysInMonth,monthData,prevMonthStart,todayData)
+        date.push(...thisMonth)//이번달 추가
 
         // 다음 달 날짜 추가
         const nextYear = month === 11 ? year + 1 : year;
         const nextMonth = month === 11 ? 0 : month + 1;
-        // let nextMonthData=await Calendar.findAll({
-        //     where:{
-        //         month:nextMonth +1,
-        //         year:nextYear
-        //     },
-        //     order:[['day','ASC']]
-        // })
         let nextMonthData:any[] =await sequelize.query(`SELECT * FROM Calendars join OperationTimes on Calendars.OperationTimeId = OperationTimes.OperationTimeId where Calendars.month = ${nextMonth +1} AND Calendars.year = ${nextYear} AND Calendars.deletedAt IS NULL ORDER BY day ASC`, {type: QueryTypes.SELECT,});
        
         
         const daysToAdd = (weeksInMonth * 7) - (date.length);
         logger.info(daysToAdd)
-        for (let i = 0; i <= daysToAdd; i++) {
-            let reservationPossible;
-            let pastOrNot = returnPastOrNot(nextMonthData[i],todayData)
-            if(pastOrNot == true){ //오늘 보다 이전이면
-                logger.info('과거')
-                reservationPossible = false
-            }else if(nextMonthData[i].OperationTimeId == 4){//휴일
-                logger.info('휴일')
-                reservationPossible = false
-            }else{
-                logger.info('not 휴일')
-                logger.info(`prevMonthData[${prevMonthStart + i -1}]: `+JSON.stringify(nextMonthData[i].CalendarId))
-                
-                let reservationPossibleDatas = await ReservationTime.findAll({
-                    where:{
-                        CalendarId:Number(nextMonthData[i].CalendarId)
-                    },
-                    raw:true
-                })
-                logger.info('reservationPossibleDatas: '+JSON.stringify(reservationPossibleDatas))
-                reservationPossible = returnReservationPossible(reservationPossibleDatas)
-            }
-            date.push({
-                CalendarId:nextMonthData[i].CalendarId,
-                OperationTimeId:nextMonthData[i].OperationTimeId,
-                isCurrentMonth:false,
-                day: nextMonthData[i].day,
-                month:nextMonthData[i].month,
-                dayOfWeek:nextMonthData[i].dayOfWeek,
-                isHoliday:nextMonthData[i].isHoliday,
-                holidayName:nextMonthData[i].holidayName,
-                reservationPossible:reservationPossible,
-            });
-        }
-        
+        const nextMonthArray = await nextMonthDataArray(daysToAdd,nextMonthData,prevMonthStart,todayData)
+        date.push(...nextMonthArray) //다음달 추가
         const splitDate =splitArray(date) 
         
         //logger.info('todayData: '+todayData)
@@ -259,155 +135,30 @@ router.post('/calendar',isAuthenticatedAdmin,async function(req,res){//이번달
         logger.info("prevMonthDays: "+prevMonthDays)
         const prevMonthStart = prevMonthDays - firstDayOfWeek + 1;
         logger.info("prevMonthStart: "+prevMonthStart)
-        // const prevMonthData = await Calendar.findAll({
-        //     where:{
-        //         month:prevMonth +1,
-        //         year:prevYear
-        //     },
-        //     order:[['day','ASC']]
-        // })
+        
         let prevMonthData:any[] =await sequelize.query(`SELECT * FROM Calendars join OperationTimes on Calendars.OperationTimeId = OperationTimes.OperationTimeId where Calendars.month = ${prevMonth +1} AND Calendars.year = ${prevYear} AND Calendars.deletedAt IS NULL ORDER BY day ASC`, {type: QueryTypes.SELECT,});
         
         logger.info('prevMonthData: '+JSON.stringify(prevMonthData))
         let dayOfWeek;
-        for (let i = 0; i < firstDayOfWeek; i++) {
-            let reservationPossible;
-            let pastOrNot = returnPastOrNot(prevMonthData[prevMonthStart + i -1],todayData)
-            logger.info('pastOrNot: '+JSON.stringify(pastOrNot))
-            if(pastOrNot == true){ //오늘 보다 이전이면
-                logger.info('과거')
-                reservationPossible = false
-            }else if(prevMonthData[prevMonthStart + i -1].OperationTimeId == 4){//휴일
-                logger.info('휴일')
-                reservationPossible = false
-            }else{
-                logger.info('not 휴일')
-                logger.info(`prevMonthData[${prevMonthStart + i -1}]: `+JSON.stringify(prevMonthData[prevMonthStart + i -1].CalendarId))
-                
-                let reservationPossibleDatas = await ReservationTime.findAll({
-                    where:{
-                        CalendarId:Number(prevMonthData[prevMonthStart + i -1].CalendarId)
-                    },
-                    raw:true
-                })
-                logger.info('reservationPossibleDatas: '+JSON.stringify(reservationPossibleDatas))
-                reservationPossible = returnReservationPossible(reservationPossibleDatas)
-            }
-            
-            date.push({
-                CalendarId:prevMonthData[prevMonthStart + i -1].CalendarId,
-                OperationTimeId:prevMonthData[prevMonthStart + i -1].OperationTimeId,
-                isCurrentMonth:false,
-                month: prevMonthData[prevMonthStart + i -1].month,
-                day: prevMonthData[prevMonthStart + i -1].day,
-                dayOfWeek:prevMonthData[prevMonthStart + i -1].dayOfWeek ?? null,
-                isHoliday:prevMonthData[prevMonthStart + i -1].isHoliday ?? null,
-                holidayName:prevMonthData[prevMonthStart + i -1].holidayName ?? null,
-                reservationPossible:reservationPossible,
-            });
-        }
-        logger.info('date: ',date)
+        const pastMonth = await pastMonthData(firstDayOfWeek,prevMonthData,prevMonthStart,todayData)
+        date.push(...pastMonth) //이전달 추가
 
-        // 현재 달 날짜 추가
-        // const monthData = await Calendar.findAll({
-        //     where:{
-        //         month:month+1,
-        //         year:year
-        //     },
-        //     order:[['day','ASC']],
-        //     raw: true,
-        // })
         let monthData:any[] =await sequelize.query(`SELECT * FROM Calendars join OperationTimes on Calendars.OperationTimeId = OperationTimes.OperationTimeId where Calendars.month = ${month+1} AND Calendars.year = ${year} AND Calendars.deletedAt IS NULL ORDER BY day ASC`, {type: QueryTypes.SELECT,});
-       
-        console.log(monthData)
-        for (let i = 0; i < daysInMonth; i++) {
-            let reservationPossible;
-            let pastOrNot = returnPastOrNot(monthData[i],todayData)
-            if(pastOrNot == true){ //오늘 보다 이전이면
-                logger.info('과거')
-                reservationPossible = false
-            }else if(monthData[i].OperationTimeId == 4){//휴일
-                logger.info('휴일')
-                reservationPossible = false
-            }else{
-                logger.info('not 휴일')
-                logger.info(`prevMonthData[${prevMonthStart + i -1}]: `+JSON.stringify(monthData[i].CalendarId))
-                
-                let reservationPossibleDatas = await ReservationTime.findAll({
-                    where:{
-                        CalendarId:Number(monthData[i].CalendarId)
-                    },
-                    raw:true
-                })
-                logger.info('reservationPossibleDatas: '+JSON.stringify(reservationPossibleDatas))
-                reservationPossible = returnReservationPossible(reservationPossibleDatas)
-            }
-            date.push({
-                CalendarId:monthData[i].CalendarId,
-                OperationTimeId:monthData[i].OperationTimeId,
-                isCurrentMonth:true,
-                month:monthData[i].month,
-                day: monthData[i].day ? monthData[i].day:null,
-                dayOfWeek:monthData[i].dayOfWeek ? monthData[i].dayOfWeek:null,
-                isHoliday:monthData[i].isHoliday ? monthData[i].isHoliday:null ,
-                holidayName:monthData[i].holidayName ? monthData[i].holidayName: null,
-                reservationPossible:reservationPossible ? reservationPossible:false, //수정해야함
-            });
-        }
-        console.log(monthData)
+        const thisMonth = await thisMonthData(daysInMonth,monthData,prevMonthStart,todayData)
+        date.push(...thisMonth)//이번달 추가
+        
 
         // 다음 달 날짜 추가
         const nextYear = month === 11 ? year + 1 : year;
         const nextMonth = month === 11 ? 0 : month + 1;
-        // let nextMonthData=await Calendar.findAll({
-        //     where:{
-        //         month:nextMonth +1,
-        //         year:nextYear
-        //     },
-        //     order:[['day','ASC']]
-        // })
         let nextMonthData:any[] =await sequelize.query(`SELECT * FROM Calendars join OperationTimes on Calendars.OperationTimeId = OperationTimes.OperationTimeId where Calendars.month = ${nextMonth +1} AND Calendars.year = ${nextYear} AND Calendars.deletedAt IS NULL ORDER BY day ASC`, {type: QueryTypes.SELECT,});
        
         const daysToAdd = (weeksInMonth * 7) - (date.length);
-        logger.info(daysToAdd)
-        for (let i = 0; i <= daysToAdd; i++) {
-            let reservationPossible;
-            let pastOrNot = returnPastOrNot(nextMonthData[i],todayData)
-            if(pastOrNot == true){ //오늘 보다 이전이면
-                logger.info('과거')
-                reservationPossible = false
-            }else if(nextMonthData[i].OperationTimeId == 4){//휴일
-                logger.info('휴일')
-                reservationPossible = false
-            }else{
-                logger.info('not 휴일')
-                logger.info(`prevMonthData[${prevMonthStart + i -1}]: `+JSON.stringify(nextMonthData[i].CalendarId))
-                
-                let reservationPossibleDatas = await ReservationTime.findAll({
-                    where:{
-                        CalendarId:Number(nextMonthData[i].CalendarId)
-                    },
-                    raw:true
-                })
-                logger.info('reservationPossibleDatas: '+JSON.stringify(reservationPossibleDatas))
-                reservationPossible = returnReservationPossible(reservationPossibleDatas)
-            }
-            date.push({
-                CalendarId:nextMonthData[i].CalendarId,
-                OperationTimeId:nextMonthData[i].OperationTimeId,
-                isCurrentMonth:false,
-                day: nextMonthData[i].day,
-                month:nextMonthData[i].month,
-                dayOfWeek:nextMonthData[i].dayOfWeek,
-                isHoliday:nextMonthData[i].isHoliday,
-                holidayName:nextMonthData[i].holidayName,
-                reservationPossible:reservationPossible,
-            });
-        }
+        //logger.info(daysToAdd)
+        const nextMonthArray = await nextMonthDataArray(daysToAdd,nextMonthData,prevMonthStart,todayData)
+        date.push(...nextMonthArray) //다음달 추가
         
         const splitDate =splitArray(date) 
-
-        
         logger.info('todayData: '+todayData)
         const returnData = returnCalendarResult(year,month+1,todayData,splitDate)
         //logger.info('splitDate: '+JSON.stringify(splitDate))
@@ -425,41 +176,14 @@ router.post('/time',isAuthenticatedAdmin,async function(req,res){//해당 날짜
     const ptcd = req.query.ptcd;
     const pccd = req.query.pccd;
     const data = req.body.data;
-    let dateData =[];
-
-    if(ptcd=='R0401'&& pccd =='R0801'){
+    
+    if(ptcd==='R0401'&& pccd ==='R0801'){
         try {
-            const calendarId:any = await Calendar.findOne({
-                where:{
-                    year:data.year,
-                    month:data.month,
-                    day:data.day
-                },
-                raw:true
-            })
-            console.log(calendarId)
-
-            const reservationTime = await ReservationTime.findAll({
-                where:{
-                    calendarId:calendarId.CalendarId
-                },
-                raw:true
-            })
-            console.log(reservationTime)
-            const length = reservationTime.length;
-            for(let i =0;i<length;i++){
-                dateData.push({
-                    startTime: reservationTime[i].startTime,
-                    endTime: reservationTime[i].endTime,
-                    numberOfReservation : reservationTime[i].numberOfReservation  ,
-                    availableNumberOfReservation :reservationTime[i].availableNumberOfReservation,
-                    reservationPossible : reservationTime[i].reservationPossible ,
-                    OperationTimeId: reservationTime[i].OperationTimeId 
-                })
-            }
-            
+            let dateData = await availableTime(data)
+           
             const returnFormatData = returnFormat(2000,'성공',dateData)
             res.json(returnFormatData);
+            
             
         } catch (error) {
             logger.error(error)
@@ -468,6 +192,7 @@ router.post('/time',isAuthenticatedAdmin,async function(req,res){//해당 날짜
         }
 
     }
+    
 })
 
 

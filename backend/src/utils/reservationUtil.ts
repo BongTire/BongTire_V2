@@ -567,7 +567,8 @@ export async function availableTime(data:any){
                 numberOfReservation : reservationTime[i].numberOfReservation  ,
                 availableNumberOfReservation :reservationTime[i].availableNumberOfReservation,
                 reservationPossible : reservationTime[i].reservationPossible ,
-                OperationTimeId: reservationTime[i].OperationTimeId 
+                OperationTimeId: reservationTime[i].OperationTimeId,
+                ReservationTimeId:reservationTime[i].ReservationTimeId 
             })
         }
         return dateData;
