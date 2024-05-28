@@ -12,6 +12,7 @@ import Product from "../views/Product.vue";
 import ProductDetail from "../views/ProductDetail.vue";
 import Board from "../views/Board.vue";
 import BoardDetail from "../views/BoardDetail.vue";
+import Introduction from "../views/Introduction.vue";
 import Reservation from "../views/Reservation.vue";
 import Login from "../views/Login.vue"
 import Edit from '../views/Edit.vue'
@@ -67,6 +68,12 @@ const routes = [
     path: "/board/:id",
     name: "BoardDetail",
     component: BoardDetail,
+    meta: { layout: PublicLayout },
+  },
+  {
+    path: "/introduction",
+    name: "Introduction",
+    component: Introduction,
     meta: { layout: PublicLayout },
   },
   {

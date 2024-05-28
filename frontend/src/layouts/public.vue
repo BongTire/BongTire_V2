@@ -235,7 +235,7 @@
     { name: '전화 예약', state: 'phone', icon: PhoneIcon },
   ]
   const company = [
-    { name: '가게 소개', href: '#' },
+    { name: '가게 소개', href: '/introduction' },
     { name: '공지사항', href: '/board?pccd=N0401' },
     { name: '문의사항', href: '/board?pccd=C0501' },
   ]
