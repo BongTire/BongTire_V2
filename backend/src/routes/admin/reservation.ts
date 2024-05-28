@@ -88,8 +88,8 @@ router.get('/calendar',isAuthenticatedAdmin,async function(req:Request,res:Respo
             }
             
             date.push({
-                calendarId:prevMonthData[prevMonthStart + i -1].CalendarId,
-                operationTimeId:prevMonthData[prevMonthStart + i -1].OperationTimeId,
+                CalendarId:prevMonthData[prevMonthStart + i -1].CalendarId,
+                OperationTimeId:prevMonthData[prevMonthStart + i -1].OperationTimeId,
                 isCurrentMonth:false,
                 month: prevMonthData[prevMonthStart + i -1].month,
                 day: prevMonthData[prevMonthStart + i -1].day,
@@ -135,8 +135,8 @@ router.get('/calendar',isAuthenticatedAdmin,async function(req:Request,res:Respo
                 reservationPossible = returnReservationPossible(reservationPossibleDatas)
             }
             date.push({
-                calendarId:monthData[i].CalendarId,
-                operationTimeId:monthData[i].OperationTimeId,
+                CalendarId:monthData[i].CalendarId,
+                OperationTimeId:monthData[i].OperationTimeId,
                 isCurrentMonth:true,
                 month:monthData[i].month,
                 day: monthData[i].day ? monthData[i].day:null,
@@ -186,8 +186,8 @@ router.get('/calendar',isAuthenticatedAdmin,async function(req:Request,res:Respo
                 reservationPossible = returnReservationPossible(reservationPossibleDatas)
             }
             date.push({
-                calendarId:nextMonthData[i].CalendarId,
-                operationTimeId:nextMonthData[i].OperationTimeId,
+                CalendarId:nextMonthData[i].CalendarId,
+                OperationTimeId:nextMonthData[i].OperationTimeId,
                 isCurrentMonth:false,
                 day: nextMonthData[i].day,
                 month:nextMonthData[i].month,
@@ -295,8 +295,8 @@ router.post('/calendar',isAuthenticatedAdmin,async function(req,res){//이번달
             }
             
             date.push({
-                calendarId:prevMonthData[prevMonthStart + i -1].CalendarId,
-                operationTimeId:prevMonthData[prevMonthStart + i -1].OperationTimeId,
+                CalendarId:prevMonthData[prevMonthStart + i -1].CalendarId,
+                OperationTimeId:prevMonthData[prevMonthStart + i -1].OperationTimeId,
                 isCurrentMonth:false,
                 month: prevMonthData[prevMonthStart + i -1].month,
                 day: prevMonthData[prevMonthStart + i -1].day,
@@ -343,8 +343,8 @@ router.post('/calendar',isAuthenticatedAdmin,async function(req,res){//이번달
                 reservationPossible = returnReservationPossible(reservationPossibleDatas)
             }
             date.push({
-                calendarId:monthData[i].CalendarId,
-                operationTimeId:monthData[i].OperationTimeId,
+                CalendarId:monthData[i].CalendarId,
+                OperationTimeId:monthData[i].OperationTimeId,
                 isCurrentMonth:true,
                 month:monthData[i].month,
                 day: monthData[i].day ? monthData[i].day:null,
@@ -393,8 +393,8 @@ router.post('/calendar',isAuthenticatedAdmin,async function(req,res){//이번달
                 reservationPossible = returnReservationPossible(reservationPossibleDatas)
             }
             date.push({
-                calendarId:nextMonthData[i].CalendarId,
-                operationTimeId:nextMonthData[i].OperationTimeId,
+                CalendarId:nextMonthData[i].CalendarId,
+                OperationTimeId:nextMonthData[i].OperationTimeId,
                 isCurrentMonth:false,
                 day: nextMonthData[i].day,
                 month:nextMonthData[i].month,
@@ -454,7 +454,7 @@ router.post('/time',isAuthenticatedAdmin,async function(req,res){//해당 날짜
                     numberOfReservation : reservationTime[i].numberOfReservation  ,
                     availableNumberOfReservation :reservationTime[i].availableNumberOfReservation,
                     reservationPossible : reservationTime[i].reservationPossible ,
-                    operationTimeId: reservationTime[i].OperationTimeId 
+                    OperationTimeId: reservationTime[i].OperationTimeId 
                 })
             }
             

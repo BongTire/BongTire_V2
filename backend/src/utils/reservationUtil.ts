@@ -71,7 +71,7 @@ export function returnCalendarResult(year:any,month:any,todayData:any,splitDate:
         year: year,
         month: month,
         today: {
-            calendarId:todayData.CalendarId,
+            CalendarId:todayData.CalendarId,
             month:todayData.month,
             week:todayData.week ?? null,
             day:todayData.day,
@@ -445,8 +445,8 @@ export async function pastMonthData(firstDayOfWeek:any,prevMonthData:any,prevMon
         }
         
         date.push({
-            calendarId:prevMonthData[prevMonthStart + i -1].CalendarId,
-            operationTimeId:prevMonthData[prevMonthStart + i -1].OperationTimeId,
+            CalendarId:prevMonthData[prevMonthStart + i -1].CalendarId,
+            OperationTimeId:prevMonthData[prevMonthStart + i -1].OperationTimeId,
             isCurrentMonth:false,
             month: prevMonthData[prevMonthStart + i -1].month,
             day: prevMonthData[prevMonthStart + i -1].day,
@@ -484,8 +484,8 @@ export async function thisMonthData(daysInMonth:any,monthData:any,prevMonthStart
             reservationPossible = returnReservationPossible(reservationPossibleDatas)
         }
         date.push({
-            calendarId:monthData[i].CalendarId,
-            operationTimeId:monthData[i].OperationTimeId,
+            CalendarId:monthData[i].CalendarId,
+            OperationTimeId:monthData[i].OperationTimeId,
             isCurrentMonth:true,
             month:monthData[i].month,
             day: monthData[i].day ? monthData[i].day:null,
@@ -567,7 +567,7 @@ export async function availableTime(data:any){
                 numberOfReservation : reservationTime[i].numberOfReservation  ,
                 availableNumberOfReservation :reservationTime[i].availableNumberOfReservation,
                 reservationPossible : reservationTime[i].reservationPossible ,
-                operationTimeId: reservationTime[i].OperationTimeId 
+                OperationTimeId: reservationTime[i].OperationTimeId 
             })
         }
         return dateData;
