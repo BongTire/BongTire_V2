@@ -1,6 +1,9 @@
 <template>
     <ul role="list" class="divide-y divide-gray-100">
-      <li v-for="post in props.conf" :key="post.PostId" class="relative py-5 hover:bg-gray-50 cursor-pointer">
+      <li v-for="post in props.conf" :key="post.PostId"
+          class="relative py-5 hover:bg-gray-50 cursor-pointer"
+          @click="clickPost(post)"
+      >
         <div class="px-4 sm:px-6 lg:px-8">
           <div class="mx-auto flex max-w-4xl justify-between gap-x-6">
             <div class="flex min-w-0 gap-x-4">
@@ -45,14 +48,19 @@
   </template>
   
   <script setup lang="ts">
-  import { ChevronRightIcon } from '@heroicons/vue/20/solid'
 
   const props = defineProps({
     conf:{
       type: Array as PropType<IPost> | undefined
     }
   })
-  
+
+  const emits = defineEmits(['movePostDetail'])
+
+  const clickPost = (post: IPost) =>{
+    console.log(post)
+    emits('movePostDetail',post)
+  }
 
   </script>
 

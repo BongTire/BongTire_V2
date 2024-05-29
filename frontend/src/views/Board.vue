@@ -1,5 +1,6 @@
 <template>
-  <div class="mx-auto max-w-2xl lg:max-w-7xl">
+  <Loading v-if="postLoading"/>
+  <div v-else class="mx-auto max-w-2xl lg:max-w-7xl">
     <div class="relative border-b border-gray-200 pb-5 sm:pb-0">
         <div class="md:flex md:items-center md:justify-between">
           <h3 class="text-base font-semibold leading-6 text-gray-900">공지사항</h3>
@@ -39,12 +40,10 @@ import {
   } from '@heroicons/vue/24/outline'
 import { IPost } from '../util/type/post';
 import { IFetchType } from '../util/type/common'
-import { fetchGetData } from '@api/common.ts'
+import { fetchGetData } from '@api/common'
 import {exportUserInfo } from '../util/func/common'
+import Loading from '../components/Common/Loading'
 
-
-import boardCard from '../mocks/api/board-card.json'
-import boardList from '../mocks/api/board-list.json'
 
 const route = useRoute()
 const router = useRouter()
@@ -74,6 +73,7 @@ const originBoard = ref<IPost[]>()
 
 watch(()=>pccd.value,async ()=>{
   if(isList.value){
+    postLoading.value = true
     const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0203' ,pccd.value)
     const boardState = await postPromise
     originBoard.value = boardState.data
@@ -82,7 +82,13 @@ watch(()=>pccd.value,async ()=>{
     const boardState = await postPromise
     originBoard.value = boardState.data
   }
+  if(originBoard.value) postLoading.value = false
 },{ deep: true })
+
+const postLoading = computed(()=>{
+  if(originBoard.value) return false
+  else return true
+})
 
 onMounted(async ()=>{
   
@@ -96,15 +102,14 @@ onMounted(async ()=>{
     originBoard.value = boardState.data
   }
 
+  console.log(originBoard.value)
 
-  const postLoading = computed(()=>{
-    if(originBoard.value) return false
-    else return true
-  })
+   if(originBoard.value) postLoading.value = false
+    else postLoading.value = false
 })
 
 const movePostDetail = async (post:IPost) =>{
-  const postId = post.id
+  const postId = post.PostId
 
   if(isList.value){
     router.push(`/board/${postId}?ptcd=P0203&pccd=${pccd.value}`)

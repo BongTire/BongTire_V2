@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import {PropType, ref} from 'vue'
+import {PropType} from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 import {IMessage} from "@type/common.ts";

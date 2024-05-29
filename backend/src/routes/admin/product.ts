@@ -14,7 +14,7 @@ const router = express.Router();
 router.get('/tire', isAuthenticatedAdmin,async function (req: Request, res: Response) {
     try {
         const response = await sequelize.query(`
-            select T.TireId as id, T.BrandId as BrandId, name as brandName, T.PCCD as PCCD, 
+            select T.TireId as TireId, T.BrandId as BrandId, name as brandName, T.PCCD as PCCD, 
             T.drivingMethodPCCD, T.productName, T.content, T.patternCode, T.mCode, T.tireSize, 
             T.maxWeight, T.maxSpeed, T.xl, T.ply, T.origin, T.price, T.feature, T.amount, T.discountPrice, 
             T.discountRate, T.numberOfDataUpdate, T.sales, T.viewers, T.isSecond, T.isActive, T.isVisible, T.isRecommanded 
@@ -124,7 +124,7 @@ router.get('/tire/brand', isAuthenticatedAdmin, async (req: Request, res: Respon
 
 router.get('/wheel', isAuthenticatedAdmin,async function (req: Request, res: Response) {
     try {
-        const response = await sequelize.query(`select W.WheelId as id, W.BrandId as BrandId, name as brandName, W.PCCD as PCCD, W.drivingMethodPCCD, W.productName, W.content,  W.wheelSize,W.frontOffset, W.rearOffset, W.price, W.feature, W.amount, W.discountPrice, W.discountRate,  W.sales, W.viewers, W.isSecond, W.isActivate, W.isVisible, W.isContinue ,W.PCD, W.hole
+        const response = await sequelize.query(`select W.WheelId as WheelId, W.BrandId as BrandId, name as brandName, W.PCCD as PCCD, W.drivingMethodPCCD, W.productName, W.content,  W.wheelSize,W.frontOffset, W.rearOffset, W.price, W.feature, W.amount, W.discountPrice, W.discountRate,  W.sales, W.viewers, W.isSecond, W.isActivate, W.isVisible, W.isContinue ,W.PCD, W.hole
         from Wheels W join Brands B on  B.BrandId = W.BrandId where W.deletedAt IS NULL`);
         const data = [...response];
         

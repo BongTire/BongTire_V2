@@ -15,7 +15,7 @@
                 </svg>
                 <div class="flex gap-x-2.5">
                   <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                    <span class="text-xs font-medium leading-none text-white">{{ post?.WriterName ? post?.WriterName.slice(0,1) : null }}</span>
+                    <span class="text-xs font-medium leading-none text-white">{{ post?.writerName ? post?.writerName.slice(0,1) : null }}</span>
                   </span>
                   {{ post.WriterName }}
                 </div>

@@ -107,15 +107,7 @@ router.get('/', async function (req: Request, res: Response) {
         {
           name: "브랜드",
           value:[
-            {
-              id: 1,
-              name: "브랜드",
-              isDrivingMethod: false,
-              filterPCCD: null,
-              isImage: true,
-              isBrand: true,
               ...result
-            }
           ]
         }
       ];
@@ -216,15 +208,9 @@ router.get('/', async function (req: Request, res: Response) {
         {
           name: "브랜드",
           value:[
-            {
-              id: 1,
-              name: "브랜드",
-              isDrivingMethod: false,
-              filterPCCD: null,
-              isImage: true,
-              isBrand: true,
+
               ...result
-            }
+
           ]
         }
       ];

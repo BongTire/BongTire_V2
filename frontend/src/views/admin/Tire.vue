@@ -2,7 +2,7 @@
   <Loading v-if="tireLoading"/>
   <div>
     <Confirm :conf="popupData" :isOpen="isOpenConfirm" @isCancelPopup="isCancelPopup" @isPostData="isPostTireData"/>
-    <EditProduct :conf="editTireData" :state="state" :isOpen="openEditDialog" @postTireData="postTireData" @closeDialog="isCloseEditDialog"/>
+    <EditProduct :conf="editTireData" :state="state" :brand="productBrand" :isOpen="openEditDialog" @postTireData="postTireData" @closeDialog="isCloseEditDialog"/>
     <div class=" flex justify-end items-center mt-5">
 
       <button @click="isOpenEditDialog" type="button" class="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">+ 타이어 추가</button>
@@ -30,7 +30,7 @@ const tire = ref<IProduct[]>([])
 const state = 'tire'
 const editTireData = ref<IProduct>({})
 const isOpenConfirm = ref(false)
-
+const productBrand = ref<IBrand[]>()
 
 const popupData = ref({
   title: '',
@@ -40,6 +40,13 @@ const popupData = ref({
 onMounted(async ()=>{
   const tirePromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/tire','','')
   const tireFetch = await tirePromise
+
+  const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
+  const filterState= await filterPromise
+  productBrand.value = filterState.data[0].value
+
+  console.log(productBrand.value)
+
   isAuthenticatedAdmin(tireFetch?.status.code)
   tire.value =  tireFetch.data
 })

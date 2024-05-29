@@ -2,7 +2,7 @@
   <Loading v-if="wheelLoading"/>
   <div v-else>
     <Confirm :conf="popupData" :isOpen="isOpenConfirm" @isCancelPopup="isCancelPopup" @isPostData="isPostTireData"/>
-    <EditProduct :conf="editWheelData" :state="state" :isOpen="openEditDialog" @postTireData="postTireData" @closeDialog="isCloseEditDialog"/>
+    <EditProduct :conf="editWheelData" :state="state" :brand="productBrand" :isOpen="openEditDialog" @postTireData="postTireData" @closeDialog="isCloseEditDialog"/>
     <div class="flex justify-end items-center mt-5">
       <button @click="isOpenEditDialog" type="button"
               class="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
@@ -14,13 +14,15 @@
 </template>
 
 <script lang="ts" setup>
-import Loading from '@component/Common/Loading.vue';
-import {IProduct} from "@type/product.ts";
-import {IFetchType} from "@type/common.ts";
-import {fetchGetData} from "@api/common.js";
-import DataTable from "@component/Admin/DataTable.vue";
-import Confirm from "@component/PopUp/Confirm.vue";
-import EditProduct from "@component/Admin/ProductDialog/EditProduct.vue";
+import Loading from '@component/Common/Loading';
+import {IProduct} from "@type/product";
+import {IBrand} from '@type/brand'
+import {IFetchType} from "@type/common";
+import {fetchGetData} from "@api/common";
+import DataTable from "@component/Admin/DataTable";
+import Confirm from "@component/PopUp/Confirm";
+import EditProduct from "@component/Admin/ProductDialog/EditProduct";
+import { isAuthenticatedAdmin } from '../../util/func/common'
 
 
 const wheelLoading = computed(()=>{
@@ -37,10 +39,17 @@ const popupData = ref({
   message:""
 })
 const openEditDialog = ref(false)
+const productBrand = ref<IBrand[]>()
 
 onMounted(async ()=>{
   const wheelPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/wheel','','')
   const wheelFetch = await wheelPromise
+
+  const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0902')
+  const filterState= await filterPromise
+  productBrand.value = filterState.data[0].value
+
+  isAuthenticatedAdmin(wheelFetch.status.code)
   wheel.value = wheelFetch.data
 })
 

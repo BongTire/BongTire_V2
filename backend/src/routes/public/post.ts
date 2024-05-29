@@ -40,9 +40,9 @@ const setListResponse = (posts: any[]): PostResponse => {
       isPin: data.isPin ?? false,
       isActive: data.isActive ?? false,
       isSecret: data.isSecret,
-      isThumnail: data.isThumnail ?? false,
+      isThumbnail: data.isThumbnail ?? false,
       isAnswer: data.isAnswer ?? false,
-      thumnail: data.thumnail ?? "",
+      thumbnail: data.thumbnail ?? "",
       viewers: data.viewers ?? 0,
       answer: data.answer ?? "",
     };
@@ -216,7 +216,7 @@ router.get('/', async (req: Request, res: Response) => { //card, list 추가
       if (result.length > 0) {
         logger.info(result[0].PCCD);
         const sendEvent = result.map((data :any , index :any) => ({
-          id: data.PostId,
+          PostId: data.PostId,
           PCCD: data.PCCD,
           thumbnail: data.thumbnail,
           isMainPost: data.isMainPost,
@@ -467,7 +467,7 @@ router.get('/event', async (req: Request, res: Response) => {
     if (result.length > 0) {
       logger.info(result[0].PCCD);
       const sendEvent = result.map((data :any , index :any) => ({
-        id: data.PostId,
+        PostId: data.PostId,
         PCCD: data.PCCD,
         thumbnail: data.thumbnail,
         isMainPost: data.isMainPost,

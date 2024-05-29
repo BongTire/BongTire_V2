@@ -2,15 +2,25 @@
     <div class="bg-white px-6 py-32 lg:px-8">
       <div class="mx-auto max-w-3xl text-base leading-7 text-gray-700">
         <!-- 현재 페이지 명 -->
-        <p class="text-base font-semibold leading-7 text-orange-600">Introducing</p>
+        <p class="text-base font-semibold leading-7 text-orange-600">
+          {{ category }}
+        </p>
         <!-- 해당 게시물에 대한 제목 -->
-        <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">JavaScript for Beginners</h1>
+        <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          {{ detail?.title ?? '' }}
+        </h1>
         <!-- 작성자 -->
-        <div v-html="content">
+        <p class="text-base font-semibold leading-7 text-gray-600">
+          {{ detail?.writerName ?? '' }}
+        </p>
+        <div>
+          <img :src="detail?.thumbnail ?? null" alt="" />
+        </div>
+        <div v-html="detail?.content" class="min-h-screen">
 
         </div>
         <!-- 댓글 시작 -->
-    <div class="flex items-start space-x-4 mt-10">
+    <div v-if="detail?.isAnswer === 1" class="flex items-start space-x-4 mt-10">
         <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
             <!-- username -->
             <span class="font-medium leading-none text-white">관</span>
@@ -56,18 +66,26 @@ import {
   import { IPost } from '../util/type/post';
   const route = useRoute()
   import { IFetchType } from '../util/type/common'
+  import { useCommonStore } from '../stores/common'
   import { fetchGetData } from '@api/common.ts'
 
   const pccd = computed(()=>route.query.pccd ?? 'N0401')
-  const ptcd = computed(()=>route.query.pccd ?? 'N0401')
+  const ptcd = computed(()=>route.query.ptcd ?? 'C0202')
 
   const postId = computed(()=>route.param.id)
   const detail = ref<IPost>()
+  const store = useCommonStore()
 
+  const PCCDArray = store.getPCCD
+  const category = ref('')
   onMounted( async ()=>{
-    const detailPromise: Promise<IPost> = await fetchGetData(`/post/${route.params.id}`, ptcd, pccd)
-    detail.value = await detailPromise
+    const detailPromise: Promise<IFetchType> = await fetchGetData<IFetchType>(`/post/${route.params.id}`, ptcd.value, pccd.value)
+    const detailState = await detailPromise
+    detail.value = detailState.data[0]
 
+    console.log(detail.value)
+    category.value = PCCDArray.filter(x=>x.PCCD===detail.value.PCCD)
+    category.value = category.value[0].secondName
   })
 
 

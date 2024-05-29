@@ -51,7 +51,7 @@
               <div class="mt-6">
                 <h3 class="sr-only">특징</h3>
   
-                <div class="space-y-6 text-base text-gray-700" v-html="productDetail.content" />
+                <div class="space-y-6 text-base text-gray-700" v-html="productDetail?.content ?? ''" />
               </div>
   
               
@@ -127,6 +127,9 @@ const amount = computed(()=>{
 })
 
 const router = useRouter();
+const route = useRoute()
+
+const ProductId = route.params.id
 
 const clickSetTireLocation = (index:number) =>{
   if(tireLocation.value[index] === 1){
@@ -160,8 +163,9 @@ const clickReservationBtn = () =>{
 }
 
 onMounted(async ()=>{
-  const productDetailPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product/1', '', 'P0601')
-  productDetail.value = await productDetailPromise
+  const productDetailPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/product/${ProductId}`, '', 'P0601')
+  const productDetailState = await productDetailPromise
+  productDetail.value = productDetailState.data
   console.log(productDetail.value)
 })
 
