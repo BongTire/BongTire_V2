@@ -12,8 +12,8 @@
 
 <script lang="ts" setup>
 
-import Introduction from '@component/Introduction/Introduction.vue';
-import Loading from '@component/Common/Loading.vue'
+import Introduction from '../components/Introduction/Introduction';
+import Loading from '../components/Common/Loading'
 
 
 

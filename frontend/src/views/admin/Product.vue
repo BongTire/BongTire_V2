@@ -38,17 +38,21 @@
 </template>
 
 <script lang="ts" setup>
-import TopTaps from '@component/Admin/TopTabs.vue'
-import CardContent from '@component/Admin/CardContent.vue'
+import TopTaps from '../../components/Admin/TopTabs'
+import CardContent from '../../components/Admin/CardContent'
 import { IProductType } from '../../util/type/product';
 import { IBrand } from '../../util/type/brand';
-import productTypeData from '../../mocks/api/product-type.json'
-import EditBrand from "@component/Admin/Brand/EditBrand.vue";
-import ProductType from "@component/Admin/Brand/productType.vue";
-import {IPCCD} from "@type/common.ts";
+
+import EditBrand from "../../components/Admin/Brand/EditBrand";
+import ProductType from "../../components/Admin/Brand/productType";
+import {IFetchType, IPCCD} from "../../util/type/common";
+import { useCommonStore } from '../../stores/common'
+import { fetchGetAdmin } from '../../api/common'
+
+const store = useCommonStore()
 
 // productType 
-const originProductType = ref<IProductType[]>([...productTypeData.data])
+const originProductType = ref<IProductType[]>()
 
 // PCCD 관련 변수
 const visibleProductType = ref<IProductType[]>()
@@ -67,21 +71,27 @@ const selectedBrandData = ref<IBrand>()
 // 상품 타입 팝업 띄울 변수
 const isOpenProductType = ref(false)
 
-onMounted(()=>{
-  visibleProductType.value = JSON.parse(JSON.stringify(originProductType.value))
+onMounted( async ()=>{
+  const productTypePromise:Promise<IFetchType> = fetchGetAdmin('/admin/producttype','')
+  const producttype = await productTypePromise
 
-  visibleKoreaBrand.value = originProductType.value[selectKoreaProductTypeIndex.value].brand?.filter(x=>x.origin===1) ?? []
-  visibleForeignBrand.value = originProductType.value[selectForeignProductTypeIndex.value].brand.filter(x=>x.origin===0) ?? []
+  originProductType.value = producttype.data
+
+  visibleProductType.value = originProductType.value
+
+  console.log(originProductType.value)
+  visibleKoreaBrand.value = originProductType.value[selectKoreaProductTypeIndex.value].brand?.filter(x=>x.origin) ?? []
+  visibleForeignBrand.value = originProductType.value[selectForeignProductTypeIndex.value].brand.filter(x=>!x.origin) ?? []
 })
 
 const selectProductType = (index:number, state:string) =>{
   if(state==='k'){
     selectKoreaProductTypeIndex.value = index
-    visibleKoreaBrand.value = originProductType.value[index].brand?.filter(x=>x.origin===1) ?? []
+    visibleKoreaBrand.value = originProductType.value[index].brand?.filter(x=>x.origin) ?? []
   }
   if(state === 'f'){
     selectForeignProductTypeIndex.value = index
-    visibleForeignBrand.value = originProductType.value[index].brand.filter(x=>x.origin===0) ?? []
+    visibleForeignBrand.value = originProductType.value[index].brand.filter(x=>!x.origin) ?? []
   }
 }
 

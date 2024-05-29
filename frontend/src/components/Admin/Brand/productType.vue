@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import {ExclamationTriangleIcon, PhotoIcon, XMarkIcon} from '@heroicons/vue/24/outline'
+import { PhotoIcon, XMarkIcon} from '@heroicons/vue/24/outline'
 import {IPCCD} from "@type/common.ts";
 import {useCommonStore} from "@store/common.ts";
 

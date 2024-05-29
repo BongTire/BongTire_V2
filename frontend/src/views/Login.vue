@@ -24,7 +24,8 @@
                 <div>
                   <label for="password" class="block text-sm font-medium leading-6 text-gray-900">비밀번호</label>
                   <div class="mt-2">
-                    <input id="password" v-model="password" name="password" type="password" autocomplete="current-password" required="" class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
+                    <input id="password" v-model="password" name="password" type="password" autocomplete="current-password"
+                           :required="true" class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
                   </div>
                 </div>
   
@@ -83,17 +84,16 @@
     </div>
   </template>
 <script setup lang="ts">
-import { IFetchType } from '@type/common'
-import { fetchPostData } from '@api/common'
-import { useUserStore } from '@store/user'
-import Error from '@component/Alert/Error.vue'
+import { IFetchType } from '../util/type/common'
+import { fetchPostData } from '../api/common'
+import { useUserStore } from '../stores/user'
+import Error from '../components/Alert/Error'
 
 
 const errorMessage = ref('')
 const email = ref('')
 const password = ref('')
 const store = useUserStore()
-const router = useRouter()
 
 
 const submitLogin = async () =>{

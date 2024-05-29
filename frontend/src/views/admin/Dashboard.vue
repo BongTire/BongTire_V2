@@ -46,7 +46,10 @@ const month = date.getMonth() + 1
 const day = date.getDate()
 
 onMounted(async () => {
-  const ReserveDataPromise:Promise<IFetchType> = fetchGetAdmin<IFetchType>('/admin/reservation/reservedata', year, month, day)
+
+  const date = `${year}${month/10 >=1 ? month : '0'+month}${day}`
+  console.log(date)
+  const ReserveDataPromise:Promise<IFetchType> = fetchGetAdmin<IFetchType>('/admin/reservation/reservedata', date)
   const reserveState = await ReserveDataPromise
 
   isAuthenticatedAdmin(reserveState?.status.code)

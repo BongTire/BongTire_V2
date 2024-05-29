@@ -232,10 +232,12 @@
 
   onMounted(async () => {
         const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd','','')
-        PCCD.value = await pccdPromise
+        const pccd = await pccdPromise
+        PCCD.value = pccd.data
 
         const ptcdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/ptcd','','')
-        PTCD.value = await ptcdPromise
+        const ptcd = await ptcdPromise
+        PTCD.value = await ptcd.data
 
         store.initCommon(PTCD.value, PCCD.value)
   })

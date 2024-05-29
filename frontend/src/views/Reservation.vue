@@ -25,18 +25,15 @@
 </template>
 
 <script lang="ts" setup>
-import Calendar from '@component/Reservation/Calendar.vue'
-import Time from '@component/Reservation/Time.vue'
-import ProductInfo from '@component/Reservation/ProductInfo.vue'
+import Calendar from '../components/Reservation/Calendar'
+import Time from '../components/Reservation/Time'
+import ProductInfo from '../components/Reservation/ProductInfo'
 import { ICalendar, IReservationTime } from '../util/type/reservation';
-import { getCalendar } from '@api/common.ts';
-import calendarData from '../mocks/api/calendar.json'
-import timeData from '../mocks/api/reservation-time.json'
 import { IFetchType } from '../util/type/common'
-import { fetchGetData, fetchPostData } from '@api/common.ts'
+import { fetchGetData, fetchPostData } from '../api/common'
 
 // 캘린더 관련 변수
-const visibleCalendar = ref<ICalendar[[]]>()
+const visibleCalendar = ref<ICalendar[][]>()
 const today = new Date()
 const presentYear = ref(today.getFullYear())
 const presentMonth = ref(today.getMonth() + 1)
@@ -58,9 +55,9 @@ onMounted(async ()=>{
   visibleCalendar.value = calendarData.data.date
 
   date.value = {
-    year: calendarData.year,
-    month: calendarData.today.month,
-    day: calendarData.today.day,
+    year: calendarData.data.year,
+    month: calendarData.data.today.month,
+    day: calendarData.data.today.day,
   }
 
   const postData = {

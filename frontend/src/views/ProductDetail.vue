@@ -13,7 +13,7 @@
                   <Tab class="relative flex h-36 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4" v-slot="{ selected }">
                     <span class="sr-only"></span>
                     <span class="absolute left-2 inset-0 overflow-hidden rounded-md">
-                      <img :src="productDetail.image" alt="" class="h-36 object-cover object-center" />
+                      <img :src="productDetail?.image ?? ''" alt="" class="h-36 object-cover object-center" />
                     </span>
                     <span :class="[selected ? 'ring-orange-500' : 'ring-transparent', 'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2']" aria-hidden="true" />
                   </Tab>
@@ -22,8 +22,8 @@
   
               <TabPanels class="flex justify-center items-center aspect-h-1 aspect-w-1 w-full ">
                 <TabPanel  class="flex justify-center items-center border rounded-lg">
-                  <img :src="productDetail.brandLogo" class="absolute top-0 left-0 h-16">
-                  <img :src="productDetail.image" class="h-96 w-auto sm:rounded-lg" />
+                  <img :src="productDetail?.brandLogo ?? ''" class="absolute top-0 left-0 h-16">
+                  <img :src="productDetail?.image ?? ''" class="h-96 w-auto sm:rounded-lg" />
                 </TabPanel>
               </TabPanels>
             </TabGroup>
@@ -85,7 +85,7 @@
                         
                     </div>
                     
-                    <p v-if="amount !== 0" class="mt-5 text-lg">총 금액 : <span class="text-orange-600 text-xl"> {{ (productDetail.discountPrice*amount).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }} </span> 원</p>
+                    <p v-if="amount !== 0" class="mt-5 text-lg">총 금액 : <span class="text-orange-600 text-xl"> {{ (productDetail.discountPrice*amount ?? 0).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }} </span> 원</p>
                 </div>
               </section>
             </div>
@@ -108,44 +108,19 @@
   <script setup lang="ts">
   import { ref } from 'vue'
   import {
-    Dialog,
-    DialogPanel,
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    Popover,
-    PopoverButton,
-    PopoverGroup,
-    PopoverPanel,
-    RadioGroup,
-    RadioGroupLabel,
-    RadioGroupOption,
     Tab,
     TabGroup,
     TabList,
     TabPanel,
     TabPanels,
-    TransitionChild,
-    TransitionRoot,
   } from '@headlessui/vue'
-  import {
-    Bars3Icon,
-    HeartIcon,
-    MagnifyingGlassIcon,
-    MinusIcon,
-    PlusIcon,
-    ShoppingBagIcon,
-    UserIcon,
-    XMarkIcon,
-  } from '@heroicons/vue/24/outline'
-  import { StarIcon } from '@heroicons/vue/20/solid'
   import {IProduct} from '../util/type/product'
   import  {IFetchType} from '../util/type/common'
-import { fetchGetData } from '@api/common.ts'
+import { fetchGetData } from '@api/common'
 import { useReservationStore } from '../stores/reservation'
 
 const store  = useReservationStore()
-const productDetail = ref<IProduct>({})
+const productDetail = ref<IProduct>()
 const tireLocation = ref([0,0,0,0])
 const amount = computed(()=>{
   return tireNWheelCalAmount()
@@ -153,7 +128,7 @@ const amount = computed(()=>{
 
 const router = useRouter();
 
-const clickSetTireLocation = (index) =>{
+const clickSetTireLocation = (index:number) =>{
   if(tireLocation.value[index] === 1){
     tireLocation.value[index] = 0
   }else{
@@ -175,10 +150,10 @@ const clickReservationBtn = () =>{
 
   const setProductStore = {
     ...productDetail.value,
-    amount: amount,
+    amount: amount.value,
     tireLocation: tireLocation.value,
     laborCost: 0,
-    price: parseInt(productDetail.value.discountPrice)*parseInt(amount.value)
+    price: productDetail.value.discountPrice*amount.value
   }
   store.setReservationProduct(setProductStore)
   router.push('/reservation')

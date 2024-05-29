@@ -167,20 +167,18 @@
     Bars3Icon,
     BellIcon,
     CalendarIcon,
-    ChartPieIcon,
     Cog6ToothIcon,
     DocumentDuplicateIcon,
-    FolderIcon,
     HomeIcon,
     UsersIcon,
     XMarkIcon,
     TruckIcon,
     GlobeAltIcon
   } from '@heroicons/vue/24/outline'
-  import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+  import {  MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
   import {IFetchType, IPCCD, IPTCD} from "@type/common.js";
   import { fetchGetData, fetchPostData } from "@api/common.js";
-  import { useCommonStore } from '@store/common.ts'
+  import { useCommonStore } from '@store/common'
   import { exportUserInfo, initSesstionStorage } from '../util/func/common'
   
   const navigation = ref([
@@ -211,6 +209,7 @@
   const PTCD = ref<IPTCD>([])
   const PCCD = ref<IPCCD>([])
   const loginInfo = exportUserInfo()
+  const successMessage = ref('')
 
   const clickSubUserMenu = async (url:string)=>{
     if(url === '/logout'){
@@ -218,15 +217,14 @@
       const reponse = await logoutPromise
 
       if(initSesstionStorage(reponse?.status.code)){
-        window.location.reload()
+        window.location.href = '/'
         return
       }
 
       if(reponse?.status.code / 1000 === 2){
-
         successMessage.value = reponse?.status.message
-        window.location.reload()
         sessionStorage.setItem('loginInfo',JSON.stringify({}))
+        window.location.href = '/'
       }
 
     }else if(url === '/admin'){
@@ -234,14 +232,18 @@
     }
   }
 
-
-  onMounted(async () => {
+  onMounted(async ()=>{
     const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd','','')
-    PCCD.value = await pccdPromise
+    const pccd = await pccdPromise
+    PCCD.value = pccd.data
 
     const ptcdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/ptcd','','')
-    PTCD.value = await ptcdPromise
+    const ptcd = await ptcdPromise
+    PTCD.value = ptcd.data
 
     store.initCommon(PTCD.value, PCCD.value)
   })
+
+
+
   </script>

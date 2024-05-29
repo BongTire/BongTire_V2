@@ -64,19 +64,25 @@ onMounted(async ()=>{
   const carState = await carPromise
   isAuthenticatedAdmin(carState?.status.code ?? 4001)
   originCar.value = carState.data
+  console.log(originCar.value)
+
 
   const carBrandPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/brand/car','','',0)
   const brandState = await carBrandPromise
   isAuthenticatedAdmin(brandState?.status.code ?? 4001)
 
   originBrand.value = brandState.data
+  console.log(originBrand.value)
+
+  visibleKoreanBrand.value = [...originBrand.value.filter((x)=>x.origin)]
+  visibleForeignBrand.value = [...originBrand.value.filter((x)=>!x.origin)]
 
 
-  visibleKoreanBrand.value = [...brandState.data.value.filter((x)=>x.origin===1)]
-  visibleForeignBrand.value = [...brandState.data.value.filter((x)=>x.origin===0)]
 
-  visibleKoreaCar.value = [...carState.data.value.filter((x=>x.BrandId===1))]
-  visibleForeignCar.value = [...carState.data.value.filter((x=>x.BrandId===6))]
+  visibleKoreaCar.value = originCar.value[0].carList.filter((x=>x.BrandId===1))
+  visibleForeignCar.value = originCar.value[1].carList.filter((x=>x.BrandId===6))
+
+
 })
 
 </script>

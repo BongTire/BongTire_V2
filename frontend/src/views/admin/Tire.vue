@@ -15,10 +15,11 @@
 import Loading from '@component/Common/Loading.vue';
 import { IProduct } from '../../util/type/product';
 import  {IFetchType} from '../../util/type/common'
-import { fetchGetData } from '@api/common.ts'
+import { fetchGetData, fetchPostData } from '@api/common'
 import DataTable from '@component/Admin/DataTable.vue'
 import EditProduct from '@component/Admin/ProductDialog/EditProduct.vue'
 import Confirm from "@component/PopUp/Confirm.vue";
+import { isAuthenticatedAdmin } from '../../util/func/common'
 
 const tireLoading = computed(()=>{
   if(tire) return false
@@ -38,8 +39,9 @@ const popupData = ref({
 
 onMounted(async ()=>{
   const tirePromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/tire','','')
-  tire.value = await tirePromise
-  console.log(tire.value)
+  const tireFetch = await tirePromise
+  isAuthenticatedAdmin(tireFetch?.status.code)
+  tire.value =  tireFetch.data
 })
 
 const openEditDialog = ref(false)
@@ -64,6 +66,8 @@ const isPostTireData = () =>{
   // post 전송
   console.log(editTireData.value)
   isOpenConfirm.value = false
+
+
 }
 
 const postTireData = (message:any, editData:IProduct) =>{
@@ -73,8 +77,8 @@ const postTireData = (message:any, editData:IProduct) =>{
   popupData.value = {...message}
 
   isOpenConfirm.value = true
-
-  console.log(editData)
+  const response = fetchPostData('/admin/product/tire','','',editData)
+  console.log(response)
 }
 const isCancelPopup = () =>{
   // 전송 취소

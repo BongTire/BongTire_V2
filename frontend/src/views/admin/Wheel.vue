@@ -40,8 +40,8 @@ const openEditDialog = ref(false)
 
 onMounted(async ()=>{
   const wheelPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/wheel','','')
-  wheel.value = await wheelPromise
-  console.log(wheel.value)
+  const wheelFetch = await wheelPromise
+  wheel.value = wheelFetch.data
 })
 
 const isCloseEditDialog = () =>{

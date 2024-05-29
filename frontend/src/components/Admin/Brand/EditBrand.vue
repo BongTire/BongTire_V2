@@ -66,9 +66,11 @@ const initData = () =>{
 const clickEditMode = () =>{
   if(editMode.value){
     // emit으로 보내기
-    selectBrandFeature.value.map((item, index) =>{
+    selectBrandFeature.value.map((item) =>{
       if(!editBrand.value?.PCCD.includes(item.PCCD)){
-        editBrand.value?.PCCD.push((item.PCCD))
+        if(item?.PCCD){
+          editBrand.value?.PCCD.push((item?.PCCD))
+        }
       }
     })
     console.log(editBrand.value)

@@ -7,7 +7,6 @@
 <script lang="ts" setup>
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-import { imageHandler } from '../../util/func/edit'
 
 const options = {
   debug: 'info',

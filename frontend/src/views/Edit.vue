@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts" setup>
-import Edit from '@component/Post/Edit.vue'
+import Edit from '../components/Post/Edit'
 import {
     ChatBubbleLeftRightIcon,
     MegaphoneIcon,
@@ -94,8 +94,10 @@ import {
     LockOpenIcon,
 } from '@heroicons/vue/24/outline'
 import { Switch } from '@headlessui/vue'
-import { usePostStore } from '@store/post.ts'
+import { usePostStore } from '../stores/post'
 import { exportUserInfo } from '../util/func/common'
+import { IPostCategory } from '../util/type/post'
+
 
 const store = usePostStore()
 const enabled = ref(false)

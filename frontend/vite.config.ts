@@ -22,7 +22,8 @@ export default defineConfig({
       '@api' : path.resolve(__dirname, 'src/api'),
       '@store' : path.resolve(__dirname, 'src/stores'),
       '@type' : path.resolve(__dirname, 'src/util/type')
-    }
+    },
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.json','.vue']
   },
   server: {
     port: 3000

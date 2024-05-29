@@ -111,19 +111,19 @@
       <!-- Product grid -->
       <!-- 상품 박스 -->
       <div class="mt-6 lg:col-span-2 lg:mt-0 xl:col-span-3">
-        <ProductCard :conf="product" @moveDetailPage="moveDetailPage" />
+        <ProductCard :conf="products" @moveDetailPage="moveDetailPage" />
       </div>
 
     </div>
-    <PageNation class="mt-10" :total="total" :currentPage="currentPage" @moveOtherPage="moveOtherPage" />
+    <PageNation class="mt-10" :total="totalProduct" :currentPage="currentPage" @moveOtherPage="moveOtherPage" />
   </main>
 
 </template>
 
 <script lang="ts" setup >
-import ProductCard from '@component/Product/ProductCard.vue'
-import Loading from '@component/Common/Loading.vue'
-import PageNation from '@component/Common/PageNation.vue'
+import ProductCard from '@component/Product/ProductCard'
+import Loading from '@component/Common/Loading'
+import PageNation from '@component/Common/PageNation'
 import { ref } from 'vue'
 import {
   Dialog,
@@ -135,9 +135,9 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { ChevronDownIcon, PlusIcon, ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/vue/20/solid'
+import { ChevronDownIcon, PlusIcon } from '@heroicons/vue/20/solid'
 import { IFetchType } from '../util/type/common'
-import { fetchGetData, fetchGetTotalData } from '@api/common.ts'
+import { fetchGetData } from '@api/common'
 
 
 const route = useRoute();
@@ -146,22 +146,22 @@ const router = useRouter()
 const PCCD = computed(()=>{return route.query.pccd})  
 const mobileFiltersOpen = ref(false)
 
-const product:IProduct[] = ref([])
-const productFilters:IFilter | null = ref(null)
+const products = ref<IProduct[]>()
+const productFilters = ref<IFilter | null>(null)
 
-const total:number = ref(-1)
-const pageTotal:number = ref(0)
-const pageArray:number[] = ref([])
+const totalProduct = ref(-1)
+const pageTotal = ref(0)
+const pageArray = ref<number[]>([])
 const currentPage = ref(1)
-const displayPageArray:number[] = ref([])
+const displayPageArray = ref<number[]>()
 
 onMounted(async () => {
 
   const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, 1)
   const productState = await productPromise;
-  product.value = productState.data
+  products.value = productState.data
 
-  total.value = productState.total
+  totalProduct.value = productState.total
 
   if(PCCD.value==='P0601'){
     const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
@@ -177,26 +177,26 @@ onMounted(async () => {
 
   const filterLoading = computed(()=>{
     if(filters.value) return false
-    else true
+    else return true
   })
 
   const productLoading = computed(()=>{
-    if(product.value.length === 0) return true
-    else false
+    if(products.value.length === 0) return true
+    else return false
   })
 
   const totalLoading = computed(()=>{
-    if(total === -1) true
-    else false
+    if(total.value === -1) return true
+    else return false
   })
 })
 
 watch(()=>PCCD.value,async (newValue)=>{
   const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, 1)
   const productState = await productPromise;
-  product.value = productState.data
+  products.value = productState.data
 
-  total.value = productState.total
+  totalProduct.value = productState.total
 
   if(PCCD.value==='P0601'){
     const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
@@ -211,7 +211,7 @@ watch(()=>PCCD.value,async (newValue)=>{
   }
 
   const filterLoading = computed(()=>{
-    if(filters.value) return false
+    if(productFilters.value) return false
     else true
   })
 
@@ -221,7 +221,7 @@ watch(()=>PCCD.value,async (newValue)=>{
   })
 
   const totalLoading = computed(()=>{
-    if(total === -1) true
+    if(totalProduct.value === -1) true
     else false
   })
 },{ deep: true })
@@ -230,7 +230,7 @@ const moveOtherPage = async (pageNumber:number) =>{
   currentPage.value = pageNumber
   const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, pageNumber)
   const productState = await productPromise;
-  product.value = productState.data
+  products.value = productState.data
 }
 
 const moveDetailPage = (id:number) =>{

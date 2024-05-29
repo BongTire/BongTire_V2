@@ -25,12 +25,10 @@
 </template>
 
 <script lang="ts" setup>
-import { fetchGetData } from '@api/common.js';
-import IntroService from '@component/Main/IntroService.vue';
-import IntroProduct from '@component/Main/IntroProduct.vue';
-import favWiget from '@component/Main/FavWiget.vue';
-import Loading from '@component/Common/Loading.vue'
-import { IApiReturn } from '../util/type/api.ts'
+import IntroService from '../components/Main/IntroService';
+import IntroProduct from '../components/Main/IntroProduct';
+import favWiget from '../components/Main/FavWiget';
+import Loading from '../components/Common/Loading'
 import Galleria from 'primevue/galleria';
 const responsiveOptions=  [
   {

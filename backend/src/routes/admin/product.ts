@@ -37,10 +37,10 @@ router.post('/tire', isAuthenticatedAdmin, async function (req: Request, res: Re
     const tireData = req.body;
 
     const tireFormatData = {
-        TireId: tireData.id,
+        TireId: tireData.TireId,
         BrandId: tireData.BrandId,
         PCCD: tireData.PCCD,
-        drivingMethodPCCD: tireData.drivingMethodPCCD ?? null,
+        drivingMethodPCCD: JSON.stringify(tireData.drivingMethodPCCD) ?? null,
         mCode: tireData.mCode ?? null,
         productName: tireData.productName,
         tireSize: tireData.tireSize,
@@ -55,7 +55,7 @@ router.post('/tire', isAuthenticatedAdmin, async function (req: Request, res: Re
         origin: tireData.origin ?? null,
         xl: tireData.xl ?? null,
         ply: tireData.ply ?? null,
-        numberOfDataUpdate: tireData.numberOfDataUpdate,
+        numberOfDataUpdate: tireData.numberOfDataUpdate ?? 0,
         sales: tireData.sales ?? null,
         viewers: tireData.viewers ?? null,
         isSecond: tireData.isSecond ?? null,
