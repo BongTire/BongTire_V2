@@ -1,5 +1,9 @@
 <template>
-  <CarTrim :isOpen="isOpenTrim" :conf="carTrimData" @closeTrim="closeTrim" :selectYear="selectYearIndex" :selectTrim="selectTrimIndex" @selectTrim="selectTrimData"/>
+  <CarTrim :isOpen="isOpenTrim" :conf="carTrimData"
+           @closeTrim="closeTrim" @postTrim="postCarTrimData"
+           :selectYear="selectYearIndex" :selectTrim="selectTrimIndex"
+           @selectTrim="selectTrimData"
+  />
   <div class="max-w-9xl flex">
   <div class="w-1/2 mr-5 border">
     <TopTaps :conf="visibleKoreanBrand" :state="`k`" :select="selectKoreanBrand" @selectTap="selectBrand"/>
@@ -100,6 +104,11 @@ const selectBrand = async (index: number, state:string) => {
 
     visibleForeignCar.value = carState.data.carList
   }
+}
+
+const postCarTrimData = (trim:ICarTrim[]) =>{
+  // TODO : 해당 부분 post로 마무리
+  console.log(trim)
 }
 
 

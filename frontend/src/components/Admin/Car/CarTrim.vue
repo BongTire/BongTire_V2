@@ -20,11 +20,12 @@ const props = defineProps({
   }
 })
 
-const emits = defineEmits(['closeTrim', 'selectTrim'])
+const emits = defineEmits(['closeTrim', 'selectTrim', 'postTrim'])
 const editCarTrim = ref<ICarTrim>()
 const editMode = ref(false)
 
 const closeTrim = () =>{
+  changeEditMode()
   emits('closeTrim')
 }
 
@@ -40,8 +41,8 @@ const initData = () =>{
   console.log(editCarTrim.value)
 }
 
-const selectYear = (index:number) =>{
-  emits('selectYear',index, 'year')
+const selectYearData = (index:number) =>{
+  emits('selectTrim',index, 'year')
 }
 
 const selectTrim = (index:number) =>{
@@ -50,6 +51,31 @@ const selectTrim = (index:number) =>{
 
 initData()
 
+const changeEditMode = () =>{
+  editMode.value = !editMode.value
+}
+
+const editCarYearData = (target:any) =>{
+  const newValue = target?.value ?? ''
+
+  if(newValue / 2000 >= 1){
+    editCarTrim.value.yearList[props.selectYear].year = newValue
+  }
+}
+
+const editCarTrimData = (key: string, target:any) =>{
+  const newValue = target?.value ?? ''
+
+  console.log(newValue)
+  editCarTrim.value.yearList[props.selectYear].trimList[props.selectTrim][key] = newValue
+  console.log(editCarTrim.value)
+
+
+}
+
+const editTrimPostData = () =>{
+  emits('postTrim', editCarTrim.value)
+}
 </script>
 
 <template>
@@ -84,8 +110,11 @@ initData()
                         <div>
                           <p class="text-xl mb-5">연식</p>
                         </div>
-                        <div :class="`w-full h-10 ${props.selectYear === index ? 'bg-slate-200' :'bg-slate-50'} flex justify-start items-center  hover:bg-slate-100`" v-for="(year, index) in editCarTrim.yearList" @click="selectYear(index)">
-                          <input v-if="editMode" type="text" :class="`px-2 my-2 w-full`" :value="year.year" />
+                        <div :class="`w-full h-10 ${props.selectYear === index ? 'bg-slate-200' :'bg-slate-50'} flex justify-start items-center cursor-pointer hover:bg-slate-100`"
+                             v-for="(year, index) in editCarTrim.yearList"
+                             @click="selectYearData(index)"
+                        >
+                          <input v-if="editMode" type="text" :class="`px-2 my-2 w-full`" :value="year.year" @input="editCarYearData($event.target)"/>
                           <p class="p-2 my-2" v-else>{{ year.year}}</p>
                         </div>
                       </div>
@@ -94,11 +123,92 @@ initData()
                         <div class="w-full h-32 flex justify-center items-center">
                           <img class="h-full" v-if="editCarTrim.yearList.length >= 1" :src="editCarTrim.yearList[props.selectYear].image ?? defaultImage">
                         </div>
-                        <div class="flex col w-full h-full ">
+                        <div class="flex w-full h-full ">
                           <div class="flex flex-col justify-center w-52 max-h-64 overflow-auto items-center">
-                            <div @click="selectTrim(index)" :class="`${props.selectTrim === index ? 'bg-slate-200' : 'bg-slate-50'} hover:bg-slate-100 min-h-8 px-2 w-full flex justify-start items-center cursor-pointer truncate `" v-for="(trim,index) in editCarTrim.yearList[props.selectYear].trimList">
-                              <p v-if="!editMode" class="w-full flex justify-start px-2">{{trim.name}}</p>
-                              <input class="h-8 px-2" v-else type="text" :value="trim.name" >
+                            <div @click="selectTrim(index)" :class="`${props.selectTrim === index ? 'bg-slate-200' : 'bg-slate-50'} hover:bg-slate-100 min-h-8 px-2 w-full flex justify-start items-center cursor-pointer truncate `"
+                                 v-for="(trim,index) in editCarTrim.yearList[props.selectYear].trimList">
+                              <p  class="w-full flex justify-start px-2">{{trim.name}}</p>
+                            </div>
+                          </div>
+                          <div class="w-full max-h-64 overflow-y-auto  rounded-r-lg flex flex-col justify-start items-end border">
+                            <input class="w-11/12 min-h-12 px-2 text-lg"
+                                   type="text"
+                                   :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].name"
+                                   :disabled="!editMode"
+                            />
+                            <div class="w-full flex justify-end items-center border-t border-b">
+                              <label>
+                                차량 가격
+                                <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="number"
+                                       :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].price ?? 0"
+                                       :disabled="!editMode"
+                                />
+                              </label>
+                            </div>
+                            <div class="w-full flex justify-end items-center border-b">
+                              <label>
+                                앞 타이어
+                                <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="text"
+                                       :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].frontTire ?? ''"
+                                       :disabled="!editMode"
+                                />
+                              </label>
+                            </div>
+                            <div class="w-full flex justify-end items-center border-b">
+                              <label>
+                                뒷 타이어
+                                <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="text"
+                                       :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].rearTire ?? ''"
+                                       :disabled="!editMode"
+                                />
+                              </label>
+                            </div>
+                            <div class="w-full flex justify-end items-center border-b">
+                              <label>
+                                앞 브레이크
+                                <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="text"
+                                       :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].frontBrake ?? ''"
+                                       :disabled="!editMode"
+                                />
+                              </label>
+                            </div>
+                            <div class="w-full flex justify-end items-center border-b">
+                              <label>
+                                뒷 브레이크
+                                <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="text"
+                                       :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].rearBrake ?? ''"
+                                       :disabled="!editMode"
+                                />
+                              </label>
+                            </div>
+                            <div class="w-full flex justify-end items-center border-b">
+                              <label>
+                                구동 방식
+                                <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="text"
+                                       :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].traction ?? ''"
+                                       :disabled="!editMode"
+                                />
+                              </label>
+                            </div>
+                            <div class="w-full flex justify-end items-center border-b">
+                              <label>
+                                공차 중량(Kg)
+                                <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="text"
+                                       :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].curbWeight ?? ''"
+                                       :disabled="!editMode"
+                                       @input="editCarTrimData('curbWeight', $event.target)"
+                                />
+                              </label>
+                            </div>
+                            <div class="w-full flex justify-end items-center border-b">
+                              <label>
+                                복합 연비 (kg/l)
+                                <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="text"
+                                       :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].combinedEfficiency ?? ''"
+                                       :disabled="!editMode"
+                                       @input="editCarTrimData('combinedEfficiency', $event.target)"
+                                />
+                              </label>
                             </div>
                           </div>
 
@@ -116,7 +226,8 @@ initData()
                 </div>
               </div>
               <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                <button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto" @click="closeTrim">Deactivate</button>
+                <button v-if="!editMode" type="button" class="inline-flex w-full justify-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 sm:ml-3 sm:w-auto" @click="changeEditMode">편집</button>
+                <button v-else type="button" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto" @click="editTrimPostData">저장</button>
                 <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="closeTrim">닫기</button>
               </div>
             </DialogPanel>

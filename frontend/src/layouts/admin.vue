@@ -126,7 +126,7 @@
                 <MenuButton class="-m-1.5 flex items-center p-1.5">
                   <span class="sr-only">Open user menu</span>
                   <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                    <span class="font-medium leading-none text-white">{{ loginInfo?.user ? loginInfo.user.slice(0,1) : null }}</span>
+                    <span class="font-medium leading-none text-white">{{ loginInfo?.name ? loginInfo?.name.slice(0,1) : null  }}</span>
                   </span>
                 </MenuButton>
                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
@@ -208,7 +208,9 @@
   const store = useCommonStore()
   const PTCD = ref<IPTCD>([])
   const PCCD = ref<IPCCD>([])
-  const loginInfo = exportUserInfo()
+  const loginInfo = ref(sessionStorage.getItem('loginInfo'))
+  loginInfo.value = JSON.parse(loginInfo.value)
+
   const successMessage = ref('')
 
   const clickSubUserMenu = async (url:string)=>{
@@ -227,8 +229,8 @@
         window.location.href = '/'
       }
 
-    }else if(url === '/admin'){
-      router.push('/admin')
+    }else if(url === '/'){
+      router.push('/')
     }
   }
 

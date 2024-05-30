@@ -1,4 +1,5 @@
 <template>
+  <CheckUser :isOpen="isOpenCheckUser" @closePopup="closeCheckUser"/>
   <div class="flex w-full max-w-7xl m-auto">
       <div class="flex flex-col w-1/2">
       <div>
@@ -21,12 +22,28 @@
       <ProductInfo/>
     </div>
   </div>
+  <div class="w-full flex justify-end items-center pr-10">
+    <button
+        type="button"
+        class="w-20 mr-5 rounded-md bg-gray-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+    >
+      취소
+    </button>
+    <button
+        type="button"
+        class="w-20 rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        @click="openCheckUser"
+    >
+      예약
+    </button>
+  </div>
   
 </template>
 
 <script lang="ts" setup>
 import Calendar from '../components/Reservation/Calendar'
 import Time from '../components/Reservation/Time'
+import CheckUser from '../components/PopUp/CheckUser'
 import ProductInfo from '../components/Reservation/ProductInfo'
 import { ICalendar, IReservationTime } from '../util/type/reservation';
 import { IFetchType } from '../util/type/common'
@@ -47,6 +64,16 @@ const date = ref({
 // 예약 시간 변수
 const originTime = ref<IReservationTime[]>()
 const visibleTime = ref<IReservationTime[]>()
+
+const isOpenCheckUser = ref(false)
+
+const closeCheckUser = ( ) =>{
+  isOpenCheckUser.value = false
+}
+
+const openCheckUser = ( ) =>{
+  isOpenCheckUser.value = true
+}
 
 onMounted(async ()=>{
   // 캘린더
