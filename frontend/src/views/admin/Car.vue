@@ -1,9 +1,10 @@
 <template>
+  <CarTrim :isOpen="isOpenTrim" :conf="carTrimData" @closeTrim="closeTrim" :selectYear="selectYearIndex" :selectTrim="selectTrimIndex" @selectTrim="selectTrimData"/>
   <div class="max-w-9xl flex">
   <div class="w-1/2 mr-5 border">
     <TopTaps :conf="visibleKoreanBrand" :state="`k`" :select="selectKoreanBrand" @selectTap="selectBrand"/>
     <div>
-      <CardContent :conf="visibleKoreaCar"  />
+      <CardContent :conf="visibleKoreaCar" @selectCard="selectCarTrim"/>
     </div>
   </div>
     <div class="w-1/2 border">
@@ -19,13 +20,12 @@
 <script lang="ts" setup>
 import TopTaps from '@component/Admin/TopTabs.vue'
 import CardContent from '@component/Admin/CardContent.vue'
-import carBrandData from '../../mocks/api/car-brand.json'
-import carData from '../../mocks/api/car.json'
 import { IBrand } from '../../util/type/brand';
-import { ICar, ICarList } from '../../util/type/car';
+import { ICar, ICarList, ICarTrim } from '../../util/type/car';
 import { IFetchType } from  '@type/common'
 import { fetchGetData } from '../../api/common'
 import { isAuthenticatedAdmin } from '../../util/func/common'
+import CarTrim from '../../components/Admin/Car/CarTrim'
 
 // 챠량 브랜드 데이터
 const originBrand = ref<IBrand[]>()
@@ -42,11 +42,51 @@ const visibleForeignCar = ref<ICar[]>()
 const selectKoreanBrand = ref(0)
 const selectForeignBrand = ref(0)
 
-const selectBrand = (index: number, state:string) => {
+
+// 차량 트림 관련 데이터
+const isOpenTrim = ref(false)
+const carTrimData= ref<ICarTrim>()
+const selectYearIndex = ref(0)
+const selectTrimIndex = ref(0)
+
+const selectCarTrim = async (index:number, state:string, car:ICar) =>{
+  const CarId = car.CarId
+
+  const carTrimPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/admin/car/trim/${CarId}`,'','',0)
+  const carTrimState = await carTrimPromise
+
+  isAuthenticatedAdmin(carTrimState?.status.code ?? 4001)
+  carTrimData.value = carTrimState.data
+  console.log(carTrimData.value)
+
+  if(carTrimData) isOpenTrim.value=true
+}
+
+const closeTrim = ()=>{
+  isOpenTrim.value=false
+}
+
+const selectTrimData = (index:number, state:string) =>{
+  if(state==='year'){
+    selectYearIndex.value = index
+  }
+  if(state==='trim'){
+    selectTrimIndex.value = index
+  }
+
+}
+
+const selectBrand = async (index: number, state:string) => {
   if(state==='k'){
     selectKoreanBrand.value = index
     const brandId = visibleKoreanBrand.value[index].BrandId
+    console.log(brandId)
     // TODO : Post 차량 api 호출
+    const carPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/admin/car/${brandId}`,'','',0)
+    const carState = await carPromise
+    isAuthenticatedAdmin(carState?.status.code ?? 4001)
+
+    visibleKoreaCar.value = carState.data.carList
 
   }
   if(state==='f'){
@@ -54,6 +94,11 @@ const selectBrand = (index: number, state:string) => {
     const brandId = visibleForeignBrand.value[index].BrandId
     // TODO : Post 차량 api 호출
 
+    const carPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/admin/car/${brandId}`,'','',0)
+    const carState = await carPromise
+    isAuthenticatedAdmin(carState?.status.code ?? 4001)
+
+    visibleForeignCar.value = carState.data.carList
   }
 }
 

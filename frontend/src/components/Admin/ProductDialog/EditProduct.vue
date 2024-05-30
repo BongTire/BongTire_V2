@@ -497,7 +497,7 @@ const changeInputData = (key:string, target:any) =>{
     editProduct.value.discountPrice = newValue
 
     if(editProduct.value.price !== 0){
-      editProduct.value.discountRate = Math.floor((newValue / editProduct.value.price)*100)
+      editProduct.value.discountRate = 100-Math.floor((newValue / editProduct.value.price)*100)
       console.log(editProduct.value.discountRate)
     }
     return;

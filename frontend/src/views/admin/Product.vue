@@ -102,7 +102,7 @@ const openBrandBox = () =>{
   isOpenBrandPopup.value = true
 }
 
-const selectProductBrand = (index:number, state:string) =>{
+const selectProductBrand = (index:number, state:string, brand:IBrand) =>{
   if(state==='k'){
     selectedBrandData.value = visibleKoreaBrand.value[index]
   }else if(state === 'f'){
