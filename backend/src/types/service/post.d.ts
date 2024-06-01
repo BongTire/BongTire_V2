@@ -6,7 +6,8 @@ export interface IPost{
     content: string | null
     writerId : number | null
     writerName : string | null
-    writerEmail?: string | null
+    writerNumber : string | null
+    //writerEmail?: string | null
     isPin: number
     isActive: number
     isAnswer: number
