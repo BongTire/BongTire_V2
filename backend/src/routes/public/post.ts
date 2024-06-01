@@ -363,7 +363,7 @@ router.post('/comment/:id', async (req: Request, res: Response) => {
     });
   }
 });
-router.get('/:postId',async (req: Request, res: Response) =>{//상세조회(1개)
+router.post('/:postId',async (req: Request, res: Response) =>{//상세조회(1개)
   const ptcd = req.query.ptcd  ?? "" as string;
   const pccd = req.query.pccd ?? "" as string;
   const postId = Number(req.params.postId) ?? -1 as number

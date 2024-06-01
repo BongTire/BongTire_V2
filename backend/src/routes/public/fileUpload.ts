@@ -40,7 +40,7 @@ const upload = multer({
 }).single('image');
 
 router.post('/', (req: Request, res: Response) => {
-  const imageUrl = `http://${process.env.DNS_SERVER_NAME}/images/Posts/`;
+  
   try {
     upload(req, res, (err) => {
     if (err instanceof MulterError) {
@@ -48,8 +48,10 @@ router.post('/', (req: Request, res: Response) => {
     } else if (err) {
       return res.json({ status:5000,error: `Error: ${err.message}` });
     }
+    const imageUrl = `http://${process.env.DNS_SERVER_NAME}/images/Posts/${req.file?.filename}`;
+    const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{ file: req.file, imageUrl })
+    res.json(returnFormatData);
 
-    res.status(200).json({ message: '이미지를 성공적으로 저장하였습니다.', file: req.file, imageUrl });
   });
   } catch (e) {
     logger.error(e);
@@ -60,17 +62,20 @@ router.post('/', (req: Request, res: Response) => {
 });
 
 router.post('/post', (req: Request, res: Response) => {
-  const imageUrl = `http://${process.env.DNS_SERVER_NAME}/images/Posts/`;
+  let imageUrl = `http://${process.env.DNS_SERVER_NAME}/images/Posts/`;
 
   try {
     upload(req, res, (err) => {
       if (err instanceof MulterError) {
-        return res.json({ error: `Multer Error: ${err.message}` });
+        const returnFormatData = returnFormat(4000,'이미지 저장 실패',`Multer Error: ${err.message}`)
+        return res.json(returnFormatData);
       } else if (err) {
-        return res.json({ error: `Error: ${err.message}` });
+        const returnFormatData = returnFormat(5000,'이미지 저장 실패',`Error: ${err.message}`)
+        return res.json(returnFormatData);
       }
-
-      res.status(200).json({ message: '이미지를 성공적으로 저장하였습니다.', file: req.file, imageURL: imageUrl });
+      imageUrl = imageUrl + req.file?.filename
+      const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{ file: req.file, imageUrl })
+      res.json(returnFormatData);
     });
   } catch (e) {
     logger.error(e);

@@ -42,6 +42,7 @@ function configureMulter(uploadDirectory: string) {
 router.post('/', isAuthenticatedAdmin, function (req: Request, res: Response) {
     console.log(req.query.image);
     const imagePath = '../../../image/' + req.query.image;
+    let imageURL = `http://${process.env.DNS_SERVER_NAME}/images/`
     //저장 경로 설정, 일단 같은 back 폴더 안으로 테스트
     const uploadDirectory = path.join(__dirname, imagePath); //|| defaultUploadDirectory; //디폴트 경로를 설정 하고싶다면,,
     // 이미지 업로드 설정(저장경로 넘겨줌)
@@ -61,8 +62,8 @@ router.post('/', isAuthenticatedAdmin, function (req: Request, res: Response) {
             return res.json(returnFormatData);
         }
 
-        
-        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file})
+        imageURL = imageURL + req.file?.filename
+        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageUrl: imageURL})
         res.json(returnFormatData);
     });
 });
@@ -71,7 +72,7 @@ router.post('/product', isAuthenticatedAdmin, function (req: Request, res: Respo
     console.log(req.query.brand);
 
     const brandCodeName = req.query.brand;
-    const imageURL = `http://${process.env.DNS_SERVER_NAME}/images/Product/Brand/` + brandCodeName;
+    let imageURL = `http://${process.env.DNS_SERVER_NAME}/images/Product/Brand/` + brandCodeName;
 
     const imagePath = '../../../image/Product/Brand/' + brandCodeName;
     //저장 경로 설정, 일단 같은 back 폴더 안으로 테스트
@@ -93,8 +94,8 @@ router.post('/product', isAuthenticatedAdmin, function (req: Request, res: Respo
             const returnFormatData = returnFormat(5000,err.message,[])
             return res.json(returnFormatData);
         }
-
-        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageURL: imageURL})
+        imageURL = imageURL + req.file?.filename
+        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageUrl: imageURL})
         res.json(returnFormatData);
     });
 });
@@ -103,7 +104,7 @@ router.post('/car', isAuthenticatedAdmin, function (req: Request, res: Response)
     console.log(req.params.brand);
 
     const brandCodeName = req.query.brand;
-    const imageURL = `http://${process.env.DNS_SERVER_NAME}/images/PCCD/Car/` + brandCodeName;
+    let imageURL = `http://${process.env.DNS_SERVER_NAME}/images/PCCD/Car/` + brandCodeName;
     console.log(brandCodeName);
 
     const imagePath = '../../../image/PCCD/Car/' + brandCodeName;
@@ -123,14 +124,15 @@ router.post('/car', isAuthenticatedAdmin, function (req: Request, res: Response)
             const returnFormatData = returnFormat(5000,err.message,[])
             return res.json(returnFormatData);
         }
-        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageURL: imageURL})
+        imageURL = imageURL + req.file?.filename
+        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageUrl: imageURL})
         res.json(returnFormatData);
     });
 });
 
 router.post('/pccd', isAuthenticatedAdmin, function (req: Request, res: Response) {
 
-    const imageURL = `http://${process.env.DNS_SERVER_NAME}/images/systemIcon/Car`;
+    let imageURL = `http://${process.env.DNS_SERVER_NAME}/images/systemIcon/Car`;
 
     const imagePath = '../../../image/systemIcon/Car';
     //저장 경로 설정, 일단 같은 back 폴더 안으로 테스트
@@ -151,8 +153,8 @@ router.post('/pccd', isAuthenticatedAdmin, function (req: Request, res: Response
             const returnFormatData = returnFormat(5000,err.message,[])
             return res.json(returnFormatData);
         }
-
-        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageURL: imageURL})
+        imageURL = imageURL + req.file?.filename
+        const returnFormatData = returnFormat(2000,'이미지를 성공적으로 저장하였습니다.',{file: req.file, imageUrl: imageURL})
         res.json(returnFormatData);
     });
 });
