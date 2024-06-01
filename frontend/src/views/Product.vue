@@ -59,7 +59,9 @@
                       <div v-for="(option, optionIdx) in filter.value" :key="option.value" class="flex items-center">
                         <input :id="`${optionIdx}-mobile`" :name="`${optionIdx}`" 
                           type="checkbox"
-                          class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                          class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          @click="selectFilterFunc(option)"
+                        />
                         <label :for="`${optionIdx}-mobile`" class="ml-3 text-sm text-gray-500">{{
                           option.name }}</label>
                       </div>
@@ -73,7 +75,7 @@
       </div>
     </Dialog>
   </TransitionRoot>
-  <Loading v-if="productLoading && filterLoading && totalLoading"/>
+  <Loading v-if="productLoading && filterLoading"/>
   <main v-else class="mx-auto max-w-2xl px-4 py-5 sm:px-6 lg:max-w-7xl lg:px-8">
     <div class="border-b border-gray-200 pb-10">
       <h1 class="text-4xl font-bold tracking-tight text-gray-900">상품</h1>
@@ -97,7 +99,10 @@
                 <div class="space-y-3 pt-6">
                   <div v-for="(option, optionIdx) in filter.value" :key="optionIdx" class="flex items-center">
                     <input :id="`${optionIdx}`" :name="`${optionIdx}[]`"
-                      type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                            type="checkbox"
+                           class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                           @click="selectFilterFunc(option)"
+                    />
                     <label :for="`${optionIdx}`" class="ml-3 text-sm text-gray-600">{{ option.name
                       }}</label>
                   </div>
@@ -137,7 +142,8 @@ import {
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, PlusIcon } from '@heroicons/vue/20/solid'
 import { IFetchType } from '../util/type/common'
-import { fetchGetData } from '@api/common'
+import { fetchGetData, fetchPostData } from '@api/common'
+import {IBrand} from "@type/brand.ts";
 
 
 const route = useRoute();
@@ -149,11 +155,37 @@ const mobileFiltersOpen = ref(false)
 const products = ref<IProduct[]>()
 const productFilters = ref<IFilter | null>(null)
 
+const filterLoading = ref(true)
+
+const productLoading = ref(true)
+
+console.log(productLoading.value)
+
+// pageNation할 때 필요한 변수
 const totalProduct = ref(-1)
-const pageTotal = ref(0)
-const pageArray = ref<number[]>([])
 const currentPage = ref(1)
-const displayPageArray = ref<number[]>()
+
+// 필터 관련 변수
+const selectFilter = ref<number[]>([])
+
+const selectFilterFunc = async (filter:IBrand) =>{
+
+  if(selectFilter.value.includes(filter.BrandId)){
+    const brandArray:number[] = selectFilter.value.filter(item=>item!=filter.BrandId)
+    selectFilter.value = brandArray
+  }else{
+    const brandArray:number[] = [...selectFilter.value, filter.BrandId]
+    selectFilter.value = brandArray
+  }
+
+  console.log(selectFilter.value)
+  // const productPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/product/filter', 'P0301', PCCD.value, currentPage.value, {
+  //   data:selectFilter.value
+  // })
+  // const productState = await productPromise;
+  // products.value = productState.data
+}
+
 
 onMounted(async () => {
 
@@ -161,7 +193,7 @@ onMounted(async () => {
   const productState = await productPromise;
   products.value = productState.data
 
-  totalProduct.value = productState.total
+  totalProduct.value = productState.total ?? -1
 
   if(PCCD.value==='P0601'){
     const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
@@ -175,28 +207,30 @@ onMounted(async () => {
     productFilters.value = filterState.data
   }
 
-  const filterLoading = computed(()=>{
-    if(filters.value) return false
-    else return true
-  })
+  if(productFilters?.value){
+    filterLoading.value = false
+  }else {
+    filterLoading.value = false
+  }
 
-  const productLoading = computed(()=>{
-    if(products.value.length === 0) return true
-    else return false
-  })
+  if(products?.value){
+    productLoading.value = false
+  }else {
+    productLoading.value = true
+  }
 
-  const totalLoading = computed(()=>{
-    if(total.value === -1) return true
-    else return false
-  })
 })
 
-watch(()=>PCCD.value,async (newValue)=>{
+watch(()=>PCCD.value,async ()=>{
+
+  filterLoading.value = true
+  productLoading.value = true
+
   const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, 1)
   const productState = await productPromise;
   products.value = productState.data
 
-  totalProduct.value = productState.total
+  totalProduct.value = productState.total ?? -1
 
   if(PCCD.value==='P0601'){
     const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
@@ -210,21 +244,20 @@ watch(()=>PCCD.value,async (newValue)=>{
     productFilters.value = filterState.data
   }
 
-  const filterLoading = computed(()=>{
-    if(productFilters.value) return false
-    else true
-  })
+  if(productFilters?.value){
+    filterLoading.value = false
+  }else {
+    filterLoading.value = false
+  }
 
-  const productLoading = computed(()=>{
-    if(product.value.length === 0) return true
-    else false
-  })
+  if(products?.value){
+    productLoading.value = false
+  }else {
+    productLoading.value = true
+  }
 
-  const totalLoading = computed(()=>{
-    if(totalProduct.value === -1) true
-    else false
-  })
 },{ deep: true })
+
 const moveOtherPage = async (pageNumber:number) =>{
   console.log(pageNumber)
   currentPage.value = pageNumber

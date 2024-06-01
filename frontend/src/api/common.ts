@@ -1,6 +1,6 @@
 import client from ".";
 
-const fetchGetData = async <T>(url: string, ptcd:string, pccd:string, page:number):Promise<T> =>{
+const fetchGetData = async <T>(url: string, ptcd:string='', pccd:string='', page:number=1):Promise<T> =>{
     const response = await client.get<T>(url, {
         withCredentials:true, 
         params: {
@@ -13,13 +13,14 @@ const fetchGetData = async <T>(url: string, ptcd:string, pccd:string, page:numbe
     return response
 }
 
-const fetchPostData = async <T>(url: string, ptcd:string, pccd:string, data:any):Promise<T> =>{
+const fetchPostData = async <T>(url: string, ptcd:string='', pccd:string='', page:number = 1, data:any):Promise<T> =>{
     
     const response = await client.post<T>(url,data, {
         withCredentials:true,
         params:{
             ptcd: ptcd,
-            pccd: pccd
+            pccd: pccd,
+            page: page
         }
     })
 

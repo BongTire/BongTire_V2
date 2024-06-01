@@ -2,6 +2,8 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
+import checker from 'vite-plugin-checker'
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,6 +17,17 @@ export default defineConfig({
       dts: 'src/auto-imports.d.ts'
     })
   ],
+  build: {
+    rollupOptions: {
+      // build 시 타입 오류 무시
+      onwarn(warning, warn) {
+        if (warning.code === 'PLUGIN_WARNING' && warning.plugin === 'vite-plugin-checker') {
+          return
+        }
+        warn(warning)
+      }
+    }
+  },
   resolve: {
     alias: {
       '@image': path.resolve(__dirname, 'src/assets/image'),
