@@ -431,7 +431,7 @@ const initData = () =>{
     brandNation: props.conf?.brandNation ?? '',
     brandLogo: props.conf?.brandLogo ?? '',
     PCCD: props.conf?.PCCD ?? '',
-    drivingMethodPCCD: props.conf?.drivingMethodPCCD ?? [],
+    drivingMethodPCCD: props.conf?.drivingMethodPCCD ?? '[]',
     productName: props.conf?.productName ?? '',
     price: props.conf?.price ?? 0,
     amount: props.conf?.amount ?? 0,
@@ -467,7 +467,7 @@ const initData = () =>{
   }
 }
 
-const changeInputData = (key:string, target:any) =>{
+const changeInputData = (key:string | number, target:any) =>{
   if(!target.value) return
 
   const newValue = target.value
@@ -484,7 +484,7 @@ const changeInputData = (key:string, target:any) =>{
   }
 
   if(key === 'price'){
-    editProduct.value.price = newValue
+    editProduct.value.price = parseInt(newValue)
 
     if(editProduct.value.discountRate === 0){
       editProduct.value.discountPrice = newValue * 1
@@ -494,7 +494,7 @@ const changeInputData = (key:string, target:any) =>{
     return;
   }
   if(key === 'discountPrice'){
-    editProduct.value.discountPrice = newValue
+    editProduct.value.discountPrice = parseInt(newValue)
 
     if(editProduct.value.price !== 0){
       editProduct.value.discountRate = 100-Math.floor((newValue / editProduct.value.price)*100)
@@ -504,10 +504,11 @@ const changeInputData = (key:string, target:any) =>{
   }
 
   if(key === 'discountRate'){
-    editProduct.value.discountRate = newValue
+    editProduct.value.discountRate = parseInt(newValue)
     if(editProduct.value.price !== 0){
       editProduct.value.discountPrice = Math.floor(editProduct.value.price - ((newValue/100) * editProduct.value.price))
     }
+    return;
   }
 
   editProduct.value = {

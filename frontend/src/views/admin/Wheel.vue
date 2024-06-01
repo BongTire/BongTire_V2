@@ -1,8 +1,8 @@
 <template>
   <Loading v-if="wheelLoading"/>
   <div v-else>
-    <Confirm :conf="popupData" :isOpen="isOpenConfirm" @isCancelPopup="isCancelPopup" @isPostData="isPostTireData"/>
-    <EditProduct :conf="editWheelData" :state="state" :brand="productBrand" :isOpen="openEditDialog" @postTireData="postTireData" @closeDialog="isCloseEditDialog"/>
+    <Confirm :conf="popupData" :isOpen="isOpenConfirm" @isCancelPopup="isCancelPopup" @isPostData="isPostWheelData"/>
+    <EditProduct :conf="editWheelData" :state="state" :brand="productBrand" :isOpen="openEditDialog" @postTireData="postWheelData" @closeDialog="isCloseEditDialog"/>
     <div class="flex justify-end items-center mt-5">
       <button @click="isOpenEditDialog" type="button"
               class="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
@@ -18,7 +18,7 @@ import Loading from '@component/Common/Loading';
 import {IProduct} from "@type/product";
 import {IBrand} from '@type/brand'
 import {IFetchType} from "@type/common";
-import {fetchGetData} from "@api/common";
+import {fetchGetData, fetchPostData} from "@api/common";
 import DataTable from "@component/Admin/DataTable";
 import Confirm from "@component/PopUp/Confirm";
 import EditProduct from "@component/Admin/ProductDialog/EditProduct";
@@ -42,10 +42,10 @@ const openEditDialog = ref(false)
 const productBrand = ref<IBrand[]>()
 
 onMounted(async ()=>{
-  const wheelPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/wheel','','')
+  const wheelPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/wheel','','',0)
   const wheelFetch = await wheelPromise
 
-  const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0902')
+  const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0902',0)
   const filterState= await filterPromise
   productBrand.value = filterState.data[0].value
 
@@ -69,14 +69,14 @@ const editData = (editTire:IProduct) =>{
   openEditDialog.value = true
 }
 
-const isPostTireData = () =>{
+const isPostWheelData = () =>{
   // confirm에서 승인 누를때 나오는 함수
   // post 전송
   console.log(editWheelData.value)
   isOpenConfirm.value = false
 }
 
-const postTireData = (message:any, editData:IProduct) =>{
+const postWheelData = (message:any, editData:IProduct) =>{
   // 전송 물어보기
   openEditDialog.value = false
   editWheelData.value = editData
@@ -84,7 +84,8 @@ const postTireData = (message:any, editData:IProduct) =>{
 
   isOpenConfirm.value = true
 
-  console.log(editData)
+  const response = fetchPostData('/admin/product/wheel','','',0,editData)
+  console.log(response)
 }
 const isCancelPopup = () =>{
   // 전송 취소

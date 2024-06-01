@@ -84,7 +84,7 @@ const postTireData = (message:any, editData:IProduct) =>{
   popupData.value = {...message}
 
   isOpenConfirm.value = true
-  const response = fetchPostData('/admin/product/tire','','',editData)
+  const response = fetchPostData('/admin/product/tire','','',0,editData)
   console.log(response)
 }
 const isCancelPopup = () =>{

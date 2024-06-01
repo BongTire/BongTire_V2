@@ -164,7 +164,7 @@ router.post('/wheel', isAuthenticatedAdmin, async (req: Request, res: Response) 
     const wheelData = req.body;
 
     const wheelFormatData = {
-        WheelId: wheelData.id,
+        WheelId: wheelData.WheelId,
         BrandId: wheelData.BrandId,
         PCCD: wheelData.PCCD,
         drivingMethodPCCD: wheelData.drivingMethodPCCD,
