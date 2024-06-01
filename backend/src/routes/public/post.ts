@@ -148,7 +148,7 @@ router.get('/', async (req: Request, res: Response) => { //card, list 추가
           *, 
           Posts.UserId AS writerId, 
           Posts.name AS writerName, 
-          Posts.number AS writerEmail
+          Posts.number AS writerNumber
         FROM 
           Posts 
         WHERE 
@@ -367,18 +367,19 @@ router.post('/:postId',async (req: Request, res: Response) =>{//상세조회(1�
   const ptcd = req.query.ptcd  ?? "" as string;
   const pccd = req.query.pccd ?? "" as string;
   const postId = Number(req.params.postId) ?? -1 as number
-
+  logger.info('입성1')
   
   if((ptcd == 'P0203'&&pccd == 'C0501') || (ptcd == 'P0203'&&pccd == 'C0502') || (ptcd == 'P0202'&&pccd == 'C0401') || (ptcd == 'P0202'&&pccd == 'N0402')){  //list, card (ptcd=P0203&pccd=C0501 : Q&A / ptcd=P0203&pccd=C0502 : F&Q / ptcd = 'P0202'&&pccd = 'C0401' : notice(card))
+    logger.info('입성')
     //해당글이 비밀글인지 아닌지 알아야함
     const { name, number } = req.body.data || {};
   try {
     const listDataRaw = await sequelize.query(`
       SELECT 
           *, 
-          Posts.USERID AS writerId, 
+          Posts.UserId AS writerId, 
           Posts.name AS writerName, 
-          Posts.number AS writerEmail 
+          Posts.number AS writerNumber
       FROM Posts 
       WHERE PCCD = '${pccd}' AND Posts.deletedAt IS NULL AND Posts.PostId = ${postId}`, { type: QueryTypes.SELECT });
 
@@ -392,7 +393,8 @@ router.post('/:postId',async (req: Request, res: Response) =>{//상세조회(1�
             content: data.content,
             writerId: data.writerId,
             writerName: data.writerName,
-            writerEmail: data.writerEmail,
+            writerNumber: data.writerNumber,
+            //writerEmail: data.writerEmail,
             isPin: data.isPin,
             isActive: data.isActive,
             isAnswer: data.isAnswer,
@@ -417,9 +419,13 @@ router.post('/:postId',async (req: Request, res: Response) =>{//상세조회(1�
       // 세션 검사
       if (req.session?.grade == 0) { // 관리자일 경우 Pass
         return res.json(result);
-      } else if (number === (listData as any[])[0].number && name === (listData as any[])[0].name) { // 이름이랑 전화번호 같은지 확인
+      } else if (number === (listData as any[])[0].writerNumber && name === (listData as any[])[0].writerName) { // 이름이랑 전화번호 같은지 확인
         return res.json(result);
       } else {
+        logger.info(number)
+        logger.info(listData[0].writerNumber)
+        logger.info(name)
+        logger.info(listData [0].writerName)
         return res.json({
           status: {
             message: "이름 또는 전화번호가 일치하지 않습니다.",
