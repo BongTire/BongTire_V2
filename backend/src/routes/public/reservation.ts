@@ -203,9 +203,7 @@ router.post('/',async function(req,res){
   
     const name = data.name ?? null
     const number =data.number ?? null
-    const userId = Number(req.session.userId) ?? -1;
-
-
+    const userId = Number.isNaN(Number(req.session.userId)) ? -1 : Number(req.session.userId);
    // const {ownCarId,paymentMethod,request,totalPrice} = req.body.data ?? ""
    const year = Number(data.date.substring(0,4))
    const month = Number(data.date.substring(4,6))
@@ -307,25 +305,17 @@ router.post('/',async function(req,res){
                     reservationTiredata = await sequelize.query(`select *,ReservationProducts.PCCD as ReservationProductsPCCD from ReservationProducts join Tires on ReservationProducts.ProductId = Tires.TireId join Brands on Tires.BrandId = Brands.BrandId where ReservationMasterId = '${newReservation.ReservationMasterId}' AND ReservationProducts.deletedAt IS NULL AND ReservationProducts.PCCD = 'P0601'`, { type: QueryTypes.SELECT })
                     reservationWheeldata =await sequelize.query(`select *,ReservationProducts.PCCD as ReservationProductsPCCD from ReservationProducts join Wheels on ReservationProducts.ProductId = Wheels.WheelId join Brands on Wheels.BrandId = Brands.BrandId where ReservationMasterId = '${newReservation.ReservationMasterId}' AND ReservationProducts.deletedAt IS NULL AND ReservationProducts.PCCD = 'P0602'`, { type: QueryTypes.SELECT })
                     //const reservationMasterData = await sequelize.query(`select * from ReservationMasters join Users on ReservationMasters.UserId = Users.UserId where  ReservationMasters.ReservationMasterId =${newReservation.ReservationMasterId} AND ReservationMasters.deletedAt IS NULL `, { type: QueryTypes.SELECT })
-                    let reservationMasterDatabaseQuery =`SELECT * 
-                    FROM ReservationMasters 
-                    JOIN Users ON ReservationMasters.UserId = Users.UserId 
-                    JOIN ReservationTimes ON ReservationMasters.ReservationTimeId = ReservationTimes.ReservationTimeId
-                    WHERE ReservationMasterId = :reservationMasterId 
-                    AND ReservationMasters.deletedAt IS NULL`;
+                    let reservationMasterDatabaseQuery =`SELECT * FROM ReservationMasters JOIN Users ON ReservationMasters.UserId = Users.UserId JOIN ReservationTimes ON ReservationMasters.ReservationTimeId = ReservationTimes.ReservationTimeId WHERE ReservationMasterId = :reservationMasterId AND ReservationMasters.deletedAt IS NULL`;
     
                     let replacements = {
                         reservationMasterId: newReservation.ReservationMasterId
                     };
-    
+                    //logger.info("reservationMasterId: "+newReservation.ReservationMasterId)
+                   
                     // 비회원 - 유저 조인 안함
-                    if (userId ==-1) {
-                        reservationMasterDatabaseQuery = 
-                            `SELECT * 
-                            FROM ReservationMasters 
-                            JOIN ReservationTimes ON ReservationMasters.ReservationTimeId = ReservationTimes.ReservationTimeId
-                            WHERE ReservationMasterId = :reservationMasterId 
-                            AND ReservationMasters.deletedAt IS NULL`;
+                    if (userId == -1) {
+                        reservationMasterDatabaseQuery = `SELECT * FROM ReservationMasters JOIN ReservationTimes ON ReservationTimes.ReservationTimeId = ReservationMasters.ReservationTimeId WHERE ReservationMasterId = :reservationMasterId AND ReservationMasters.deletedAt IS NULL`;
+                        logger.info('비회원')
                     }
     
                     //쿼리 실행
@@ -333,7 +323,7 @@ router.post('/',async function(req,res){
                         replacements: replacements,
                         type: QueryTypes.SELECT,
                     });
-                    logger.info(JSON.stringify(reservationMasterData))
+                    //logger.info(JSON.stringify(reservationMasterData))
                     const reReservationContent = returnReservationContent(reservationTiredata,reservationWheeldata,reservationMasterData[0])
                     const reTodayReservation = returnTodayReservation(reservationMasterData[0],reReservationContent)
                     result = returnResult(reTodayReservation,req.body.date)
