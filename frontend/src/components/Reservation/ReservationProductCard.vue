@@ -1,7 +1,7 @@
 <template>
   <div class="w-80 h-96 relative border ml-5 rounded-md border-gray-200">
     <div class="flex items-center justify-between">
-        <img class="h-6" :src="props.conf.brandLogo" >
+        <img class="h-6 mt-2 ml-2" :src="props.conf.brandLogo" >
         <XMarkIcon v-if="productState==='reserve'" @click="clickDeleteProductList" class="w-8 h-8 mt-2 mr-2 rounded-lg hover:bg-slate-100 cursor-pointer "/>
     </div>
     <!-- 이미지 -->

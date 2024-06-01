@@ -1,5 +1,6 @@
 <template>
-  <CheckUser :isOpen="isOpenCheckUser" @closePopup="closeCheckUser"/>
+  <CheckUser :isOpen="isOpenCheckUser" @closePopup="closeCheckUser" @confirm="confirmReservation" />
+  <Warning :isOpen="isOpenWarning" :message="warnMessage" @closeNoti="closeNotification"/>
   <div class="flex w-full max-w-7xl m-auto">
       <div class="flex flex-col w-1/2">
       <div>
@@ -46,8 +47,12 @@ import Time from '../components/Reservation/Time'
 import CheckUser from '../components/PopUp/CheckUser'
 import ProductInfo from '../components/Reservation/ProductInfo'
 import { ICalendar, IReservationTime } from '../util/type/reservation';
-import { IFetchType } from '../util/type/common'
+import {IFetchType, IMessage} from '../util/type/common'
 import { fetchGetData, fetchPostData } from '../api/common'
+import Warning from "@component/Notification/Warning.vue";
+import {IUser} from "@type/user.ts";
+import {useReservationStore} from "@store/reservation.ts";
+import {exportUserInfo } from '../util/func/common'
 
 // 캘린더 관련 변수
 const visibleCalendar = ref<ICalendar[][]>()
@@ -60,22 +65,78 @@ const date = ref({
   month: presentMonth.value,
   day: presentDay.value
 })
+// 스토어 지정
+const store = useReservationStore()
+const userInfo = exportUserInfo()
+
+//Loading 변수
+const calendarLoading = ref(true)
+const timeLoading = ref(true)
 
 // 예약 시간 변수
-const originTime = ref<IReservationTime[]>()
 const visibleTime = ref<IReservationTime[]>()
-
 const isOpenCheckUser = ref(false)
+
+// notification
+const isOpenWarning = ref(false)
+const warnMessage = ref({
+  title: '',
+  message: ''
+})
 
 const closeCheckUser = ( ) =>{
   isOpenCheckUser.value = false
 }
 
 const openCheckUser = ( ) =>{
-  isOpenCheckUser.value = true
+
+  if(store.getCalendar === -1){
+    warnMessage.value = {
+      title:'날짜 예약',
+      message: '날짜를 선택해주세요'
+    }
+    notificationWarning(warnMessage.value)
+    return
+  }
+  if(store.getReservationTime === -1){
+    warnMessage.value = {
+      title:'시간 예약',
+      message: '시간을 선택해주세요'
+    }
+    notificationWarning(warnMessage.value)
+    return
+  }
+  if(store.getReservationProduct.length < 1){
+    warnMessage.value = {
+      title:'상품 예약',
+      message: '상품을 선택해주세요'
+    }
+    notificationWarning(warnMessage.value)
+    return
+  }
+
+  if(userInfo.grade === 0){
+    postReservation()
+  }else{
+    isOpenCheckUser.value = true
+  }
+
+
+
+
 }
 
 onMounted(async ()=>{
+
+  if(userInfo || userInfo?.name){
+    const user = {
+      name : userInfo.name ?? '',
+      number : userInfo.number ?? '',
+      UserId : userInfo.UserId ?? '',
+    }
+    store.setReservationUser(user, false)
+  }
+
   // 캘린더
   const calendarPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/reservation/calendar','R0401','R0801')
   const calendarData = await calendarPromise
@@ -90,27 +151,25 @@ onMounted(async ()=>{
   const postData = {
     data: date.value
   }
-  console.log(postData)
   // 시간
-  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801', postData)
+  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801',-1, postData)
   const time = await timePromise
   visibleTime.value = time.data
 
-  const calendarLoading = computed(()=>{
-    if(visibleCalendar.value) false
-    else true
-  })
+  if(visibleCalendar.value){
+    calendarLoading.value = false
+  }
 
-  const timeLoading = computed(()=>{
-    if(visibleTime.value) false
-    else true
-  })
+  if(visibleTime.value){
+    timeLoading.value = false
+  }
+
 })
 
 const selectDate = async (day:ICalendar) =>{
   console.log(day)
 
-  date.value={
+  date.value = {
     ...date.value,
     month: day.month,
     day: day.day
@@ -120,9 +179,37 @@ const selectDate = async (day:ICalendar) =>{
     data: date.value
   }
 
-  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801', postData)
-   const time = await timePromise
+  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801',-1, postData)
+  const time = await timePromise
   visibleTime.value = time.data
+}
+
+const confirmReservation = (user:IUser, payment:boolean) =>{
+  store.setReservationUser(user, payment)
+  postReservation()
+}
+
+const notificationWarning = (message:IMessage) =>{
+  warnMessage.value = ({
+    title: message.title,
+    message: message.message
+  })
+  isOpenWarning.value = true
+}
+
+const closeNotification = ( ) =>{
+  isOpenWarning.value = false
+}
+
+const postReservation = async () =>{
+  const reserve = store.getReservationInfo
+  console.log(reserve)
+
+  const responsePromise:Promise<IFetchType> = fetchPostData('/reservation','','',0,reserve)
+  const response = await responsePromise
+
+  console.log(response)
+
 }
 
 </script>

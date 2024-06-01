@@ -46,3 +46,12 @@ export interface IMessage{
     title: string | null
     message: string | null
 }
+
+export interface IEvent {
+    PostId: number
+    PCCD: "N0402",
+    thumbnail: string | null
+    isMainPost: boolean | number | null,
+    viewers: number | null,
+    url: string | null
+}

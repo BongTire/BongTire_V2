@@ -5,9 +5,10 @@ export interface ICalendar{
     month: number
     day: number
     dayOfWeek: string | null
-    isHoliday: number | null
+    isHoliday: number | null | boolean
     holidayName: string | null
-    reservationPossible: number
+    isCurrentMonth : number | null | boolean
+    reservationPossible: number | boolean
 }
 
 // 기존에 줬던 api 명세와는 다르게 아래와 같은 명세로 진행한다.
@@ -79,3 +80,8 @@ export interface IReservationProduct{
     isVisible?: number
 }
 
+export interface IDate{
+    year: number
+    month: number
+    day: number
+}

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import  db  from '../../models';
-import { Sequelize, DataTypes, QueryTypes, Op } from 'sequelize';
+import { Sequelize, DataTypes, QueryTypes, Op, col } from 'sequelize';
 import logger from '../../config/logger';
 import {returnFormat} from '../../utils/return'
 
@@ -14,12 +14,24 @@ router.post('/', async (req: Request, res: Response) => {
   logger.info(searchText);
   try {
     const results = await Tire.findAll({
+      attributes:[
+          [col('TireId'), 'id'],  //
+          'BrandId',
+          'PCCD',
+          'productName',
+          'tireSize',
+          'discountRate',
+          'price',
+          'discountPrice',
+          'image'
+      ],
       where: {
         [Op.or]: [
           { tireSize: { [Op.like]: `%${searchText}%` } },
           { productName: { [Op.like]: `%${searchText}%` } }
         ]
-      }
+      },
+      limit: 100,
     });
 
     logger.info(results);

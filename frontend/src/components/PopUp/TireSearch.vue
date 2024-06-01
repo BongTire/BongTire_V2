@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import {computed, PropType, ref} from 'vue'
 import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import { ChevronRightIcon, UsersIcon } from '@heroicons/vue/24/outline'
 import {
@@ -12,14 +12,19 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
+import {IProduct} from "@type/product.ts";
+import ProductCard from "@component/Product/ProductCard.vue";
 
 const props = defineProps({
   isOpen:{
     type: Boolean
-  }
+  },
+  conf:{
+    type: Array as PropType<IProduct> | undefined
+  },
 })
 
-const emits = defineEmits(['closeSearch'])
+const emits = defineEmits(['closeSearch', 'searchProduct'])
 
 const closeSearch = ()=>{
   emits('closeSearch')
@@ -39,8 +44,7 @@ const people = [
   },
   // More people...
 ]
-
-const recent = [people[5], people[4], people[2], people[10], people[16]]
+const router = useRouter()
 
 const query = ref('')
 const filteredPeople = computed(() =>
@@ -55,7 +59,14 @@ function onSelect(person) {
   window.location = person.url
 }
 
+const moveDetailPage = (id:number) =>{
+  router.push(`/product/${id}?pccd=P0601`)
+}
 
+const inputSearchBox = (target:any) =>{
+  query.value = target?.value
+  emits('searchProduct', query.value)
+}
 
 </script>
 
@@ -68,19 +79,15 @@ function onSelect(person) {
 
       <div class="fixed inset-0 z-10 w-screen overflow-y-auto p-4 sm:p-6 md:p-20">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="ease-in duration-200" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
-          <DialogPanel class="mx-auto max-w-2xl transform rounded-xl bg-white p-2 shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
+          <DialogPanel class="mx-auto max-w-4xl transform rounded-xl bg-white p-2 shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
             <Combobox @update:modelValue="onSelect">
-              <ComboboxInput class="w-full rounded-md border-0 bg-gray-100 px-4 py-2.5 text-gray-900 focus:ring-0 sm:text-sm" placeholder="Search..." @change="query = $event.target.value" @blur="query = ''" />
+              <ComboboxInput class="w-full rounded-md border-0 bg-gray-100 px-4 py-2.5 text-gray-900 focus:ring-0 sm:text-sm" placeholder="Search..." @change="inputSearchBox($event.target)" @blur="query = ''" />
 
-              <ComboboxOptions v-if="filteredPeople.length > 0" static class="-mb-2 max-h-72 scroll-py-2 overflow-y-auto py-2 text-sm text-gray-800">
-                <ComboboxOption v-for="person in filteredPeople" :key="person.id" :value="person" as="template" v-slot="{ active }">
-                  <li :class="['cursor-default select-none rounded-md px-4 py-2', active && 'bg-orange-600 text-white']">
-                    {{ person.name }}
-                  </li>
-                </ComboboxOption>
+              <ComboboxOptions v-if="props.conf.length > 0" static class="-mb-2 max-h-96 scroll-py-2 overflow-y-auto py-2 text-sm text-gray-800">
+                <ProductCard :conf="props.conf" @moveDetailPage="moveDetailPage" />
               </ComboboxOptions>
 
-              <div v-if="query !== '' && filteredPeople.length === 0" class="px-4 py-14 text-center sm:px-14">
+              <div v-if="query !== '' && props.conf.length === 0" class="px-4 py-14 text-center sm:px-14">
                 <UsersIcon class="mx-auto h-6 w-6 text-gray-400" aria-hidden="true" />
                 <p class="mt-4 text-sm text-gray-900">상품을 찾을 수가 없습니다</p>
               </div>

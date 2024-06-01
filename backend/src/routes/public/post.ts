@@ -5,8 +5,11 @@ import { Sequelize, DataTypes, QueryTypes } from 'sequelize';
 import {IPost,IPostCategory} from '../../types/service/post'
 import session, { SessionData } from 'express-session';
 import {returnFormat} from '../../utils/return'
+import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
+
 const Post = db.Post
 const sequelize = db.sequelize
+
 
 const router = express.Router();
 
@@ -338,7 +341,7 @@ router.post('/delete', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/comment/:id', async (req: Request, res: Response) => {
+router.post('/comment/:id', isAuthenticatedAdmin,async (req: Request, res: Response) => {
   const comment = req.body;
   const postId = req.params.id;
 
@@ -478,7 +481,7 @@ router.get('/event', async (req: Request, res: Response) => {
         thumbnail: data.thumbnail,
         isMainPost: data.isMainPost,
         viewers: data.viewers,
-        url: '/post/detail/' + data.PostId + '?pccd=' + data.PCCD
+        url: `board/${data.PostId}?ptcd=P0202&pccd=${data.PCCD}`
       }));
       
       res.json({

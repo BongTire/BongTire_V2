@@ -9,7 +9,7 @@ const Brand = db.Brand
 const PCCD = db.PCCD
 const router: Router = express.Router();
 
-router.get('/', async function(req: Request, res: Response) {
+router.get('/', isAuthenticatedAdmin,async function(req: Request, res: Response) {
     try {
         let productType: any[] = [];
 

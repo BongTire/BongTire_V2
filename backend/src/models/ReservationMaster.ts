@@ -46,7 +46,7 @@ export default class ReservationMaster extends Model {
                 allowNull: true,
             },
             ReservationCode: {
-                type: DataTypes.STRING(30),
+                type: DataTypes.STRING(255),
                 allowNull: false,
                 defaultValue: '0', // Changed defaultValue to string '0' to match the type
             },

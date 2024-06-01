@@ -88,7 +88,6 @@ const pccd = computed(()=>route.query.pccd ?? 'N0401')
 const ptcd = computed(()=>route.query.ptcd ?? 'C0202')
 
 const route = useRoute()
-const router = useRouter()
 const detail = ref<IPost>()
 const store = useCommonStore()
 const pageStore = usePageStore()

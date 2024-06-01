@@ -59,11 +59,11 @@
 </template>
 
 <script lang="ts" setup>
+import {PropType} from "vue";
+
 const date = new Date()
-import { IReservationMaster } from '../../util/type/reservation'
+import {IDate, IReservationMaster} from '../../util/type/reservation'
 import ReservationProductCard from '@component/Reservation/ReservationProductCard.vue'
-const month = date.getMonth()+1
-const day = date.getDate()
 
 
 
@@ -72,11 +72,19 @@ const selectTime = ref(date.getHours());
 
 const props = defineProps({
   conf:{
-    type:Array as Array as PropType<IReservationMaster>
+    type: Array as  PropType<IReservationMaster> | undefined
+  },
+  date:{
+    type: Object as PropType<IDate> | undefined
   }
 })
-const confProps = props.conf
-const reservationTime = computed(()=>{
+
+const month = ref(date.getMonth()+1)
+const day = ref(date.getDate())
+const visibleReservation = ref<IReservationMaster[]>()
+
+
+const uniqueTime:number[] = () =>{
   const uniqueTimes = new Set();
   const result = [];
 
@@ -88,26 +96,35 @@ const reservationTime = computed(()=>{
   })
 
   return result;
-})
+}
 
-
-
-const visibleReservation = ref(confProps.filter(item => item.time === selectTime.value))
-
+const reservationTime = ref(uniqueTime())
 const isReserveData = ref(false)
+
+
+watch(() => props.date, () => {
+  month.value = props.date?.month ?? date.getMonth()+1
+  day.value = props.date?.day ?? date.getDate();
+
+  console.log(props.conf)
+
+  visibleReservation.value = props.conf.filter((item => item?.time === selectTime.value))
+  reservationTime.value = uniqueTime()
+},{ deep: true })
 
 
 const selectTimeFunc = (time:number) =>{
   selectTime.value = time
   visibleReservation.value = props.conf.filter(item => item.time === time);
   if(visibleReservation.value.length >= 1){
-    
     isReserveData.value = true
   }else{
     isReserveData.value = false
   } 
   console.log(visibleReservation.value.length)
 }
+
+
 
 </script>
 

@@ -14,16 +14,18 @@
     </div>
     <div v-for="week in props.conf" class="flex">
       <div v-for="day in week" class="flex">
-        <div :class="`w-16 h-14  flex flex-col items-center justify-center hover:bg-slate-50 rounded-lg cursor-pointer ${selectCalendar === day.CalendarId ? 'bg-orange-600 text-white' : null}`"
+        <div :class="`w-16 h-14  flex flex-col items-center justify-center hover:bg-slate-50 rounded-lg cursor-pointer
+                      ${selectCalendar === day.CalendarId ? 'bg-orange-600 text-white' : null}
+                      ${day?.isCurrentMonth && day?.reservationPossible ? null : 'text-gray-400'}`"
           @click="clickCalendar(day)"
         >
-          <p :class="`flex justify-center items-center ${day?.reservationPossible===0 ? 'text-gray-300' : null}
-            ${day?.reservationPossible===1 && day?.isHoliday === 1 ? 'text-red-600':null}
+          <p :class="`flex justify-center items-center ${day?.reservationPossible ? null : 'text-gray-300'}
+            ${day?.reservationPossible && day?.isHoliday === 1 ? 'text-red-600':null}
           `">{{ day?.day }}</p>
           <p v-if="day?.isHoliday === 1" :class="`text-xs text-center flex 
               justify-center items-center 
-              ${day?.reservationPossible===0 ? 'text-gray-300' : 'text-red-600'} 
-              `">{{ day?.holidayName??null  }}</p>
+              ${day?.reservationPossible ? 'text-red-600' : 'text-gray-300'}
+              `">{{ day?.holidayName ?? ''  }}</p>
         </div>
       </div>
     </div>
@@ -56,14 +58,24 @@ const store = useReservationStore();
 
 const emits = defineEmits(['selectDate'])
 
-  // 캘린더 ID를 기준으로 computed로 반응성 유지
+// 캘린더 ID를 기준으로 computed로 반응성 유지
 const selectCalendar = computed(()=>store.getCalendar)
 
-  const clickCalendar = (day) =>{
-    if(day.reservationPossible === 0){
+  const clickCalendar = (day:any) =>{
+    if(!day.reservationPossible){
       return
     }
-    store.setCalendar(day)
+
+    if(!day.reservationPossible){
+      return
+    }
+
+    const setDate = {
+      year:props.date?.year,
+      ...day
+    }
+
+    store.setCalendar(setDate)
     emits('selectDate',day)
   }
 

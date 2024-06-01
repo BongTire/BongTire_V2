@@ -191,6 +191,7 @@
     { name: '예약 관리', href: '/admin/reservation', icon: CalendarIcon, current: false },
   ])
 
+  const router = useRouter()
   const userNavigation = [
     { name: '홈으로', href: '/' },
     { name: '로그아웃', href: '/logout' },

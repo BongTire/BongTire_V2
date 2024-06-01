@@ -35,16 +35,21 @@ const props = defineProps({
   }
 })
 
+const emits = defineEmits(['clickAdmin'])
+
 const clickTime = (time) =>{
   if(time?.reservationPossible === 0 || !time?.reservationPossible){
     // TODO 경고 메시지 띄우기
     return 
   }
   console.log(time)
-  store.setReservationTime(time) 
+  store.setReservationTime(time)
+
+  emits('clickAdmin')
 }
 
 const selectTime = computed(()=>store.getReservationTime)
+
 
 
 
