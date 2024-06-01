@@ -26,6 +26,8 @@ import Tire from "../views/admin/Tire.vue";
 import Wheel from "../views/admin/Wheel.vue";
 import User from "../views/admin/User.vue";
 
+//Common
+import NotFound from '../views/Error.vue'
 
 const routes = [
   {
@@ -130,6 +132,11 @@ const routes = [
     component: AdminReservation,
     meta: { layout: AdminLayout },
   },
+  {
+    path: '/:catchAll(.*)', // "catch-all" 라우트
+    name: 'NotFound',
+    component: NotFound
+  }
 ];
 
 const router = createRouter({

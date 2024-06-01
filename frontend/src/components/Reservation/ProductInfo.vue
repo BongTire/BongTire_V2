@@ -13,7 +13,7 @@
           </div>
         </div>
         <div
-            class="w-40 h-40 ml-10 flex flex-col justify-center items-center rounded-md bg-slate-100 hover:bg-slate-50 cursor-pointer"
+            class="min-w-40 h-40 ml-10 flex flex-col justify-center items-center rounded-md bg-slate-100 hover:bg-slate-50 cursor-pointer"
             @click="moveProductPage(type)"
         >
           <img :src="type.icon" class="h-24">

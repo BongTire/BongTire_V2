@@ -55,7 +55,7 @@ export const initSesstionStorage = (responseCode: number | null):boolean =>{
 }
 
 export const exportUserInfo = ():IUser =>{
-    return sessionStorage.getItem('loginInfo')
+    return JSON.parse(sessionStorage.getItem('loginInfo'))
 }
 
 export const isAuthenticatedAdmin = (responseCode: number | null) =>{

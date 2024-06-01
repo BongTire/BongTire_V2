@@ -10,6 +10,7 @@
             class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white cursor-pointer"
             @click="clickProductCard(product.id)"
             >
+            <img :src="product.brandLogo ?? null" class="absolute h-6 top-1 left-3"/>
             <div class="h-96 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-80 flex justify-center items-center">
               <img :src="product.image ? product.image : defaultImage" :alt="product.imageAlt" :class="`${product.image ? 'h-3/4 sm:h-3/4' : 'w-3/4 sm:w-3/4' }  object-cover object-center`" />
             </div>

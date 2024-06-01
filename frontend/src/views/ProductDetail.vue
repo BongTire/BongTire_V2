@@ -1,6 +1,6 @@
 <template>
+  <Warning :isOpen="isOpenWarning" :message="warningMessage" @closeNoti="closeNotification"/>
     <div class="bg-white">
-  
       <main class="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
         <div class="mx-auto max-w-2xl lg:max-w-none">
           <!-- Product -->
@@ -22,7 +22,7 @@
   
               <TabPanels class="flex justify-center items-center aspect-h-1 aspect-w-1 w-full ">
                 <TabPanel  class="flex justify-center items-center border rounded-lg">
-                  <img :src="productDetail?.brandLogo ?? ''" class="absolute top-0 left-0 h-16">
+                  <img :src="productDetail?.brandLogo ?? ''" class="absolute top-1 left-2 h-12">
                   <img :src="productDetail?.image ?? ''" class="h-96 w-auto sm:rounded-lg" />
                 </TabPanel>
               </TabPanels>
@@ -105,7 +105,7 @@
     </div>
   </template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
   import { ref } from 'vue'
   import {
     Tab,
@@ -118,18 +118,33 @@
   import  {IFetchType} from '../util/type/common'
 import { fetchGetData } from '@api/common'
 import { useReservationStore } from '../stores/reservation'
+  import Warning from "@component/Notification/Warning.vue";
 
 const store  = useReservationStore()
 const productDetail = ref<IProduct>()
 const tireLocation = ref([0,0,0,0])
-const amount = computed(()=>{
-  return tireNWheelCalAmount()
-})
+const amount = ref(0)
+
 
 const router = useRouter();
 const route = useRoute()
 
 const ProductId = route.params.id
+const pccd = route.query.pccd
+const pageInfo = computed(()=>{
+  if(pccd === 'P0601') return 'tire'
+  else if(pccd === 'P0602') return 'wheel'
+})
+
+const isOpenWarning = ref(false)
+const warningMessage = ref({
+  title: '',
+  message: ''
+})
+
+const closeNotification = () =>{
+  isOpenWarning.value = false
+}
 
 const clickSetTireLocation = (index:number) =>{
   if(tireLocation.value[index] === 1){
@@ -147,23 +162,35 @@ const tireNWheelCalAmount = () =>{
     return amount
 }
 
+watch(() => tireLocation, () => {
+  amount.value = tireNWheelCalAmount()
+},{ deep: true })
 
 const clickReservationBtn = () =>{
+  console.log(amount.value)
+  if(amount.value === 0){
+    warningMessage.value = {
+      title: '예약 실패',
+      message: '수량을 선택해주세요'
+    }
+    isOpenWarning.value = true
 
-
-  const setProductStore = {
-    ...productDetail.value,
-    amount: amount.value,
-    tireLocation: tireLocation.value,
-    laborCost: 0,
-    price: productDetail.value.discountPrice*amount.value
+  }else{
+    const setProductStore = {
+      ...productDetail.value,
+      amount: amount.value,
+      tireLocation: tireLocation.value,
+      laborCost: 0,
+      price: (productDetail.value?.discountPrice ?? productDetail.value?.price ?? 0 )*amount.value
+    }
+    store.setReservationProduct(setProductStore)
+    router.push('/reservation')
   }
-  store.setReservationProduct(setProductStore)
-  router.push('/reservation')
 }
 
 onMounted(async ()=>{
-  const productDetailPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/product/${ProductId}`, '', 'P0601')
+
+  const productDetailPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/product/${pageInfo.value}/detail/${ProductId}`, 'P0301', pccd)
   const productDetailState = await productDetailPromise
   productDetail.value = productDetailState.data
   console.log(productDetail.value)

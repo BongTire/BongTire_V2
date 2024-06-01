@@ -1,4 +1,5 @@
 <template>
+  <ConfirmUser :isOpen="isOpenUserConfirm" @closeDialog="closeUserConfirmDialog" @confirm="confirmUserInfo"/>
   <Loading v-if="postLoading"/>
   <div v-else class="mx-auto max-w-2xl lg:max-w-7xl">
     <div class="relative border-b border-gray-200 pb-5 sm:pb-0">
@@ -40,15 +41,18 @@ import {
   } from '@heroicons/vue/24/outline'
 import { IPost } from '../util/type/post';
 import { IFetchType } from '../util/type/common'
-import { fetchGetData } from '@api/common'
+import { fetchGetData, fetchPostData } from '@api/common'
 import {exportUserInfo } from '../util/func/common'
 import Loading from '../components/Common/Loading'
+import {usePageStore} from "@store/page.ts";
+import ConfirmUser from "@component/Post/ConfrimUser.vue";
 
 
 const route = useRoute()
 const router = useRouter()
 
 const userInfo = exportUserInfo()
+const pageStore = usePageStore()
 
 const pccd = computed(()=>route.query.pccd ?? 'N0401')
 
@@ -70,6 +74,13 @@ const isList = computed(()=>{
 })
 
 const originBoard = ref<IPost[]>()
+
+// 유저 확인용 dialog
+const isOpenUserConfirm = ref(false)
+const postId = ref<number | null>()
+const closeUserConfirmDialog = () =>{
+  isOpenUserConfirm.value = false
+}
 
 watch(()=>pccd.value,async ()=>{
   if(isList.value){
@@ -109,12 +120,38 @@ onMounted(async ()=>{
 })
 
 const movePostDetail = async (post:IPost) =>{
-  const postId = post.PostId
+  postId.value = post?.PostId
+  const isSecret = post?.isSecret ?? 0
+  if(isSecret === 1 && userInfo.grade !== 0){
+    isOpenUserConfirm.value = true
+  }else{
+    if(isList.value){
+      router.push(`/board/${postId.value}?ptcd=P0203&pccd=${pccd.value}`)
+    }else{
+      router.push(`/board/${postId.value}?ptcd=P0202&pccd=${pccd.value}`)
+    }
+  }
+}
+
+const confirmUserInfo = async (name:string, number:string) =>{
+
+  const postData = {
+    data:{
+      name: name,
+      number: number,
+    }
+  }
+
+  const detailPromise: Promise<IFetchType> = await fetchPostData<IFetchType>(`/post/${postId.value}`, 'P0203', pccd.value,null ,postData)
+  const detailState = await detailPromise
+  const detail = detailState.data[0]
+
+  pageStore.setPostDetail(detail)
 
   if(isList.value){
-    router.push(`/board/${postId}?ptcd=P0203&pccd=${pccd.value}`)
+    router.push(`/board/${postId.value}?ptcd=P0203&pccd=${pccd.value}`)
   }else{
-    router.push(`/board/${postId}?ptcd=P0202&pccd=${pccd.value}`)
+    router.push(`/board/${postId.value}?ptcd=P0202&pccd=${pccd.value}`)
   }
 }
 

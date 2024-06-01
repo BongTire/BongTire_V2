@@ -170,6 +170,7 @@ const selectFilter = ref<number[]>([])
 
 const selectFilterFunc = async (filter:IBrand) =>{
 
+  let productState:any
   if(selectFilter.value.includes(filter.BrandId)){
     const brandArray:number[] = selectFilter.value.filter(item=>item!=filter.BrandId)
     selectFilter.value = brandArray
@@ -179,11 +180,17 @@ const selectFilterFunc = async (filter:IBrand) =>{
   }
 
   console.log(selectFilter.value)
-  // const productPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/product/filter', 'P0301', PCCD.value, currentPage.value, {
-  //   data:selectFilter.value
-  // })
-  // const productState = await productPromise;
-  // products.value = productState.data
+  if(selectFilter.value.length >= 1){
+    const productPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/product/filter', 'P0301', PCCD.value, currentPage.value, {
+      data:selectFilter.value
+    })
+    productState = await productPromise;
+  }else{
+    const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, 1)
+    productState = await productPromise;
+  }
+
+  products.value = productState.data
 }
 
 
@@ -267,7 +274,7 @@ const moveOtherPage = async (pageNumber:number) =>{
 }
 
 const moveDetailPage = (id:number) =>{
-  router.push(`/product/${id}`)
+  router.push(`/product/${id}?pccd=${PCCD.value}`)
 }
 
 </script>
