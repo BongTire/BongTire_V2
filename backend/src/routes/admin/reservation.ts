@@ -426,14 +426,17 @@ router.get('/reservedata',isAuthenticatedAdmin, async function(req: Request, res
             raw: true
         });
 
-        const reservationContent = await returnTodayReservations(reservationTimeDatas);
-        const result = returnResult(reservationContent, date);
+        const reservationContent = await returnTodayReservations(reservationTimeDatas ,date);
+        //const result = returnResult(reservationContent, date);
+        logger.info(JSON.stringify(reservationContent))
+        const returnFormatData = returnFormat(2000,"조회 성공",reservationContent)
+        res.json(returnFormatData);
 
-        res.json(result);
+        //res.json(result);
     } catch (error: any) {
         logger.error('Error: ' + error);
         
-        const returnFormatData = returnFormat(4000,'실패',error)
+        const returnFormatData = returnFormat(4000,'조회 실패',error)
         res.json(returnFormatData);
     }
 });
