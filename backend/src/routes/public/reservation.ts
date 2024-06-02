@@ -200,6 +200,7 @@ router.post('/',async function(req,res){
     const data = req.body;
    
     const product = data.product;
+    const date = req.body.date;
   
     const name = data.name ?? null
     const number =data.number ?? null
@@ -329,20 +330,28 @@ router.post('/',async function(req,res){
                     result = returnResult(reTodayReservation,req.body.date)
                     //logger.info(JSON.stringify(reservationMasterData))
                     logger.info('예약 데이터 성공적으로 저장')
+                    const returnFormatData = returnFormat(2000,'예약 성공',{date, ...reTodayReservation})
+                res.json(returnFormatData);
                 }catch(error){
                     logger.error('예약 트랜잭션 오류: ',error)
+                    const returnFormatData = returnFormat(4000,'예약 실패',error)
+                res.json(returnFormatData);
                 }
-               res.json(result)
+               
 
             }else if(reservationTimeDataDB.reservationPossible == 0){//예약 불가
                 //logger.info('예약 full, 관리자 예약 시도중')
-                res.send('예약 불가')//여기에는 비즈니스 코드 도입해야함
+                
+                const returnFormatData = returnFormat(4000,'해당 타임 예약 불가',[])
+                res.json(returnFormatData);
             }
             
             
             
         } catch (error) {
             logger.error(error)
+            const returnFormatData = returnFormat(4000,'예약 실패',error)
+            res.json(returnFormatData);
             
         }
 })

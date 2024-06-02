@@ -159,9 +159,6 @@ export function returnReservationContent(productTire:any,productWheel:any,reserv
         products = [...wheelData]
     }
     
-
-    
-    
     reservationContent = {
         ReservationMasterId:reservationMasterData.ReservationMasterId??null,
         ReservationTimeId:reservationMasterData.ReservationTimeId ?? null,
