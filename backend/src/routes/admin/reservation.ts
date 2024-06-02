@@ -343,7 +343,7 @@ router.post('/',isAuthenticatedAdmin,async function(req,res){
                 
                 //logger.info(JSON.stringify(reservationMasterData))
                 logger.info('예약 데이터 성공적으로 저장')
-                const returnFormatData = returnFormat(2000,'예약 성공',{date, ...reTodayReservation})
+                const returnFormatData = returnFormat(2000,'예약 성공',[{date, ...reTodayReservation}])
                 res.json(returnFormatData);
             }catch(error){
                 logger.error('예약 트랜잭션 오류: ',error)
