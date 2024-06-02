@@ -3,6 +3,7 @@ import {PropType, ref} from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { PhotoIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import {IBrand} from "@type/brand.ts";
+import { IPCCD } from '@type/common.ts'
 import MultiSelect from 'primevue/multiselect';
 import { useCommonStore } from '@store/common.ts'
 import defaultLogo from '@image/Company/BongTireLogo.png'
@@ -19,7 +20,7 @@ const props = defineProps({
 const store = useCommonStore()
 const PCCD = computed(()=>store.getPCCD)
 
-const brandFeature = ref(PCCD.value.filter(item => item?.PCCD.startsWith('T10') || item?.PCCD.startsWith('C07') || item?.PCCD.startsWith('P06')))
+const brandFeature = ref(PCCD.value.filter((item:IPCCD) => item?.PCCD.startsWith('T10') || item?.PCCD.startsWith('C07') || item?.PCCD.startsWith('P06')))
 
 const closeDialog = () =>{
   emits('closePopup')
@@ -45,7 +46,7 @@ const initData = () =>{
       origin: props.conf?.origin ?? 0,
       nation: props.conf?.nation ?? ''
     }
-    selectBrandFeature.value = PCCD.value.filter(item => editBrand.value?.PCCD.some(pccd => item.PCCD.startsWith(pccd)));
+    selectBrandFeature.value = PCCD.value.filter((item:IPCCD) => editBrand.value?.PCCD.some((pccd:IBrand) => item.PCCD.startsWith(pccd)));
   }else{
     editBrand.value = {
       BrandId:  null,
@@ -66,8 +67,8 @@ const initData = () =>{
 const clickEditMode = () =>{
   if(editMode.value){
     // emit으로 보내기
-    selectBrandFeature.value.map((item) =>{
-      if(!editBrand.value?.PCCD.includes(item.PCCD)){
+    selectBrandFeature.value.map((item:IBrand) =>{
+      if(!editBrand.value?.PCCD.includes(item?.PCCD)){
         if(item?.PCCD){
           editBrand.value?.PCCD.push((item?.PCCD))
         }

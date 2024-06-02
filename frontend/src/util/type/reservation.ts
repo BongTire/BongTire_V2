@@ -63,6 +63,7 @@ export interface IReservationMaster{
 export interface IReservationProduct{
     ReservationProductId?: number | null
     ProductId: number | null
+    id?: number | null
     PCCD: string
     amount: number
     price: number

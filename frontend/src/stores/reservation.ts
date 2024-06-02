@@ -1,7 +1,6 @@
 // src/stores/counter.js
 import { defineStore } from 'pinia'
-import { ICalendar, IReservationTime } from '../util/type/reservation'
-import { IProduct } from '../util/type/product'
+import {ICalendar, IReservationProduct, IReservationTime} from '../util/type/reservation'
 import {IUser} from "../util/type/user.ts";
 
 export const useReservationStore = defineStore('reservation', {
@@ -87,15 +86,15 @@ export const useReservationStore = defineStore('reservation', {
       this.time = time?.startTime ?? -1
       this.reservationPossible = time?.reservationPossible ?? -1
     },
-    setReservationProduct(product:IProduct){
+    setReservationProduct(product:IReservationProduct){
       const productData = {
         ReservationProductId: null,
         ProductId: product.id,
         PCCD: product.PCCD,
         amount: product.amount,
         price: product.price,
-        tireLocation: product.tireLocation,
-        laborCost: product.laborCost,
+        tireLocation: product?.tireLocation ?? [0,0,0,0],
+        laborCost: product?.laborCost ?? 0,
         brandName: product.brandName,
         brandLogo: product.brandLogo,
         image: product.image,
@@ -105,7 +104,7 @@ export const useReservationStore = defineStore('reservation', {
         isRecommanded : product.isRecommanded,
         isActive: product.isActive,
         isSecond: product.isSecond,
-        isVisible: product.isVisible ?? 1,
+        isVisible: product?.isVisible ?? 1,
       }
 
       this.product.push(productData)

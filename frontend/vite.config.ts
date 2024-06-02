@@ -2,13 +2,17 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
-import checker from 'vite-plugin-checker'
+import Checker from 'vite-plugin-checker'
 
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    Checker({
+      typescript: true,
+      vueTsc: false
+    }),
     AutoImport({
       imports: [
         'vue',
@@ -17,6 +21,11 @@ export default defineConfig({
       dts: 'src/auto-imports.d.ts'
     })
   ],
+  esbuild:{
+    loader: 'ts',
+    include: /src\/.*\.ts$/,
+    exclude: [],
+  },
   build: {
     rollupOptions: {
       // build 시 타입 오류 무시

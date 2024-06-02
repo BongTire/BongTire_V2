@@ -10,7 +10,7 @@ const fetchGetData = async <T>(url: string, ptcd:string='', pccd:string='', page
         }
     })
 
-    return response
+    return response.data
 }
 
 const fetchPostData = async <T>(url: string, ptcd:string='', pccd:string='', page:number = 1, data:any):Promise<T> =>{
@@ -24,7 +24,7 @@ const fetchPostData = async <T>(url: string, ptcd:string='', pccd:string='', pag
         }
     })
 
-    return response
+    return response.data
 }
 
 const fetchGetAdmin = async <T>(url: string, date:string=''):Promise<T> =>{
@@ -35,7 +35,7 @@ const fetchGetAdmin = async <T>(url: string, date:string=''):Promise<T> =>{
         }
     })
 
-    return response
+    return response.data
 }
 
 export{ fetchGetData , fetchPostData, fetchGetAdmin }

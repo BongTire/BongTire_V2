@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { PhotoIcon, XMarkIcon} from '@heroicons/vue/24/outline'
-import {IPCCD} from "@type/common.ts";
-import {useCommonStore} from "@store/common.ts";
-
-const open = ref(true)
+import {IPCCD} from "../../../util/type/common";
+import {useCommonStore} from "../../../stores/common";
 
 const store = useCommonStore()
 

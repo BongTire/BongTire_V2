@@ -8,7 +8,7 @@ const client = axios.create({
 client.interceptors.response.use(
   (response) => {
     if (response && response.data) {
-      return response.data;
+      return response;
     }
     return response;
   },

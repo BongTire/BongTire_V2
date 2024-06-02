@@ -1,5 +1,5 @@
 // src/router.ts
-import { createWebHistory, createRouter } from "vue-router";
+import { createWebHistory, createRouter, RouteRecordRaw } from "vue-router";
 
 // Layout
 import PublicLayout from "../layouts/public.vue";
@@ -29,7 +29,7 @@ import User from "../views/admin/User.vue";
 //Common
 import NotFound from '../views/Error.vue'
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",

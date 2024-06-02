@@ -1,6 +1,6 @@
 // src/stores/counter.js
 import { defineStore } from 'pinia'
-import { IPCCD, IPTCD,  IFetchType} from '../util/type/common'
+import { IPCCD, IPTCD} from '../util/type/common'
 
 
 

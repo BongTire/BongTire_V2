@@ -1,5 +1,5 @@
 import { useRouter} from "vue-router";
-import type { IUser } from '@type/user'
+import type { IUser } from '../type/user'
 
 const router = useRouter()
 

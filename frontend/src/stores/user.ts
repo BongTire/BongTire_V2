@@ -1,6 +1,6 @@
 // src/stores/user.js
 import { defineStore } from 'pinia'
-import { IUser } from '@type/user'
+import { IUser } from '../util/type/user'
 
 export const useUserStore = defineStore('user', {
 
@@ -13,8 +13,8 @@ export const useUserStore = defineStore('user', {
     }),
     getters: {
         getUserId: state => state.UserId,
-        getUserGrade: state => state.UserGrade,
-        getUserName: state => state.UserName,
+        getUserGrade: state => state.grade,
+        getUserName: state => state.name,
     },
     actions: {
         setUserInfo(userInfo: IUser) {
