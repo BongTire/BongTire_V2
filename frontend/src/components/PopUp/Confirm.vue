@@ -56,7 +56,7 @@ const cancelPostData = () =>{
   emits('isCancelPopup')
 }
 const postData = () =>{
-  emits('isPostData')
+  emits('isPostData', props.conf?.status ?? '')
 }
 
 

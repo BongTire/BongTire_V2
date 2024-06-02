@@ -43,9 +43,27 @@
             <div class="bg-slate-50 flex px-5 justify-between items-center pb-5 ">
               <p>총 금액 : {{ reserve.totalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }}</p>
               <div>
-                <button v-if="reserve.isCancel===0&& reserve.isReceive === 1 && reserve.isComplete === 0 " type="button" class="rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 ml-5">정비 완료</button>
-                <button v-if="reserve.isCancel===0 && reserve.isComplete === 0" type="button" class="rounded-md bg-red-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ml-5">예약 취소</button>
-                <button v-if="reserve.isCancel===0 && reserve.isReceive === 0 && reserve.isComplete === 0" type="button" class="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 ml-5">예약 접수</button>  
+                <button
+                    v-if="reserve.isCancel===0&& reserve.isReceive === 1 && reserve.isComplete === 0 " type="button"
+                    class="rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 ml-5"
+                    @click="clickReservatioOption('confirm', reserve.ReservationMasterId)"
+                >
+                  정비 완료
+                </button>
+                <button
+                    v-if="reserve.isCancel===0 && reserve.isComplete === 0" type="button"
+                        class="rounded-md bg-red-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ml-5"
+                    @click="clickReservatioOption('cancel', reserve.ReservationMasterId)"
+                >
+                  예약 취소
+                </button>
+                <button
+                    v-if="reserve.isCancel===0 && reserve.isReceive === 0 && reserve.isComplete === 0" type="button"
+                    class="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 ml-5"
+                    @click="clickReservatioOption('receive', reserve.ReservationMasterId)"
+                >
+                  예약 접수
+                </button>
               </div>
             </div>
           </div>
@@ -72,23 +90,29 @@ const selectTime = ref(date.getHours());
 
 const props = defineProps({
   conf:{
-    type: Array as  PropType<IReservationMaster> | undefined
+    type: Array as  PropType<IReservationMaster[]> | undefined
   },
   date:{
     type: Object as PropType<IDate> | undefined
   }
 })
 
+const emits = defineEmits(['clickOption'])
+
 const month = ref(date.getMonth()+1)
 const day = ref(date.getDate())
 const visibleReservation = ref<IReservationMaster[]>()
 
+const confProps = ref(props.conf)
 
-const uniqueTime:number[] = () =>{
+
+
+
+const uniqueTime = ():number[] =>{
   const uniqueTimes = new Set();
   const result = [];
 
-  props.conf.forEach(item => {
+  props.conf.map(item => {
     if (!uniqueTimes.has(item.time)) {
       uniqueTimes.add(item.time);
       result.push(item);
@@ -102,13 +126,17 @@ const reservationTime = ref(uniqueTime())
 const isReserveData = ref(false)
 
 
-watch(() => props.date, () => {
+watch(() => props, () => {
+
+  confProps.value = props.conf
   month.value = props.date?.month ?? date.getMonth()+1
   day.value = props.date?.day ?? date.getDate();
+  console.log(confProps.value)
 
   console.log(props.conf)
-
-  visibleReservation.value = props.conf.filter((item => item?.time === selectTime.value))
+  if(props.conf){
+    visibleReservation.value = props.conf.filter((item:IReservationMaster) => {item?.time === selectTime.value})
+  }
   reservationTime.value = uniqueTime()
 },{ deep: true })
 
@@ -122,6 +150,11 @@ const selectTimeFunc = (time:number) =>{
     isReserveData.value = false
   } 
   console.log(visibleReservation.value.length)
+}
+
+const clickReservatioOption = (state:string, id:number) =>{
+  emits('clickOption',state, id)
+
 }
 
 

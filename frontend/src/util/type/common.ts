@@ -45,6 +45,7 @@ export interface IFetchType{
 export interface IMessage{
     title: string | null
     message: string | null
+    status?: string | null
 }
 
 export interface IEvent {

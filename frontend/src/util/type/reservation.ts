@@ -37,7 +37,7 @@ export interface IReservationTime{
     endTime: number
     numberOfReservation: number
     availableNumberOfReservation: number | null
-    reservationPossible: number | null
+    reservationPossible: number | boolean | null
 }
 
 export interface IReservationMaster{

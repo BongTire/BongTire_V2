@@ -49,7 +49,7 @@
                         <button
                             type="submit"
                             class="inline-flex items-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-                            :disabled="userInfo.grade !== 0 || detail?.answer ? true : false"
+                            :disabled="userInfo?.grade !== 0 || detail?.answer ? true : false"
                         >
                           등록
                         </button>
@@ -64,14 +64,7 @@
 </template>
   
 <script setup lang="ts">
-import {
-  FaceFrownIcon,
-  FaceSmileIcon as FaceSmileIconMini,
-  FireIcon,
-  HandThumbUpIcon,
-  HeartIcon,
-  XMarkIcon,
-} from '@heroicons/vue/20/solid'
+
 import { IPost } from '../util/type/post';
 
 import {IFetchType, IPCCD} from '../util/type/common'
@@ -96,6 +89,9 @@ const PCCDArray = store.getPCCD
 
 const userInfo = exportUserInfo()
 const postDetailInfo = pageStore.getPostDetail
+
+console.log(postDetailInfo)
+
 const comment = ref('')
 
 const categoryInfo = ref<IPCCD[]>()
@@ -113,27 +109,35 @@ const notiMessage = ref({
 
 
 onMounted( async ()=>{
-  if(postDetailInfo && postDetailInfo?.PostId === route.params.id){
+
+  if(postDetailInfo && postDetailInfo?.PostId === Number(route.params.id)){
     detail.value = postDetailInfo
     categoryFunc(detail.value?.PCCD)
+    comment.value = detail.value?.answer ?? ''
+
   }else{
     getApiData()
   }
-  comment.value = detail.value?.answer ?? ''
-  console.log(category.value)
+
 })
 
 
 const getApiData = async () =>{
   const detailPromise: Promise<IFetchType> = await fetchPostData<IFetchType>(`/post/${route.params.id}`, ptcd.value, pccd.value,null,{data:null})
   const detailState = await detailPromise
+
+  if(Math.floor(detailState.status.code/1000) === 4){
+    return
+  }
+
   detail.value = detailState.data[0]
   categoryFunc(detail.value?.PCCD)
+  comment.value = detail.value?.answer ?? ''
 }
 
 const postComment = async () =>{
-  console.log(userInfo.grade)
-  if(userInfo.grade === 0){
+
+  if(userInfo?.grade === 0){
     const commentPromise:Promise<IFetchType> = await fetchPostData<IFetchType>(`/post/comment/${route.params.id}`, ptcd.value, pccd.value,null,{answer: comment.value})
     const commentState = await commentPromise
     if(commentState.status.code/1000 === 2) {
@@ -164,16 +168,10 @@ const categoryFunc = (pagePCCD:string = '') =>{
   if(categoryInfo.value?.length >= 1){
     category.value = categoryInfo.value[0]?.secondName ?? ''
   }
-}
 
-const moods = [
-  { name: 'Excited', value: 'excited', icon: FireIcon, iconColor: 'text-white', bgColor: 'bg-red-500' },
-  { name: 'Loved', value: 'loved', icon: HeartIcon, iconColor: 'text-white', bgColor: 'bg-pink-400' },
-  { name: 'Happy', value: 'happy', icon: FaceSmileIconMini, iconColor: 'text-white', bgColor: 'bg-green-400' },
-  { name: 'Sad', value: 'sad', icon: FaceFrownIcon, iconColor: 'text-white', bgColor: 'bg-yellow-400' },
-  { name: 'Thumbsy', value: 'thumbsy', icon: HandThumbUpIcon, iconColor: 'text-white', bgColor: 'bg-blue-500' },
-  { name: 'I feel nothing', value: null, icon: XMarkIcon, iconColor: 'text-gray-400', bgColor: 'bg-transparent' },
-]
+  console.log(category.value)
+
+}
 
 
   </script>

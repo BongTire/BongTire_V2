@@ -1,6 +1,7 @@
 <template>
   <CheckUser :isOpen="isOpenCheckUser" @closePopup="closeCheckUser" @confirm="confirmReservation" />
   <Warning :isOpen="isOpenWarning" :message="warnMessage" @closeNoti="closeNotification"/>
+  <ResultDialog :isOpen="isOpenResultReserve" :message="isReserveResultMessage" @closeDialog="closeResultDialog"/>
   <div class="flex w-full max-w-7xl m-auto">
       <div class="flex flex-col w-1/2">
       <div>
@@ -53,6 +54,7 @@ import Warning from "@component/Notification/Warning.vue";
 import {IUser} from "@type/user.ts";
 import {useReservationStore} from "@store/reservation.ts";
 import {exportUserInfo } from '../util/func/common'
+import ResultDialog from "../components/Notification/ResultDialog.vue";
 
 // 캘린더 관련 변수
 const visibleCalendar = ref<ICalendar[][]>()
@@ -69,6 +71,8 @@ const date = ref({
 const store = useReservationStore()
 const userInfo = exportUserInfo()
 
+const router = useRouter()
+
 //Loading 변수
 const calendarLoading = ref(true)
 const timeLoading = ref(true)
@@ -83,6 +87,15 @@ const warnMessage = ref({
   title: '',
   message: ''
 })
+
+// 예약 최종 성공 여부 변수
+const isOpenResultReserve = ref(false)
+const isReserveResultMessage = ref({
+  title: '',
+  message: '',
+  status: ''
+})
+
 
 const closeCheckUser = ( ) =>{
   isOpenCheckUser.value = false
@@ -209,7 +222,30 @@ const postReservation = async () =>{
   const response = await responsePromise
 
   console.log(response)
+  if(response.status.code === 2000){
+    // TODO 예약 성공
+    isReserveResultMessage.value = {
+      title: '예약 성공',
+      message: '예약에 성공 했습니다.',
+      status: 'success'
+    }
+    isOpenResultReserve.value = true
+  }else{
+    // TODO 예약 실패
+    isReserveResultMessage.value = {
+      title: '예약 실패',
+      message: '예약에 실패 했습니다. 관리자에게 문의 해주세요',
+      status: 'error'
+    }
+    isOpenResultReserve.value = true
+  }
 
+
+
+}
+
+const closeResultDialog = () =>{
+  router.push('/')
 }
 
 </script>

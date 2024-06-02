@@ -1,4 +1,6 @@
 <template>
+  <ResultDialog :isOpen="isOpenResult" :message="dialogMessage" @closeDialog="closeResultDialog"/>
+  <Confirm :isOpen="isOpenConfirm" :conf="dialogMessage" @isCancelPopup="cancelResultDialog" @isPostData="isPostData"/>
   <div>
     <div class="flex">
       <div class="w-1/2">
@@ -25,26 +27,40 @@
           </Switch>
         </div>
         <div class="flex justify-end items-center mt-5">
-          <button type="button" class="rounded mr-5 bg-gray-500 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">취소</button>
-          <button type="button" class="rounded bg-orange-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">저장</button>
+          <button
+              type="button"
+              class="rounded mr-5 bg-gray-500 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+          >
+            취소
+          </button>
+          <button
+              type="button"
+              class="rounded bg-orange-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+              @click="clickChangeTimePossible"
+          >
+            저장
+          </button>
         </div>
       </div>
     </div>
     <div>
-      <ReservationResult :conf="reserve" :date="date"/>
+      <ReservationResult :conf="reserve" :date="date" @clickOption="clickReservationOption"/>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {ICalendar, IReservationMaster, IReservationTime} from "@type/reservation.ts";
-import {IFetchType} from "@type/common.ts";
+import { ICalendar, IReservationMaster, IReservationTime } from "@type/reservation.ts";
+import { IFetchType } from "../../util/type/common.ts";
 import {fetchGetAdmin, fetchGetData, fetchPostData} from "@api/common.ts";
 import Calendar from '../../components/Reservation/Calendar.vue'
 import Time from "@component/Reservation/Time.vue";
 import ReservationResult from "@component/Admin/ReservationResult.vue";
 import { Switch } from '@headlessui/vue'
-import {useReservationStore} from "@store/reservation.ts";
+import { useReservationStore } from "@store/reservation.ts";
+import ResultDialog from "../../components/Notification/ResultDialog.vue";
+import Confirm from "../../components/PopUp/Confirm.vue";
+import { isAuthenticatedAdmin } from '../../util/func/common'
 
 
 const visibleCalendar = ref<ICalendar[][]>()
@@ -65,11 +81,28 @@ const timeLoading = ref(true)
 const reserveLoading = ref(true)
 const enabled = ref(false)
 
+const isOpenConfirm = ref(false)
+const isOpenResult = ref(false)
+
+const dialogMessage = ref({
+  title: '',
+  message: '',
+  status: ''
+})
+
 
 const visibleTime = ref<IReservationTime[]>()
 
 const reserve = ref<IReservationMaster[]>([])
 const selectTime = computed(()=>store.getReservationAdmin)
+
+const actionState = ref('')
+const reservationAction = ref({
+  ReservationMasterId: -1,
+  isCancel : 0,
+  isReceive: 0,
+  isCompleted: 0,
+})
 
 const clickAdminTime = () =>{
   if(selectTime.value.reservationPossible === 1){
@@ -80,28 +113,25 @@ const clickAdminTime = () =>{
 }
 
 const clickChangeTimePossible = async () =>{
-  if(enabled.value){
-    selectTime.value.reservationPossible = 1
-  }else{
-    selectTime.value.reservationPossible = 0
+  dialogMessage.value = {
+    title:'활성화 시간 변경',
+    message: '해당 시간의 예약 여부를 변경하시겠습니까?',
+    status:  'time'
   }
 
-  const data = {
-    ReservationTimeId: selectTime.value.ReservationTimeId,
-    reservationPossible: selectTime.value.reservationPossible
-  }
+
+  selectTime.value.reservationPossible = enabled.value
+
+
+  isOpenConfirm.value = true
 
   // TODO 데이터 쏴주는거 넣기
-  const responsePromise = fetchPostData('/admin/reservation/time','','',0,data)
-  const responseState = await responsePromise
-
-  console.log(responseState)
-
 }
 
 onMounted(async ()=>{
   const calendarPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/reservation/calendar','R0401','R0801')
   const calendarData = await calendarPromise
+  isAuthenticatedAdmin(calendarData.status.code)
   visibleCalendar.value = calendarData.data.date
 
   date.value = {
@@ -116,11 +146,16 @@ onMounted(async ()=>{
   // 시간
   const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801',-1, postData)
   const time = await timePromise
+
+  isAuthenticatedAdmin(time.status.code)
+
   visibleTime.value = time.data
 
   const paramsDate = `${date.value.year}${parseInt(date.value.month)/10 < 1 ? '0'+date.value.month : date.value.month}${parseInt(date.value.day)/10 < 1 ? '0'+date.value.day : date.value.day}`
   const reservePromise:Promise<IFetchType> = fetchGetAdmin('/admin/reservation/reservedata', paramsDate)
   const reserveState = await reservePromise
+  isAuthenticatedAdmin(reserveState.status.code)
+
   reserve.value = reserveState.data
 
   if(visibleCalendar.value){
@@ -154,10 +189,117 @@ const selectDate = async (day:ICalendar) =>{
   const reserveState = await reservePromise
 
   reserve.value = reserveState.data
-
-
 }
 
+const closeResultDialog = () =>{
+  isOpenResult.value = false
+}
+
+const cancelResultDialog = () =>{
+  isOpenConfirm.value = false
+}
+
+const clickReservationOption = (state:string, id:number)=>{
+
+  if(state==='receive'){
+    dialogMessage.value={
+      title: "접수",
+      message: "예약을 접수 하시겠습니까?",
+      status: "reserve"
+    }
+    actionState.value = state
+    reservationAction.value = {
+      ReservationMasterId: id,
+      isCancel : 0,
+      isReceive: 1,
+      isCompleted: 0,
+    }
+  }
+  if(state==='cancel'){
+    actionState.value = state
+    dialogMessage.value={
+      title: "취소",
+      message: "예약을 취소 하시겠습니까?",
+      status: "reserve"
+    }
+    reservationAction.value = {
+      ReservationMasterId: id,
+      isCancel : 1,
+      isReceive: 0,
+      isCompleted: 0,
+    }
+  }
+  if(state==='confirm'){
+    actionState.value = state
+    dialogMessage.value={
+      title: "완료",
+      message: "예약을 완료 처리 하시겠습니까?",
+      status: "reserve"
+    }
+    reservationAction.value = {
+      ReservationMasterId: id,
+      isCancel : 0,
+      isReceive: 0,
+      isCompleted: 1,
+    }
+  }
+
+  isOpenConfirm.value = true
+}
+
+const isPostData = async (state:string) => {
+  isOpenConfirm.value = false
+
+  if(state === 'time'){
+
+    const data = {
+      data:{
+        ReservationTimeId: selectTime.value.ReservationTimeId,
+        reservationPossible: selectTime.value.reservationPossible
+      }
+    }
+
+    const responsePromise = fetchPostData('/admin/reservation/isActive','','',0,data)
+    const responseState = await responsePromise
+
+    if(responseState?.status.code === 2000){
+      dialogMessage.value={
+        title: '성공',
+        message: '데이터를 변경하는데 성공했습니다.',
+        status: 'success'
+      }
+      isOpenResult.value = true
+    }else{
+      dialogMessage.value={
+        title: '실패',
+        message: '데이터를 변경하는데 실패 했습니다. 관리자에게 문의 해주세요',
+        status: 'error'
+      }
+      isOpenResult.value = true
+    }
+  }else{
+    const data = { data: reservationAction.value }
+
+    const responsePromise = fetchPostData('/admin/reservation/confirmed','','',0,data)
+    const responseState = await responsePromise
+
+    if(responseState?.status.code === 2000){
+      dialogMessage.value={
+        title: '성공',
+        message: '데이터를 변경하는데 성공했습니다.',
+        status: 'success'
+      }
+      isOpenResult.value = true
+    }else{
+      dialogMessage.value={
+        title: '실패',
+        message: '데이터를 변경하는데 실패 했습니다. 관리자에게 문의 해주세요',
+        status: 'error'
+      }
+      isOpenResult.value = true
+    }
+  }
+}
 
 </script>
 

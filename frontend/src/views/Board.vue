@@ -6,7 +6,7 @@
         <div class="md:flex md:items-center md:justify-between">
           <h3 class="text-base font-semibold leading-6 text-gray-900">공지사항</h3>
           <div class="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
-              <button v-if="(userInfo?.grade && userInfo?.grade === 0) || isList" type="button" class="ml-3 inline-flex items-center rounded-md bg-orange-600 pl-2 pr-1 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
+              <button v-if="userInfo?.grade === 0 || isList" type="button" class="ml-3 inline-flex items-center rounded-md bg-orange-600 pl-2 pr-1 py-1 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
                 <RouterLink to="/edit" >
                   <PencilSquareIcon class="h-6 w-6" aria-hidden="true" />
                 </RouterLink>
@@ -53,6 +53,8 @@ const router = useRouter()
 
 const userInfo = exportUserInfo()
 const pageStore = usePageStore()
+
+console.log(userInfo)
 
 const pccd = computed(()=>route.query.pccd ?? 'N0401')
 
@@ -122,7 +124,7 @@ onMounted(async ()=>{
 const movePostDetail = async (post:IPost) =>{
   postId.value = post?.PostId
   const isSecret = post?.isSecret ?? 0
-  if(isSecret === 1 && userInfo.grade !== 0){
+  if(isSecret === 1 && userInfo?.grade !== 0){
     isOpenUserConfirm.value = true
   }else{
     if(isList.value){

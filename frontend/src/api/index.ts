@@ -21,13 +21,15 @@ client.interceptors.response.use(
         };
       }
       if (error.response.status === 401) {
+
         return {
-          status: {
-            code: 4001,
-            message: "잘못된 접근 입니다.",
-          },
-          data:''
-        };
+          data:{
+            status: {
+              code: 4001,
+              message: "잘못된 접근 입니다.",
+            },
+            data:''
+        }}
       }
       if (error.response.status === 403) {
         return {
@@ -37,9 +39,15 @@ client.interceptors.response.use(
       }
       if (error.response.status === 404) {
         return {
-          code: "404",
-          message: "404",
-        };
+          data:{
+            status:{
+              code: 4004,
+              message: "잘못된 주소 혹은 오류 입니다.",
+            },
+            data:''
+          }
+        }
+
       }
     }
     return Promise.reject(error);

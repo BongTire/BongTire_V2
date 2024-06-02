@@ -432,7 +432,7 @@ router.post('/:postId',async (req: Request, res: Response) =>{//상세조회(1�
         return res.json({
           status: {
             message: "이름 또는 전화번호가 일치하지 않습니다.",
-            code: "상태 코드",
+            code: 4005,
           },
         });
       }

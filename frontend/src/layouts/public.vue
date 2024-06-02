@@ -150,6 +150,7 @@
   </header>
   <div>
     <TireSearch :isOpen="isOpenSearch" @closeSearch="closeSearch" :conf="tireSearch" @searchProduct="tireSearchFunc"/>
+    <TireSearchForCar :isOpen="isOpenCarSearch" @closeSearch="closeCarSearch" />
     <slot/>
   </div>
   <footer className="bg-white">
@@ -216,6 +217,7 @@
   import Success from '@component/Alert/Success.vue'
   import { initSesstionStorage } from '../util/func/common'
   import {IProduct} from "@type/product.ts";
+  import TireSearchForCar from "@component/Common/TireSearchForCar.vue";
 
   const PTCD = ref<IPTCD[]>([])
   const PCCD = ref<IPCCD[]>([])
@@ -265,8 +267,8 @@ const products = [
 ]
 
 const callsToAction = [
-  { name: '타이어 검색', state: 'search', icon: MagnifyingGlassIcon },
-  { name: '차량 검색', state: 'phone', icon: PhoneIcon },
+  { name: '타이어 검색', state: 'tire', icon: MagnifyingGlassIcon },
+  { name: '차량 검색', state: 'car', icon: MagnifyingGlassIcon },
 ]
 
 const company = [
@@ -302,28 +304,35 @@ const navigation = {
 }
 
 const isOpenSearch = ref(false)
+const isOpenCarSearch = ref(false)
 const clickMenuBtn = (state:string) =>{
-    if(state==='search'){
-      console.log(1)
+    if(state==='tire'){
       isOpenSearch.value = true
     }
+    if(state==='car'){
+      isOpenCarSearch.value = true
+    }
+
 }
 const clickSubUserMenu = async (url:string)=>{
   if(url === '/logout'){
-    const logoutPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/logout','','',{data:''})
-    const reponse = await logoutPromise
+    const logoutPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/logout','','',0,{data:''})
+    const response = await logoutPromise
 
-    if(initSesstionStorage(reponse?.status.code)){
+
+    if(initSesstionStorage(response?.status?.code)){
       window.location.reload()
       return
     }
 
-    if(reponse?.status.code / 1000 === 2){
-      console.log(reponse)
-      successMessage.value = reponse?.status.message
+    if(response?.status.code / 1000 === 2){
+
+      successMessage.value = response?.status.message
       window.location.reload()
       sessionStorage.setItem('loginInfo',JSON.stringify({}))
     }
+
+
 
   }else if(url === '/admin'){
     router.push('/admin')
@@ -332,6 +341,10 @@ const clickSubUserMenu = async (url:string)=>{
 
 const closeSearch = () =>{
     isOpenSearch.value = false
+}
+
+const closeCarSearch = () =>{
+    isOpenCarSearch.value = false
 }
 
 </script>
