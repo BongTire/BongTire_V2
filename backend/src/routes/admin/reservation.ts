@@ -205,7 +205,7 @@ router.post('/',isAuthenticatedAdmin,async function(req,res){
     const number =data.number ?? null
     const userId = -1; //관리자가 직접예약해서 일단 -1넣음
 
-
+   const date = req.body.date;
    // const {ownCarId,paymentMethod,request,totalPrice} = req.body.data ?? ""
    const year = Number(data.date.substring(0,4))
    const month = Number(data.date.substring(4,6))
@@ -321,6 +321,7 @@ router.post('/',isAuthenticatedAdmin,async function(req,res){
                 let replacements = {
                     reservationMasterId: newReservation.ReservationMasterId
                 };
+                
 
                 // 비회원 - 유저 조인 안함
                 if (userId ==-1) {
@@ -339,16 +340,22 @@ router.post('/',isAuthenticatedAdmin,async function(req,res){
                 });
                 const reReservationContent = returnReservationContent(reservationTiredata,reservationWheeldata,reservationMasterData[0])
                 const reTodayReservation = returnTodayReservation(reservationMasterData[0],reReservationContent)
-                result = returnResult(reTodayReservation,req.body.date)
+                
                 //logger.info(JSON.stringify(reservationMasterData))
                 logger.info('예약 데이터 성공적으로 저장')
+                const returnFormatData = returnFormat(2000,'예약 성공',{date, ...reTodayReservation})
+                res.json(returnFormatData);
             }catch(error){
                 logger.error('예약 트랜잭션 오류: ',error)
+                const returnFormatData = returnFormat(4000,'예약 실패',error)
+                res.json(returnFormatData);
             }
-            res.json(result)
+            
             
         } catch (error) {
             logger.error(error)
+            const returnFormatData = returnFormat(4000,'예약 실패',error)
+            res.json(returnFormatData);
             
         }
 })
