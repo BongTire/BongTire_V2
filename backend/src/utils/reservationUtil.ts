@@ -184,11 +184,10 @@ export function returnReservationContent(productTire:any,productWheel:any,reserv
     return reservationContent
 }
 export function returnTodayReservation(reservationMasterData:any,reservationContent:any){
-    //logger.info("reservationMasterData: "+ JSON.stringify(reservationMasterData))
-    let todayReservation = {
-        time:reservationMasterData.startTime ?? null,
-        ...reservationContent
-    }
+    //logger.info("reservationMasterData: "+ JSON.stringify(reservationMasterData.startTime))
+    let todayReservation = reservationContent
+    todayReservation.time = reservationMasterData.startTime
+    logger.info(JSON.stringify(todayReservation.time))
     return todayReservation
 }
 export function returnReservation(reservationMasterData:any,reservationContent:any){
@@ -338,7 +337,7 @@ export async function returnReservations(reservationTimeDatas:any){
     return reTodayReservation;
 }
 
-export async function returnTodayReservations(reservationTimeDatas: any[]) {
+export async function returnTodayReservations(reservationTimeDatas: any[] , date:string) {
     const reTodayReservation = [];
 
     for (let i = 0; i < reservationTimeDatas.length; i++) {
@@ -356,17 +355,25 @@ export async function returnTodayReservations(reservationTimeDatas: any[]) {
 
         for (let x = 0; x < reservationMasters.length; x++) {
             const { reservationTiredata, reservationWheeldata, reservationMasterDataWithUserData } = await returnProductData(reservationMasters[x]);
-
-            reReservationContent.push(returnReservationContent(reservationTiredata, reservationWheeldata, reservationMasterDataWithUserData));
-
+            let pushData: any = {}
+            
+            pushData = await returnReservationContent(reservationTiredata, reservationWheeldata, reservationMasterDataWithUserData)
+            pushData.time = reservationMasters[x].startTime
+            pushData.date = date
+            logger.info("pushData: "+JSON.stringify(pushData))
+            reTodayReservation.push(pushData);
+            //logger.info("reReservationContent: " + JSON.stringify(reReservationContent))
             // logger.info('!!returnReservationContent: ' + JSON.stringify(reReservationContent));
 
             if (x == reservationMasters.length - 1) {
-                reTodayReservation.push(returnTodayReservation(reservationMasters[x], reReservationContent));
+                //logger.info("reservationMasters[x]: "+JSON.stringify(reservationMasters[x]))
+                //logger.info(JSON.stringify(returnTodayReservation(reservationMasters[x], reReservationContent)))
+                //reTodayReservation.push(returnTodayReservation(reservationMasters[x], reReservationContent));
+                //logger.info('reTodayReservation: ' + JSON.stringify(reTodayReservation));
             }
         }
 
-        // logger.info('reTodayReservation: ' + JSON.stringify(reTodayReservation));
+        //logger.info('reTodayReservation: ' + JSON.stringify(reTodayReservation));
     }
     return reTodayReservation;
 }
