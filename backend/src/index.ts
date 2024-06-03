@@ -68,6 +68,7 @@ import fileUploadRouter from './routes/public/fileUpload';
 import commonRouter from './routes/public/common';
 import postRouter from './routes/public/post';
 import searchRouter from './routes/public/search';
+import paymentRouter from './routes/public/payment';
 
 import adminProductTypeRouter from './routes/admin/producttype';
 import adminProductRouter from './routes/admin/product';
@@ -78,6 +79,7 @@ import adminBrandRouter from './routes/admin/brand';
 import adminCalendarRouter from './routes/admin/calendar';
 import adminReservationRouter from './routes/admin/reservation';
 import adminUserRouter from './routes/admin/user';
+
 
 app.use(morganMiddleware);
 app.use(express.json());
@@ -91,6 +93,9 @@ app.use('/api/file-upload', fileUploadRouter);
 app.use('/api/common', commonRouter);
 app.use('/api/post', postRouter);
 app.use('/api/search', searchRouter);
+app.use('/api/product', productRouter);
+app.use('/api/payment', paymentRouter);
+
 app.use('/api/admin/producttype', adminProductTypeRouter);
 app.use('/api/admin/product', adminProductRouter);
 app.use('/api/admin/car', adminCarRouter);

@@ -29,6 +29,9 @@ import User from "../views/admin/User.vue";
 //Common
 import NotFound from '../views/Error.vue'
 
+// Test
+import Test from '../views/Test.vue'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -131,6 +134,12 @@ const routes: Array<RouteRecordRaw> = [
     name: "AdminReservation",
     component: AdminReservation,
     meta: { layout: AdminLayout },
+  },
+  {
+    path: "/test",
+    name: "Test",
+    component: Test,
+    meta: { layout: PublicLayout },
   },
   {
     path: '/:catchAll(.*)', // "catch-all" 라우트
