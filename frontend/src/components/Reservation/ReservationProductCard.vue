@@ -51,7 +51,18 @@ const store = useReservationStore()
 const productState = props?.state ?? 'reserve'
 
 const clickDeleteProductList = () =>{
+  if(props.conf.TireId){
+    store.setDeleteProduct(props.conf.TireId)
+  }
+  else if(props.conf.WheelId){
+    store.setDeleteProduct(props.conf.WheelId)
+  }
+  else if(props.conf.id){
     store.setDeleteProduct(props.conf.id)
+  }
+  else if(props.conf.ProductId){
+    store.setDeleteProduct(props.conf.ProductId)
+  }
 }
 
 

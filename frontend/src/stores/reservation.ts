@@ -13,7 +13,7 @@ export const useReservationStore = defineStore('reservation', {
     month: -1,
     day: -1,
     date: '',
-    UserId: -1,
+    UserId: null,
     OwnCarId : -1,
     reservationCode: '',
     paymentMethod: false,
@@ -106,7 +106,7 @@ export const useReservationStore = defineStore('reservation', {
         isSecond: product.isSecond,
         isVisible: product?.isVisible ?? 1,
       }
-
+      this.totalPrice += product.price
       this.product.push(productData)
     },
     setReservationUser(user:IUser, payment:boolean ){
@@ -117,7 +117,9 @@ export const useReservationStore = defineStore('reservation', {
       this.paymentMethod = payment ?? false
     },
     setDeleteProduct(ProductId:number){
-      const index = this.product.findIndex(x=>x.ProductId === ProductId)
+      const index = this.product.findIndex((x:IReservationProduct)=>x.ProductId === ProductId)
+
+      this.totalPrice -= this.product[index].price
       this.product.splice(index,1)
     }
   },

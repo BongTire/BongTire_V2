@@ -74,6 +74,21 @@ const initiatePayment = () => {
   }
 }
 
+function m_Completepayment( FormOrJson, closeEvent ) {
+  var frm = document.order_info;
+  GetField( frm, FormOrJson );
+
+  if( frm.res_cd.value == "0000" )
+  {
+    frm.submit();
+  }
+  else
+  {
+    alert( "[" + frm.res_cd.value + "] " + frm.res_msg.value );
+    closeEvent();
+  }
+}
+
 function jsf_pay(form) {
   try {
     KCP_Pay_Execute_Web(form);

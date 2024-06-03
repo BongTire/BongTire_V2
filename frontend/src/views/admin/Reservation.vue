@@ -101,7 +101,7 @@ const reservationAction = ref({
   ReservationMasterId: -1,
   isCancel : 0,
   isReceive: 0,
-  isCompleted: 0,
+  isComplete: 0,
 })
 
 const clickAdminTime = () =>{
@@ -212,7 +212,7 @@ const clickReservationOption = (state:string, id:number)=>{
       ReservationMasterId: id,
       isCancel : 0,
       isReceive: 1,
-      isCompleted: 0,
+      isComplete: 0,
     }
   }
   if(state==='cancel'){
@@ -226,7 +226,7 @@ const clickReservationOption = (state:string, id:number)=>{
       ReservationMasterId: id,
       isCancel : 1,
       isReceive: 0,
-      isCompleted: 0,
+      isComplete: 0,
     }
   }
   if(state==='confirm'){
@@ -240,7 +240,7 @@ const clickReservationOption = (state:string, id:number)=>{
       ReservationMasterId: id,
       isCancel : 0,
       isReceive: 0,
-      isCompleted: 1,
+      isComplete: 1,
     }
   }
 

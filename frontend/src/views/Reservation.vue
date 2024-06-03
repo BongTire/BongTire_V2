@@ -128,7 +128,7 @@ const openCheckUser = ( ) =>{
     return
   }
 
-  if(userInfo.grade === 0){
+  if(userInfo?.grade === 0){
     postReservation()
   }else{
     isOpenCheckUser.value = true
