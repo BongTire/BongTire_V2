@@ -35,11 +35,9 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
     host: dbConfig.host,
     port: parseInt(dbConfig.port, 10),
     dialect: dbConfig.dialect,
-    dialectOptions: {
-        collate: 'utf8mb4_unicode_ci',
-    },
     define: {
         charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci',
     },
 });
 User.initModel(sequelize)
