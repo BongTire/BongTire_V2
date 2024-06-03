@@ -223,7 +223,7 @@ router.post('/',isAuthenticatedAdmin,async function(req,res){
                 }
             })
             
-            let reservationTimeDataDB:any =await sequelize.query(`select * from ReservationTimes join OperationTimes on ReservationTimes.OperationTimeId = OperationTimes.OperationTimeId where ReservationTimes.CalendarId = ${calendarDataDB.CalendarId} AND ReservationTimes.startTime =${data.time} AND ReservationTimes.deletedAt IS NULL`, {type: QueryTypes.SELECT,});
+            let reservationTimeDataDB:any =await sequelize.query(`select *,ReservationTimes.startTime as startTime, OperationTimes.startTime as OperationStartTime from ReservationTimes join OperationTimes on ReservationTimes.OperationTimeId = OperationTimes.OperationTimeId where ReservationTimes.CalendarId = ${calendarDataDB.CalendarId} AND ReservationTimes.startTime =${data.time} AND ReservationTimes.deletedAt IS NULL`, {type: QueryTypes.SELECT,});
             reservationTimeDataDB = reservationTimeDataDB[0]
             
             logger.info('reservationTimeDataDB: '+JSON.stringify(reservationTimeDataDB))

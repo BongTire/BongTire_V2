@@ -220,8 +220,8 @@ router.post('/',async function(req,res){
                     day:day
                 }
             })
-            
-            let reservationTimeDataDB:any =await sequelize.query(`select * from ReservationTimes join OperationTimes on ReservationTimes.OperationTimeId = OperationTimes.OperationTimeId where ReservationTimes.CalendarId = ${calendarDataDB.CalendarId} AND ReservationTimes.startTime =${data.time} AND ReservationTimes.deletedAt IS NULL`, {type: QueryTypes.SELECT,});
+            logger.info("data: "+JSON.stringify(data))
+            let reservationTimeDataDB:any =await sequelize.query(`select *,ReservationTimes.startTime as startTime, OperationTimes.startTime as OperationStartTime from ReservationTimes join OperationTimes on ReservationTimes.OperationTimeId = OperationTimes.OperationTimeId where ReservationTimes.ReservationTimeId = ${data.ReservationTimeId} AND ReservationTimes.deletedAt IS NULL`, {type: QueryTypes.SELECT,});
             reservationTimeDataDB = reservationTimeDataDB[0]
             
             logger.info('reservationTimeDataDB: '+JSON.stringify(reservationTimeDataDB))
@@ -256,11 +256,11 @@ router.post('/',async function(req,res){
                             transaction: transaction
                         })
                         console.log(JSON.stringify(newReservationCode))
-                        logger.info('setadsf')
+                        //logger.info('setadsf')
                         
                             // 예약 상품 정보 저장
                         for (const item of product) {
-                            logger.info('product: '+JSON.stringify(item))
+                            //logger.info('product: '+JSON.stringify(item))
                             await ReservationProduct.create({
                                 ReservationMasterId: newReservation.ReservationMasterId,
                                 ReservationTimeId: reservationTimeDataDB.ReservationTimeId,
@@ -358,6 +358,7 @@ router.post('/',async function(req,res){
 
 router.post('/inquiry',async function(req,res){//예약조회
     const{name, number} = req.body.data;
+    logger.info("name: "+name+", number: "+number)
     try {
         let reservationDatasQuery =`SELECT * 
                     FROM ReservationMasters 

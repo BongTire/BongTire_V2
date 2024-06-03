@@ -97,12 +97,14 @@ export function returnReservationContent(productTire:any,productWheel:any,reserv
     //logger.info(JSON.stringify(productTire))
     let tireData:any = [];
     let products:any = [];
-    let wheelData:any ,reservationContent:any = [];
+    let wheelData:any = [];
+    let reservationContent:any = [];
 
     //logger.info('reservationMasterData: '+JSON.stringify(reservationMasterData))
     if(productTire.length !== 0){
         productTire.map((product:any, i:any)=>{
             let tireLocation = JSON.parse(product.tireLocation)
+            //logger.info("product: "+JSON.stringify(product))
             tireData[i] = {
                 ReservationProductId:product.ReservationProductId ?? null,
                 ProductId:product.TireId ?? null,
@@ -115,7 +117,7 @@ export function returnReservationContent(productTire:any,productWheel:any,reserv
                 brandLogo:product.brandLogo ?? null,
                 productName:product.productName ?? null,
                 image:product.image ?? null,
-                isActive:product.isActive ?? null,
+                isActivate:product.isActivate ?? null,
                 isContinue:product.isContinue ?? null,
                 isSecond:product.isSecond ?? null,
                 isVisible:product.isVisible ?? null,
@@ -138,7 +140,7 @@ export function returnReservationContent(productTire:any,productWheel:any,reserv
                 amount:product.amount ?? null,
                 laborCost:product.laborCost ?? null,
                 price:product.price ?? null,
-                ProductId:product.TireId ?? null,
+                ProductId:product.WheelId ?? null,
                 PCCD2:product.ReservationProductsPCCD ?? null,
                 drivingMethodPCCD:product.drivingMethodPCCD ?? null,
                 brandName:product.name ?? null,
@@ -148,7 +150,7 @@ export function returnReservationContent(productTire:any,productWheel:any,reserv
                 wheelSize:product.wheelSize ?? null,
                 frontOffset:product.frontOffset ?? null,
                 rearOffset:product.rearOffset ?? null,
-                isActive:product.isActive ?? null,
+                isActivate:product.isActivate ?? null,
                 isContinue:product.isContinue ?? null,
                 isSecond:product.isSecond ?? null,
                 isVisible:product.isVisible ?? null,
@@ -175,9 +177,6 @@ export function returnReservationContent(productTire:any,productWheel:any,reserv
         isReceive:reservationMasterData.isReceive ?? null,
         name:reservationMasterData.name ?? null,
         number:reservationMasterData.number ?? null,
-
-
-
         product: products ?? null
     }
 
