@@ -20,7 +20,7 @@ router.get('/tire', isAuthenticatedAdmin,async function (req: Request, res: Resp
             T.discountRate, T.numberOfDataUpdate, T.sales, T.viewers, T.isSecond, T.isActive, T.isVisible, T.isRecommanded 
             from Tires T 
             join Brands B on B.BrandId = T.BrandId 
-            where T.deletedAt IS NULL`);
+            where T.deletedAt IS NULL ORDER BY T.createdAt DESC`);
         const data = [...response];
         
         const returnFormatData = returnFormat(2000,'타이어 데이터 찾기의 성공했습니다.',data[0])
@@ -125,7 +125,7 @@ router.get('/tire/brand', isAuthenticatedAdmin, async (req: Request, res: Respon
 router.get('/wheel', isAuthenticatedAdmin,async function (req: Request, res: Response) {
     try {
         const response = await sequelize.query(`select W.WheelId as WheelId, W.BrandId as BrandId, name as brandName, W.PCCD as PCCD, W.drivingMethodPCCD, W.productName, W.content,  W.wheelSize,W.frontOffset, W.rearOffset, W.price, W.feature, W.amount, W.discountPrice, W.discountRate,  W.sales, W.viewers, W.isSecond, W.isActivate, W.isVisible, W.isContinue ,W.PCD, W.hole
-        from Wheels W join Brands B on  B.BrandId = W.BrandId where W.deletedAt IS NULL`);
+        from Wheels W join Brands B on  B.BrandId = W.BrandId where W.deletedAt IS NULL ORDER BY W.createdAt DESC`);
         const data = [...response];
         
         const returnFormatData = returnFormat(2000,'타이어 데이터 찾기의 성공했습니다.',data[0])

@@ -6,6 +6,7 @@ import {IPost,IPostCategory} from '../../types/service/post'
 import session, { SessionData } from 'express-session';
 import {returnFormat} from '../../utils/return'
 import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
+import bcrypt from 'bcryptjs';
 
 const Post = db.Post
 const sequelize = db.sequelize
@@ -64,27 +65,62 @@ const setListResponse = (posts: any[]): PostResponse => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const postData: { data: IPost } = req.body;
+    const postData: { data: any } = req.body;
     logger.info(JSON.stringify(postData));
+    //비회원이라면 이름과 전화번호 필수
+    let name = req.session.name ?? postData.data.name ?? null;
+        let number = req.session.number ?? postData.data.number ?? '';
+        let UserId = req.session.userId ?? postData.data.UserId ?? null;  
+        let hashednumber;
+        // 전화번호가 null 또는 undefined인지 확인하고 기본값 설정
+        number = number ? number.replace(/[-\s]/g, '') : null;
+        name = name ? name.replace(/[\s]/g, '') : null;
 
     if (postData.data.PostId === null) {
       // id값이 null 일때는 create
       try {
-        const createData = await Post.create(postData.data as any); // 여기서 타입 캐스팅
-        logger.info("데이터 주입 성공", createData);
-        res.json({
-          status: {
-            code: 2000,
-            message: "정상적으로 포스터가 들어갔습니다.",
-          },
-          data: createData,
-        });
+        if(postData.data.PTCD ==='' && postData.data.PCCD ===''){
+          logger.info('PTCD, PCCD가 존재하지 않습니다.')
+          const returnFormatData = returnFormat(4000,'PTCD, PCCD가 존재하지 않습니다.',{})
+          res.json(returnFormatData);
+        }else if(UserId && number && name && number !==''&& !/\D/.test(number)){//number값이 존재하는가?//전화번호에 숫자 이외에 다른게 있는가?
+            //logger.info(number)
+            const salt = await bcrypt.genSalt(10);
+            hashednumber = await bcrypt.hash(number, salt);
+            //hashednumber = number
+            const createData = await Post.create({
+              UserId: UserId,
+                PTCD: postData.data.PTCD,
+                PCCD: postData.data.PCCD,
+                title: postData.data.title,
+                content: postData.data.content,
+                name: name,
+                number: hashednumber,
+                isThumbnail: postData.data.isThumbnail,
+                thumbnail: postData.data.thumbnail,
+                isMainPost: postData.data.isMainPost,
+                isPin: postData.data.isPin,
+                isActive: postData.data.isActive,
+                isAnswer: postData.data.isAnswer,
+                answer: postData.data.answer,
+                viewers: postData.data.viewers,
+                isSecret: postData.data.isSecret,
+            }); // 여기서 타입 캐스팅
+            logger.info("데이터 주입 성공", createData);
+            const returnFormatData = returnFormat(2000,"정상적으로 포스터가 들어갔습니다.",createData)
+            res.json(returnFormatData);
+            
+        }else{
+          logger.info('저장 실패, UserId, number, name이 적합하지 않습니다.')
+          const returnFormatData = returnFormat(4000,'저장 실패, UserId, number, name 중 null이 존재합니다.',{})
+          res.json(returnFormatData);
+        }
       } catch (error) {
         logger.error("데이터 주입 실패" + error);
         res.json({
           status: {
-            code: 4000,
-            message: "create했지만, 저장 못함.",
+            code: 5000,
+            message: "데이터 주입 실패, 저장과정중 오류가 발생했습니다.",
           },
           data: error,
         });
@@ -92,23 +128,115 @@ router.post("/", async (req: Request, res: Response) => {
     } else {
       // id값이 null이 아닌 숫자값이 온다면, update 만약 숫자가 왔어도, 해당 id 값이 존재하지 않다면 insert
       try {
-        const existingData = await Post.findByPk(postData.data.PostId);
+        const existingData = await Post.findOne({
+          where:{
+            PostId:postData.data.PostId
+          },
+          raw:true
+        });
         let result;
         if (existingData) {
-          result = await Post.update(postData.data as any, {
-            where: { PostId: postData.data.PostId },
-          });
-        } else {
-          result = await Post.create(postData.data as any);
+          const isMatch = await bcrypt.compare(number, existingData.number ??'');
+          if(postData.data.PTCD !=='' && postData.data.PCCD !==''){
+            logger.info('PTCD, PCCD가 존재하지 않습니다.')
+            const returnFormatData = returnFormat(4000,'PTCD, PCCD가 존재하지 않습니다.',{})
+            res.json(returnFormatData);
+          }else if(UserId && number && name && number !==''&& !/\D/.test(number) && existingData.name ===name && isMatch){
+            result = await Post.update({
+              UserId: UserId,
+                PTCD: postData.data.PTCD,
+                PCCD: postData.data.PCCD,
+                title: postData.data.title,
+                content: postData.data.content,
+                name: name,
+                number: hashednumber,
+                isThumbnail: postData.data.isThumbnail,
+                thumbnail: postData.data.thumbnail,
+                isMainPost: postData.data.isMainPost,
+                isPin: postData.data.isPin,
+                isActive: postData.data.isActive,
+                isAnswer: postData.data.isAnswer,
+                answer: postData.data.answer,
+                viewers: postData.data.viewers,
+                isSecret: postData.data.isSecret,
+            }, {
+              where: { PostId: postData.data.PostId },
+            });
+            logger.info('post 업데이트 완료')
+            const returnFormatData = returnFormat(2000,'post 업데이트 완료',result)
+            res.json(returnFormatData);
+          }else if(req.session.grade === 0){//관리자라면
+            result = await Post.update({
+              UserId: UserId,
+                PTCD: postData.data.PTCD,
+                PCCD: postData.data.PCCD,
+                title: postData.data.title,
+                content: postData.data.content,
+                isThumbnail: postData.data.isThumbnail,
+                thumbnail: postData.data.thumbnail,
+                isMainPost: postData.data.isMainPost,
+                isPin: postData.data.isPin,
+                isActive: postData.data.isActive,
+                isAnswer: postData.data.isAnswer,
+                answer: postData.data.answer,
+                viewers: postData.data.viewers,
+                isSecret: postData.data.isSecret,
+            }, {
+              where: { PostId: postData.data.PostId },
+            });
+            logger.info('관리자가 post 업데이트 완료')
+            const returnFormatData = returnFormat(2000,'관리자가 post 업데이트 완료',result)
+            res.json(returnFormatData);
+          }
+        } else { //기존에 postId가 존재하지 않는다면
+          try {
+            if(postData.data.PTCD !=='' && postData.data.PCCD !==''){
+              logger.info('PTCD, PCCD가 존재하지 않습니다.')
+              const returnFormatData = returnFormat(4000,'PTCD, PCCD가 존재하지 않습니다.',{})
+              res.json(returnFormatData);
+            }else if(UserId && number && name && number !==''&& !/\D/.test(number)){//number값이 존재하는가?//전화번호에 숫자 이외에 다른게 있는가?
+                //logger.info(number)
+                const salt = await bcrypt.genSalt(10);
+                hashednumber = await bcrypt.hash(number, salt);
+                //hashednumber = number
+                const createData = await Post.create({
+                  UserId: UserId,
+                    PTCD: postData.data.PTCD,
+                    PCCD: postData.data.PCCD,
+                    title: postData.data.title,
+                    content: postData.data.content,
+                    name: name,
+                    number: hashednumber,
+                    isThumbnail: postData.data.isThumbnail,
+                    thumbnail: postData.data.thumbnail,
+                    isMainPost: postData.data.isMainPost,
+                    isPin: postData.data.isPin,
+                    isActive: postData.data.isActive,
+                    isAnswer: postData.data.isAnswer,
+                    answer: postData.data.answer,
+                    viewers: postData.data.viewers,
+                    isSecret: postData.data.isSecret,
+                }); // 여기서 타입 캐스팅
+                logger.info("데이터 주입 성공", createData);
+                const returnFormatData = returnFormat(2000,"정상적으로 포스터가 들어갔습니다.",createData)
+                res.json(returnFormatData);
+                
+            }else{
+              logger.info('저장 실패, UserId, number, name이 적합하지 않습니다.')
+              const returnFormatData = returnFormat(4000,'저장 실패, UserId, number, name 중 null이 존재합니다.',{})
+              res.json(returnFormatData);
+            }
+          } catch (error) {
+            logger.error("데이터 주입 실패" + error);
+            res.json({
+              status: {
+                code: 5000,
+                message: "데이터 주입 실패, 저장과정중 오류가 발생했습니다.",
+              },
+              data: error,
+            });
+          }
         }
-        logger.info("데이터 삽입 또는 업데이트가 성공적으로 수행됐습니다." + JSON.stringify(result));
-        res.json({
-          status: {
-            code: 2000,
-            message: "정상적으로 포스터가 들어갔습니다.",
-          },
-          data: result,
-        });
       } catch (error) {
         logger.error("데이터 삽입 또는 업데이트에 실패했습니다." + error);
         res.json({
@@ -147,21 +275,23 @@ router.get('/', async (req: Request, res: Response) => { //card, list 추가
       const offset = (page - 1) * pageSize; // offset 계산
   
       const query = `
-        SELECT 
-          *, 
-          Posts.UserId AS writerId, 
-          Posts.name AS writerName, 
-          Posts.number AS writerNumber
-        FROM 
-          Posts 
-        WHERE 
-          PCCD = :pccd 
-        AND 
-          Posts.deletedAt IS NULL 
-        LIMIT
-          :pageSize
-        OFFSET
-          :offset`;
+      SELECT 
+      *, 
+      Posts.UserId AS writerId, 
+      Posts.name AS writerName, 
+      Posts.number AS writerNumber
+    FROM 
+      Posts 
+    WHERE 
+      PCCD = :pccd 
+    AND 
+      Posts.deletedAt IS NULL 
+    ORDER BY
+      Posts.createdAt DESC
+    LIMIT
+      :pageSize
+    OFFSET
+      :offset;`;
   
       const posts = await sequelize.query(query, {
         replacements: {
@@ -372,6 +502,7 @@ router.post('/:postId',async (req: Request, res: Response) =>{//상세조회(1�
   const postId = Number(req.params.postId) ?? -1 as number
   logger.info('입성1')
   
+  
   if((ptcd == 'P0203'&&pccd == 'C0501') || (ptcd == 'P0203'&&pccd == 'C0502') || (ptcd == 'P0202'&&pccd == 'C0401') || (ptcd == 'P0202'&&pccd == 'N0402')){  //list, card (ptcd=P0203&pccd=C0501 : Q&A / ptcd=P0203&pccd=C0502 : F&Q / ptcd = 'P0202'&&pccd = 'C0401' : notice(card))
     logger.info('입성')
     //해당글이 비밀글인지 아닌지 알아야함
@@ -416,14 +547,19 @@ router.post('/:postId',async (req: Request, res: Response) =>{//상세조회(1�
         success: false,
         message: '해당 게시물을 찾을 수 없습니다.',
       });
-    }else if(listData[0].isSecret == 1){// 비밀글인 경우
+    }else if(listData[0].isSecret === 1 && listData[0].writerId === -1){// 비회원 비밀글인 경우 (회원 비밀글은 elseif로 따로 처리)
       let result = setListResponse(listData as any[]);
-
+      
+      
       // 세션 검사
       if (req.session?.grade == 0) { // 관리자일 경우 Pass
         return res.json(result);
-      } else if (number === (listData as any[])[0].writerNumber && name === (listData as any[])[0].writerName) { // 이름이랑 전화번호 같은지 확인
-        return res.json(result);
+      } else if (name === (listData as any[])[0].writerName) { // 이름이랑 전화번호 같은지 확인
+        let number =req.body.data.number ?? '';
+        const isMatch = await bcrypt.compare(number, (listData as any[])[0].writerNumber);
+        if(isMatch){
+          return res.json(result);
+        }
       } else {
         logger.info(number)
         logger.info(listData[0].writerNumber)
@@ -442,8 +578,10 @@ router.post('/:postId',async (req: Request, res: Response) =>{//상세조회(1�
     }
   } catch (e) {
     logger.error(e);
-    const result = setListResponse([]);
-    res.json(result);//여기서 에러가 났는데 result를 줄때 혹시 listData를 뽑고나서 담아서 주게되는일은 발생하지 않는가?
+    const returnFormatData = returnFormat(4000,'post 세부조회 실패',e)
+    res.json(returnFormatData);
+    // const result = setListResponse([]);
+    // res.json(result);//여기서 에러가 났는데 result를 줄때 혹시 listData를 뽑고나서 담아서 주게되는일은 발생하지 않는가?
   }    
   }else if(ptcd == "" || pccd == ""){ //ptcd 또는 pccd가 안넘어왔을때
     res.json({
