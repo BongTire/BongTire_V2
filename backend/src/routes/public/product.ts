@@ -166,6 +166,7 @@ router.get('/', async function (req: Request, res: Response) {
         FROM Tires T
         JOIN Brands B ON T.BrandId = B.BrandId
         WHERE isSecond = :isSecond AND T.deletedAt IS NULL AND B.deletedAt IS NULL
+        ORDER BY T.createdAt DESC
         LIMIT :pageSize OFFSET :offset
       `, {
         type: QueryTypes.SELECT,
@@ -267,6 +268,7 @@ router.get('/', async function (req: Request, res: Response) {
         FROM Wheels W
         JOIN Brands B ON W.BrandId = B.BrandId
         WHERE W.isSecond = :isSecond AND W.deletedAt IS NULL AND B.deletedAt IS NULL
+        ORDER BY W.createdAt DESC
         LIMIT :pageSize OFFSET :offset
       `, {
         type: QueryTypes.SELECT,

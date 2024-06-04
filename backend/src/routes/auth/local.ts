@@ -23,6 +23,7 @@ declare module 'express-session' {
         email: string;
         grade: number;
         name: string;
+        number: string;
     }
 }
 
@@ -118,6 +119,9 @@ router.post('/login', async (req: Request, res: Response) => {
         req.session.userId = user.UserId;
         req.session.email = user.email;
         req.session.grade = user.grade;
+        req.session.name = user.name;
+        req.session.number = user.number;
+
 
         const returnFormatData = returnFormat(2000,'로그인에 성공하였습니다.',{email:user.email,UserId: user.UserId,name:user.name,grade:user.grade})
         res.json(returnFormatData);
@@ -138,6 +142,8 @@ router.post('/logout', isAuthenticatedUser, (req: Request, res: Response) => {
         delete req.session.userId;
         delete req.session.email;
         delete req.session.grade;
+        delete req.session.name;
+        delete req.session.number;
 
         const returnFormatData = returnFormat(2000,'로그아웃을 성공했습니다.',{})
         res.json(returnFormatData);
