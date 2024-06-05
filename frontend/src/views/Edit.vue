@@ -114,6 +114,7 @@ import Warning from "@component/Notification/Warning.vue";
 import Confirm from "@component/PopUp/Confirm.vue";
 import ResultDialog from "@component/Notification/ResultDialog.vue";
 import {fetchPostData} from "@api/common.ts";
+import {removeSpaces, validationPhoneNumber} from "../util/func/edit.ts";
 
 
 const store = usePostStore()
@@ -183,13 +184,20 @@ const setTitle = () => {
   store.setTitle(title.value)
 }
 
-const setContent = () =>{
-
-}
 
 const closeConfirmDialog = () =>{
   isOpenConfirm.value = false
 }
+
+watch(() => enabled.value, () => {
+  if(enabled.value){
+    store.setPostSecret(1)
+  }else{
+    store.setPostSecret(0)
+  }
+
+})
+
 
 const clickSavePost = () =>{
   const postData = store.getPostData
@@ -248,6 +256,22 @@ const clickSavePost = () =>{
 }
 
 const sendPostData = async () =>{
+
+  userName.value = removeSpaces(userName.value)
+  const isNumber = validationPhoneNumber(phoneNumber.value)
+
+  if(isNumber){
+    isOpenConfirm.value = false
+
+    isOpenWarning.value = true
+    dialogMessage.value = {
+      title: '주의',
+      message:'전화번호 형식에 맞게 작성해주세요',
+      status: ''
+    }
+    return
+  }
+
   const post = store.getPostData
   const data = {
     data: {

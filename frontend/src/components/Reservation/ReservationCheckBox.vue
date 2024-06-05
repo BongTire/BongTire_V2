@@ -2,8 +2,9 @@
 import {PropType, ref} from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import {  XMarkIcon } from '@heroicons/vue/24/outline'
-import {IReservationMaster} from "@type/reservation.ts";
+import { IReservationMaster } from "@type/reservation.ts";
 import ReservationProductCard from '../Reservation/ReservationProductCard'
+import {removeSpaces, validationPhoneNumber} from "../../util/func/edit.ts";
 
 const props = defineProps({
   isOpen: Boolean,
@@ -16,6 +17,8 @@ const props = defineProps({
 const name = ref('')
 const number = ref('')
 
+const nameValidation = ref(false)
+const numberValidation = ref(false)
 
 const emits = defineEmits(['closeDialog', 'confirmDialog'])
 
@@ -24,6 +27,18 @@ const closeDialog=()=>{
 }
 
 const confirmCheckReservation = () =>{
+
+  if(!name.value){
+    nameValidation.value = true
+    return
+  }else{
+    nameValidation.value = false
+  }
+
+  name.value = removeSpaces(name.value)
+  numberValidation.value = validationPhoneNumber(number.value)
+  if(numberValidation.value) return
+
   const user = {
     name: name.value,
     number: number.value
@@ -68,16 +83,16 @@ const initData = () =>{
                   <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">예약 조회</DialogTitle>
                   <div v-if="!props.isResult" class="mt-2">
                     <div class="isolate -space-y-px rounded-md shadow-sm">
-                      <div class="relative rounded-md rounded-b-none px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-gray-300 focus-within:z-10 focus-within:ring-2 focus-within:ring-indigo-600">
-                        <label for="name" class="block text-xs font-medium text-gray-900">예약자 성함</label>
+                      <div :class="`relative rounded-md rounded-b-none px-3 pb-1.5 pt-2.5 ring-1 ring-inset ${nameValidation ? 'ring-red-600' :'ring-gray-300'} focus-within:z-10 focus-within:ring-2 focus-within:ring-orange-600`">
+                        <label for="name" class="block text-xs font-medium text-gray-900">예약자 성함 <span v-if="nameValidation" class="text-red-600">성함을 입력해주세요</span></label>
                         <input type="text" name="name" id="name"
                                class="block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                placeholder="예약자 성함"
                                v-model="name"
                         />
                       </div>
-                      <div class="relative rounded-md rounded-t-none px-3 pb-1.5 pt-2.5 ring-1 ring-inset ring-gray-300 focus-within:z-10 focus-within:ring-2 focus-within:ring-indigo-600">
-                        <label for="job-title" class="block text-xs font-medium text-gray-900">예약자 전화번호</label>
+                      <div :class="`relative rounded-md rounded-t-none px-3 pb-1.5 pt-2.5 ring-1 ring-inset ${numberValidation ? 'ring-red-600' : 'ring-gray-300'} focus-within:z-10 focus-within:ring-2 focus-within:ring-orange-600`">
+                        <label for="job-title" class="block text-xs font-medium text-gray-900">예약자 전화번호 <span v-if="numberValidation" class="text-red-600"> 전화 번호 형식에 맞게 작성해주세요 </span></label>
                         <input type="text" name="number" id="number"
                                class="block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                placeholder="예약자 전화번호"

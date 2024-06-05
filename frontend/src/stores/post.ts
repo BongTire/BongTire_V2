@@ -66,6 +66,9 @@ export const usePostStore = defineStore('post', {
     },
     setContent(content: string){
       this.content = content ?? ''
+    },
+    setPostSecret(isSecret: number){
+      this.isSecret = isSecret
     }
   },
 })

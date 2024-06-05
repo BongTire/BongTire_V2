@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { CreditCardIcon, XMarkIcon, BuildingStorefrontIcon } from '@heroicons/vue/24/outline'
+import {removeSpaces, validationPhoneNumber} from "../../util/func/edit.ts";
 
 const open = ref(true)
 
@@ -34,11 +35,15 @@ const comfirmReservation = ()=>{
   }
   if(number.value===''){
     isNumberInput.value = false
+  }else if(validationPhoneNumber(number.value)){
+    isNumberInput.value = false
   }else{
     isNumberInput.value = true
   }
   if(isNameInput.value && isNumberInput.value){
-    console.log('hi')
+
+    name.value = removeSpaces(name.value)
+
     emits('confirm', {name: name.value, number:number.value}, paymentMethod.value)
   }
 
