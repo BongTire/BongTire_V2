@@ -56,7 +56,7 @@ const selectTrimIndex = ref(0)
 const selectCarTrim = async (index:number, state:string, car:ICar) =>{
   const CarId = car.CarId
 
-  const carTrimPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/admin/car/trim/${CarId}`,'','',0)
+  const carTrimPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/admin/car/trim/${CarId}`,{})
   const carTrimState = await carTrimPromise
 
   isAuthenticatedAdmin(carTrimState?.status.code ?? 4001)
@@ -86,7 +86,7 @@ const selectBrand = async (index: number, state:string) => {
     const brandId = visibleKoreanBrand.value[index].BrandId
     console.log(brandId)
     // TODO : Post 차량 api 호출
-    const carPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/admin/car/${brandId}`,'','',0)
+    const carPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/admin/car/${brandId}`,{})
     const carState = await carPromise
     isAuthenticatedAdmin(carState?.status.code ?? 4001)
 
@@ -98,7 +98,7 @@ const selectBrand = async (index: number, state:string) => {
     const brandId = visibleForeignBrand.value[index].BrandId
     // TODO : Post 차량 api 호출
 
-    const carPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/admin/car/${brandId}`,'','',0)
+    const carPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/admin/car/${brandId}`,{})
     const carState = await carPromise
     isAuthenticatedAdmin(carState?.status.code ?? 4001)
 
@@ -114,14 +114,14 @@ const postCarTrimData = (trim:ICarTrim[]) =>{
 
 onMounted(async ()=>{
 
-  const carPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/car','','',0)
+  const carPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/car', {})
   const carState = await carPromise
   isAuthenticatedAdmin(carState?.status.code ?? 4001)
   originCar.value = carState.data
   console.log(originCar.value)
 
 
-  const carBrandPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/brand/car','','',0)
+  const carBrandPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/brand/car',{})
   const brandState = await carBrandPromise
   isAuthenticatedAdmin(brandState?.status.code ?? 4001)
 

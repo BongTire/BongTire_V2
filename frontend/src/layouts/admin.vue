@@ -216,7 +216,7 @@
 
   const clickSubUserMenu = async (url:string)=>{
     if(url === '/logout'){
-      const logoutPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/logout','','',{data:''})
+      const logoutPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/logout', {},{data:''})
       const reponse = await logoutPromise
 
       if(initSesstionStorage(reponse?.status.code)){
@@ -236,11 +236,11 @@
   }
 
   onMounted(async ()=>{
-    const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd','','')
+    const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd', {})
     const pccd = await pccdPromise
     PCCD.value = pccd.data
 
-    const ptcdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/ptcd','','')
+    const ptcdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/ptcd',{})
     const ptcd = await ptcdPromise
     PTCD.value = ptcd.data
 

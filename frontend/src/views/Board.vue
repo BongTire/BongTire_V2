@@ -87,11 +87,11 @@ const closeUserConfirmDialog = () =>{
 watch(()=>pccd.value,async ()=>{
   if(isList.value){
     postLoading.value = true
-    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0203' ,pccd.value)
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post',{ ptcd:'P0203', pccd: pccd.value})
     const boardState = await postPromise
     originBoard.value = boardState.data
   }else{
-    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0202' ,pccd.value)
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post', {ptcd:'P0202',pccd: pccd.value})
     const boardState = await postPromise
     originBoard.value = boardState.data
   }
@@ -106,11 +106,11 @@ const postLoading = computed(()=>{
 onMounted(async ()=>{
   
   if(isList.value){
-    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0203' ,pccd.value)
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post', {ptcd:'P0203',pccd: pccd.value})
     const boardState = await postPromise
     originBoard.value = boardState.data
   }else{
-    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post','P0202' ,pccd.value)
+    const postPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/post', {ptcd:'P0202',pccd: pccd.value})
     const boardState = await postPromise
     originBoard.value = boardState.data
   }
@@ -144,7 +144,7 @@ const confirmUserInfo = async (name:string, number:string) =>{
     }
   }
 
-  const detailPromise: Promise<IFetchType> = await fetchPostData<IFetchType>(`/post/${postId.value}`, 'P0203', pccd.value,null ,postData)
+  const detailPromise: Promise<IFetchType> = await fetchPostData<IFetchType>(`/post/${postId.value}`, {ptcd:'P0203',pccd: pccd.value} ,postData)
   const detailState = await detailPromise
   const detail = detailState.data[0]
 

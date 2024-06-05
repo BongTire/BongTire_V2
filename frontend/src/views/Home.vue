@@ -106,7 +106,7 @@ const homeLoading = ref(true)
 const event = ref<IEvent>()
 
 onMounted( async()=>{
-  const eventPromise:Promise<IFetchType> = fetchGetData('/post/event','','',0)
+  const eventPromise:Promise<IFetchType> = fetchGetData('/post/event', {})
   const eventState = await eventPromise
   event.value = eventState.data
 
@@ -134,7 +134,7 @@ const closeCheckReservation = () =>{
 
 const checkReservation = async (user:IUser) =>{
   console.log(user)
-  const checkProise:Promise<IFetchType> = fetchPostData('/reservation/inquiry','','',0, {data:user})
+  const checkProise:Promise<IFetchType> = fetchPostData('/reservation/inquiry',{}, {data:user})
   const checkStatus = await checkProise
 
   checkReservationResult.value = checkStatus.data

@@ -257,7 +257,7 @@ const sendPostData = async () =>{
       }
     }
 
-  const response = fetchPostData('/post','','',0,data)
+  const response = fetchPostData('/post', {},data)
   const responseState = await response
 
   if(responseState.status.code === 2000){

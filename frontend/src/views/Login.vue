@@ -105,7 +105,7 @@ const submitLogin = async () =>{
     }
   }
 
-  const LoginPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/login','','',-1 ,postLoginData)
+  const LoginPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/login',{} ,postLoginData)
   const response = await LoginPromise
 
 

@@ -129,7 +129,7 @@ const clickChangeTimePossible = async () =>{
 }
 
 onMounted(async ()=>{
-  const calendarPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/reservation/calendar','R0401','R0801')
+  const calendarPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/reservation/calendar', {ptcd:'R0401',pccd: 'R0801'})
   const calendarData = await calendarPromise
   isAuthenticatedAdmin(calendarData.status.code)
   visibleCalendar.value = calendarData.data.date
@@ -144,7 +144,7 @@ onMounted(async ()=>{
     data: date.value
   }
   // 시간
-  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801',-1, postData)
+  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time', {ptcd:'R0401',pccd: 'R0801'}, postData)
   const time = await timePromise
 
   isAuthenticatedAdmin(time.status.code)
@@ -180,12 +180,12 @@ const selectDate = async (day:ICalendar) =>{
     data: date.value
   }
 
-  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/admin/reservation/time','R0401','R0801',-1, postData)
+  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/admin/reservation/time', {ptcd:'R0401',pccd: 'R0801'}, postData)
   const time = await timePromise
   visibleTime.value = time.data
 
   const paramsDate = `${date.value.year}${parseInt(date.value.month)/10 < 1 ? '0'+date.value.month : date.value.month}${parseInt(date.value.day)/10 < 1 ? '0'+date.value.day : date.value.day}`
-  const reservePromise:Promise<IFetchType> = fetchGetAdmin('/admin/reservation/reservedata', paramsDate)
+  const reservePromise:Promise<IFetchType> = fetchGetAdmin('/admin/reservation/reservedata',{}, paramsDate)
   const reserveState = await reservePromise
 
   reserve.value = reserveState.data
@@ -259,7 +259,7 @@ const isPostData = async (state:string) => {
       }
     }
 
-    const responsePromise = fetchPostData('/admin/reservation/isActive','','',0,data)
+    const responsePromise = fetchPostData('/admin/reservation/isActive', {},data)
     const responseState = await responsePromise
 
     if(responseState?.status.code === 2000){
@@ -280,7 +280,7 @@ const isPostData = async (state:string) => {
   }else{
     const data = { data: reservationAction.value }
 
-    const responsePromise = fetchPostData('/admin/reservation/confirmed','','',0,data)
+    const responsePromise = fetchPostData('/admin/reservation/confirmed', {},data)
     const responseState = await responsePromise
 
     if(responseState?.status.code === 2000){

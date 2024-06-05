@@ -42,10 +42,10 @@ const openEditDialog = ref(false)
 const productBrand = ref<IBrand[]>()
 
 onMounted(async ()=>{
-  const wheelPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/wheel','','',0)
+  const wheelPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/wheel', {})
   const wheelFetch = await wheelPromise
 
-  const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0902',0)
+  const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: 'F0902'})
   const filterState= await filterPromise
   productBrand.value = filterState.data[0].value
 
@@ -84,7 +84,7 @@ const postWheelData = (message:any, editData:IProduct) =>{
 
   isOpenConfirm.value = true
 
-  const response = fetchPostData('/admin/product/wheel','','',0,editData)
+  const response = fetchPostData('/admin/product/wheel', {}, editData)
   console.log(response)
 }
 const isCancelPopup = () =>{

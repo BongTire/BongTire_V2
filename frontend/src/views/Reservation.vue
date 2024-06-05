@@ -151,7 +151,7 @@ onMounted(async ()=>{
   }
 
   // 캘린더
-  const calendarPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/reservation/calendar','R0401','R0801')
+  const calendarPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/reservation/calendar', {ptcd:'R0401',pccd: 'R0801'})
   const calendarData = await calendarPromise
   visibleCalendar.value = calendarData.data.date
 
@@ -165,7 +165,7 @@ onMounted(async ()=>{
     data: date.value
   }
   // 시간
-  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801',-1, postData)
+  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time', {ptcd:'R0401', pccd:'R0801'}, postData)
   const time = await timePromise
   visibleTime.value = time.data
 
@@ -192,7 +192,7 @@ const selectDate = async (day:ICalendar) =>{
     data: date.value
   }
 
-  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time','R0401','R0801',-1, postData)
+  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time', {ptcd:'R0401',pccd: 'R0801'}, postData)
   const time = await timePromise
   visibleTime.value = time.data
 }
@@ -218,7 +218,7 @@ const postReservation = async () =>{
   const reserve = store.getReservationInfo
   console.log(reserve)
 
-  const responsePromise:Promise<IFetchType> = fetchPostData('/reservation','','',0,reserve)
+  const responsePromise:Promise<IFetchType> = fetchPostData('/reservation',{},reserve)
   const response = await responsePromise
 
   console.log(response)

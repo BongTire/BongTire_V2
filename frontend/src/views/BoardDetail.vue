@@ -123,7 +123,7 @@ onMounted( async ()=>{
 
 
 const getApiData = async () =>{
-  const detailPromise: Promise<IFetchType> = await fetchPostData<IFetchType>(`/post/${route.params.id}`, ptcd.value, pccd.value,null,{data:null})
+  const detailPromise: Promise<IFetchType> = await fetchPostData<IFetchType>(`/post/${route.params.id}`,{ptcd:ptcd.value,pccd: pccd.value} ,{data:null})
   const detailState = await detailPromise
 
   if(Math.floor(detailState.status.code/1000) === 4){
@@ -138,7 +138,7 @@ const getApiData = async () =>{
 const postComment = async () =>{
 
   if(userInfo?.grade === 0){
-    const commentPromise:Promise<IFetchType> = await fetchPostData<IFetchType>(`/post/comment/${route.params.id}`, ptcd.value, pccd.value,null,{answer: comment.value})
+    const commentPromise:Promise<IFetchType> = await fetchPostData<IFetchType>(`/post/comment/${route.params.id}`, {ptcd:ptcd.value,pccd: pccd.value} ,{answer: comment.value})
     const commentState = await commentPromise
     if(commentState.status.code/1000 === 2) {
       notiMessage.value= {

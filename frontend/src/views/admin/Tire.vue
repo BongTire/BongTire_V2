@@ -38,10 +38,10 @@ const popupData = ref({
 })
 
 onMounted(async ()=>{
-  const tirePromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/tire','','')
+  const tirePromise:Promise<IFetchType> = fetchGetData<IFetchType>('/admin/product/tire',{})
   const tireFetch = await tirePromise
 
-  const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
+  const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: 'F0901'})
   const filterState= await filterPromise
   productBrand.value = filterState.data[0].value
 
@@ -84,7 +84,7 @@ const postTireData = (message:any, editData:IProduct) =>{
   popupData.value = {...message}
 
   isOpenConfirm.value = true
-  const response = fetchPostData('/admin/product/tire','','',0,editData)
+  const response = fetchPostData('/admin/product/tire', {},editData)
   console.log(response)
 }
 const isCancelPopup = () =>{

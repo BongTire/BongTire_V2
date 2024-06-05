@@ -236,7 +236,7 @@ const tireSearch = ref('')
 const tireSearchResult = ref<IProduct[]>()
 
 const tireSearchFunc = async (search:string) => {
-  const searchPromise:Promise<IFetchType> = fetchPostData('/search', '','',0, {data:search})
+  const searchPromise:Promise<IFetchType> = fetchPostData('/search', {}, {data:search})
   const searchData = await searchPromise
 
   tireSearch.value = searchData.data
@@ -245,11 +245,11 @@ const tireSearchFunc = async (search:string) => {
 
 
 onMounted(async () => {
-  const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd','','')
+  const pccdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/pccd', {})
   const pccd = await pccdPromise
   PCCD.value = pccd.data
 
-  const ptcdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/ptcd','','')
+  const ptcdPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/ptcd', {})
   const ptcd = await ptcdPromise
   PTCD.value = await ptcd.data
 
@@ -316,7 +316,7 @@ const clickMenuBtn = (state:string) =>{
 }
 const clickSubUserMenu = async (url:string)=>{
   if(url === '/logout'){
-    const logoutPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/logout','','',0,{data:''})
+    const logoutPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/logout', {},{data:''})
     const response = await logoutPromise
 
 

@@ -56,3 +56,11 @@ export interface IEvent {
     viewers: number | null,
     url: string | null
 }
+
+export interface IParams{
+    ptcd?:string | null
+    pccd?:string | null
+    page?:number | null
+    isSecond?: number | null
+    date?:string | null
+}

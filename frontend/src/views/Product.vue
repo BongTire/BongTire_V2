@@ -181,12 +181,16 @@ const selectFilterFunc = async (filter:IBrand) =>{
 
   console.log(selectFilter.value)
   if(selectFilter.value.length >= 1){
-    const productPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/product/filter', 'P0301', PCCD.value, currentPage.value, {
+    const productPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/product/filter', {
+      ptcd:'P0301',
+      pccd:PCCD.value,
+      page:currentPage.value
+    }, {
       data:selectFilter.value
     })
     productState = await productPromise;
   }else{
-    const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, 1)
+    const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1})
     productState = await productPromise;
   }
 
@@ -196,20 +200,20 @@ const selectFilterFunc = async (filter:IBrand) =>{
 
 onMounted(async () => {
 
-  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, 1)
+  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1})
   const productState = await productPromise;
   products.value = productState.data
 
   totalProduct.value = productState.total ?? -1
 
   if(PCCD.value==='P0601'){
-    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
+    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301', pccd:'F0901'})
     const filterState= await filterPromise
     productFilters.value = filterState.data
   }
   
   if(PCCD.value==='P0602'){
-    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0902')
+    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: 'F0902'})
     const filterState= await filterPromise
     productFilters.value = filterState.data
   }
@@ -233,20 +237,20 @@ watch(()=>PCCD.value,async ()=>{
   filterLoading.value = true
   productLoading.value = true
 
-  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, 1)
+  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1})
   const productState = await productPromise;
   products.value = productState.data
 
   totalProduct.value = productState.total ?? -1
 
   if(PCCD.value==='P0601'){
-    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0901')
+    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301', pccd:'F0901'})
     const filterState= await filterPromise
     productFilters.value = filterState.data
   }
 
   if(PCCD.value==='P0602'){
-    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', 'F0902')
+    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301', pccd:'F0902'})
     const filterState= await filterPromise
     productFilters.value = filterState.data
   }
@@ -268,7 +272,7 @@ watch(()=>PCCD.value,async ()=>{
 const moveOtherPage = async (pageNumber:number) =>{
   console.log(pageNumber)
   currentPage.value = pageNumber
-  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', 'P0301', PCCD.value, pageNumber)
+  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value,page: pageNumber})
   const productState = await productPromise;
   products.value = productState.data
 }

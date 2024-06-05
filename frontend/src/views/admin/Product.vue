@@ -72,7 +72,7 @@ const selectedBrandData = ref<IBrand>()
 const isOpenProductType = ref(false)
 
 onMounted( async ()=>{
-  const productTypePromise:Promise<IFetchType> = fetchGetAdmin('/admin/producttype','')
+  const productTypePromise:Promise<IFetchType> = fetchGetAdmin('/admin/producttype', {})
   const producttype = await productTypePromise
 
   originProductType.value = producttype.data

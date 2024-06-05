@@ -190,7 +190,10 @@ const clickReservationBtn = () =>{
 
 onMounted(async ()=>{
 
-  const productDetailPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/product/${pageInfo.value}/detail/${ProductId}`, 'P0301', pccd)
+  const productDetailPromise:Promise<IFetchType> = fetchGetData<IFetchType>(`/product/${pageInfo.value}/detail/${ProductId}`, {
+    ptcd:'P0301',
+    pccd: pccd
+  })
   const productDetailState = await productDetailPromise
   productDetail.value = productDetailState.data
   console.log(productDetail.value)
