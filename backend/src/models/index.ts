@@ -27,6 +27,7 @@ import TireHashTagConnection from './TireHashTagConnection';
 import User from './User';
 import Wheel from './Wheel';
 import WheelHashTagConnection from './WheelHashTagConnection';
+import Payment from './payment';
 
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
@@ -66,6 +67,7 @@ TireHashTagConnection.initModel(sequelize)
 Wheel.initModel(sequelize)
 WheelHashTagConnection.initModel(sequelize)
 Brand.initModel(sequelize)
+Payment.initModel(sequelize)
 
 const db = {
     sequelize,
@@ -96,6 +98,7 @@ const db = {
     Wheel: Wheel,
     WheelHashTagConnection: WheelHashTagConnection,
     Brand: Brand,
+    Payment:Payment
 };
 
 export default db;
