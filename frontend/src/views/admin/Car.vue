@@ -14,7 +14,7 @@
     <div class="w-1/2 border">
     <TopTaps :conf="visibleForeignBrand" :state="`f`" :select="selectForeignBrand" @selectTap="selectBrand"/>
     <div>
-      <CardContent :conf="visibleForeignCar" />
+      <CardContent :conf="visibleForeignCar" @selectCard="selectCarTrim"/>
     </div>
   </div>
 </div>

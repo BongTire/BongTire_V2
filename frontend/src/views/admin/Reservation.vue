@@ -185,7 +185,7 @@ const selectDate = async (day:ICalendar) =>{
   visibleTime.value = time.data
 
   const paramsDate = `${date.value.year}${parseInt(date.value.month)/10 < 1 ? '0'+date.value.month : date.value.month}${parseInt(date.value.day)/10 < 1 ? '0'+date.value.day : date.value.day}`
-  const reservePromise:Promise<IFetchType> = fetchGetAdmin('/admin/reservation/reservedata',{}, paramsDate)
+  const reservePromise:Promise<IFetchType> = fetchGetAdmin('/admin/reservation/reservedata',{date: paramsDate})
   const reserveState = await reservePromise
 
   reserve.value = reserveState.data
