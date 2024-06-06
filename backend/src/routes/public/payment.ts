@@ -1,26 +1,202 @@
 import express, { Request, Response } from 'express';
 import logger from '../../config/logger';
+import db from '../../models'
+import { returnFormat } from '../../utils/return';
+const ReservationMaster = db.ReservationMaster
+const RservationProduct = db.ReservationProduct
+const Tire = db.Tire
+const Wheel = db.Wheel
+const Payment = db.Payment
 
 const router = express.Router();
+interface RequestData {
+    site_cd?: string; 
+    tno?: string; 
+    kcp_cert_info?: string; 
+    kcp_sign_data?: string; 
+    mod_type?: any; 
+    mod_mny?: number; 
+    rem_mny?: number; 
+    mod_desc?: any; 
+}
 
-router.post('/', async (req: Request, res: Response) => {
-    const { site_cd, ordr_idxx, pay_method, good_name, good_mny, currency, buyr_name , buyr_tel1, buyr_mail, enc_info , enc_data, tran_cd } = req.body;
+
+router.post('/order', async (req: Request, res: Response) => { //주문 요청
     console.log(req.body);
-    // 외부 결제 게이트웨이에 보낼 데이터 구성
-    const requestData = {
-        tran_cd: tran_cd,
-        ordr_mony: good_mny,
-        kcp_cert_info: "-----BEGIN CERTIFICATE-----MIIDgTCCAmmgAwIBAgIHBy4lYNG7ojANBgkqhkiG9w0BAQsFADBzMQswCQYDVQQGEwJLUjEOMAwGA1UECAwFU2VvdWwxEDAOBgNVBAcMB0d1cm8tZ3UxFTATBgNVBAoMDE5ITktDUCBDb3JwLjETMBEGA1UECwwKSVQgQ2VudGVyLjEWMBQGA1UEAwwNc3BsLmtjcC5jby5rcjAeFw0yMTA2MjkwMDM0MzdaFw0yNjA2MjgwMDM0MzdaMHAxCzAJBgNVBAYTAktSMQ4wDAYDVQQIDAVTZW91bDEQMA4GA1UEBwwHR3Vyby1ndTERMA8GA1UECgwITG9jYWxXZWIxETAPBgNVBAsMCERFVlBHV0VCMRkwFwYDVQQDDBAyMDIxMDYyOTEwMDAwMDI0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAppkVQkU4SwNTYbIUaNDVhu2w1uvG4qip0U7h9n90cLfKymIRKDiebLhLIVFctuhTmgY7tkE7yQTNkD+jXHYufQ/qj06ukwf1BtqUVru9mqa7ysU298B6l9v0Fv8h3ztTYvfHEBmpB6AoZDBChMEua7Or/L3C2vYtU/6lWLjBT1xwXVLvNN/7XpQokuWq0rnjSRThcXrDpWMbqYYUt/CL7YHosfBazAXLoN5JvTd1O9C3FPxLxwcIAI9H8SbWIQKhap7JeA/IUP1Vk4K/o3Yiytl6Aqh3U1egHfEdWNqwpaiHPuM/jsDkVzuS9FV4RCdcBEsRPnAWHz10w8CX7e7zdwIDAQABox0wGzAOBgNVHQ8BAf8EBAMCB4AwCQYDVR0TBAIwADANBgkqhkiG9w0BAQsFAAOCAQEAg9lYy+dM/8Dnz4COc+XIjEwr4FeC9ExnWaaxH6GlWjJbB94O2L26arrjT2hGl9jUzwd+BdvTGdNCpEjOz3KEq8yJhcu5mFxMskLnHNo1lg5qtydIID6eSgew3vm6d7b3O6pYd+NHdHQsuMw5S5z1m+0TbBQkb6A9RKE1md5/Yw+NymDy+c4NaKsbxepw+HtSOnma/R7TErQ/8qVioIthEpwbqyjgIoGzgOdEFsF9mfkt/5k6rR0WX8xzcro5XSB3T+oecMS54j0+nHyoS96/llRLqFDBUfWn5Cay7pJNWXCnw4jIiBsTBa3q95RVRyMEcDgPwugMXPXGBwNoMOOpuQ==\n" +
-            "-----END CERTIFICATE-----",
-        site_cd: site_cd,
-        enc_data: enc_data,
-        enc_info: enc_info,
-        ordr_no: ordr_idxx,
-        pay_type: "PACA"
-    };
-
+    const data = req.body.data; //data.ReservationId 필요함
     try {
-        const response = await fetch('https://stg-spl.kcp.co.kr/gw/enc/v1/payment', {
+        const reservationData = await ReservationMaster.findOne({
+            where:{
+                ReservationMasterId:data.ReservationMasterId
+            },
+            raw:true
+        })
+        const reservationCode = reservationData?.ReservationCode
+        const ordr_idxx = reservationCode ? ("R0401"+reservationCode.replace(/[-]/g, '')) : null//영문+숫자 (R0401 + 예약번호에서 - 뺀거)
+        const reservationProducts = await RservationProduct.findAll({
+            where:{
+                ReservationMasterId:data.ReservationMasterId
+            }
+        })
+        let good_name;
+        if(reservationProducts[0].PCCD === "P0601"){ //타이어
+            const product = await Tire.findOne({
+                where:{
+                    TireId : reservationProducts[0].ProductId
+                }
+            })
+            good_name = product?.productName
+        }else if(reservationProducts[0].PCCD === "P0602"){ //휠
+            const product = await Wheel.findOne({
+                where:{
+                    WheelId : reservationProducts[0].ProductId
+                }
+            })
+            
+            good_name = product?.productName
+        }else{
+            logger.info('상품 찾기 실패')
+            //returnFormatData = returnFormat(4000,'상품 찾기 실패',{})
+            //res.json(returnFormatData);
+        }
+        logger.info('good_name: '+ good_name)
+        
+        const pay_method = 100000000000
+        // 외부 결제 게이트웨이에 보낼 데이터 구성
+        const requestData = {
+            site_cd: process.env.site_cd,
+            ordr_idxx:ordr_idxx,
+            pay_method:pay_method,
+            good_name:good_name,
+            good_mny:reservationData?.totalPrice,
+            currency: 410,
+            shop_user_id: reservationCode, //
+            site_name:"BONGTIRE",
+        };
+        logger.info('주문 요청 파라미터 출력완료')
+        const returnFormatData = returnFormat(2000,'주문 요청 파라미터 출력완료',requestData)
+        res.json(returnFormatData);
+    } catch (error:any) {
+        logger.info('주문 요청 파라미터 출력실패')
+        const returnFormatData = returnFormat(2000,'주문 요청 파라미터 출력실패',error)
+        res.json(returnFormatData);
+    }
+})
+router.post('/', async (req: Request, res: Response) => { //주소 바꿔야함
+    const {enc_info , enc_data, tran_cd, ordr_idxx,good_mny,ReservationMasterId} = req.body; // 결제 창에서 내려 주는 값
+    logger.info(req.body)
+    console.log(JSON.stringify(req.body));
+    try {
+        const reservationData = await ReservationMaster.findOne({
+            where:{
+                ReservationMasterId:ReservationMasterId
+            },
+            raw:true
+        })
+        const reservationCode = reservationData?.ReservationCode
+        //const ordr_idxx = reservationCode ? ("R0401"+reservationCode.replace(/[-]/g, '')) : null//영문+숫자 (R0401 + 예약번호에서 - 뺀거)
+        const reservationProducts = await RservationProduct.findAll({
+            where:{
+                ReservationMasterId:ReservationMasterId
+            }
+        })
+
+        // 외부 결제 게이트웨이에 보낼 데이터 구성
+        const requestData = {
+            site_cd: process.env.site_cd,
+            kcp_cert_info: process.env.kcp_cert_info,
+            enc_data: enc_data,
+            enc_info: enc_info,
+            tran_cd: tran_cd,
+            pay_type: "PACA",
+            ordr_no: ordr_idxx,
+            ordr_mony: good_mny, 
+        };
+        logger.info("requestData: "+JSON.stringify(requestData))
+        const paymentApprovalURL = process.env.PaymentApprovalURL || 'https://stg-spl.kcp.co.kr/gw/enc/v1/payment'
+        const response = await fetch(paymentApprovalURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+        const result = await response.json();
+        if(result.res_cd === "0000"){ //정상승인이 이루어졌을때
+            const paymentResponse = await Payment.create({
+                ReservationMasterId: ReservationMasterId,
+                res_cd: result.res_cd,
+                res_msg:result.res_msg,
+                res_en_msg: result.res_en_msg,
+                pay_method: result.pay_method,
+                tno: result.tno,
+                amount: result.amount,
+                PCCD:'R0801' //'a'지점
+            })
+            logger.info("paymentResponse: "+JSON.stringify(paymentResponse))
+        }else{
+            logger.info("결제가 승인되지 않았습니다.")
+        }
+        logger.info("result: "+JSON.stringify(result))
+        res.json({ success: true, data: result });
+    } catch (error:any) {
+        res.json({ success: false, error: error.message });
+    }
+})
+router.post('/cancellation', async (req: Request, res: Response) => {
+    const {mod_type,mod_mny,rem_mny,mod_desc} = req.body; // 결제 창에서 내려 주는 값
+    logger.info(req.body)
+    
+    console.log(JSON.stringify(req.body));
+    const data = req.body;
+    try {
+        const reservationData = await ReservationMaster.findOne({
+            where:{
+                ReservationMasterId:data.ReservationMasterId,
+
+            },
+            raw: true
+        })
+        const reservationCode = reservationData?.ReservationCode
+        //const ordr_idxx = reservationCode ? ("R0401"+reservationCode.replace(/[-]/g, '')) : null//영문+숫자 (R0401 + 예약번호에서 - 뺀거)
+        const reservationProducts = await RservationProduct.findAll({
+            where:{
+                ReservationMasterId:data.ReservationMasterId
+            }
+        })
+        const paymentData = await Payment.findOne({
+            where:{
+                ReservationMasterId:reservationData?.ReservationMasterId,
+                res_cd : "0000" //결제승인에 성공한것
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        })
+        const tno = paymentData?.tno //db에서 꺼내와야함
+        
+
+        // 외부 결제 게이트웨이에 보낼 데이터 구성
+        const requestData :RequestData= {
+            site_cd: process.env.site_cd, // KCP 발급 사이트(상점) 코드
+            tno: tno, // NHN KCP 거래 고유번호
+            kcp_cert_info: process.env.kcp_cert_info, // KCP 인증서 정보 (직렬화)
+            kcp_sign_data: process.env.kcp_sign_data, // KCP 암호화 데이터 site_cd + "^" + tno + "^" + mod_type
+            mod_type: mod_type, // 전체 승인취소 - STSC / 부분취소 - STPC
+            mod_desc: mod_desc // 취소 사유
+        };
+        
+        // 조건부로 추가할 프로퍼티
+        if (mod_mny !== undefined) {
+            requestData.mod_mny = mod_mny; // 부분 취소일 경우 부분 취소 금액
+        }
+        
+        if (rem_mny !== undefined) {
+            requestData.rem_mny = rem_mny; // 부분 취소일 경우 남은 원거래 금액
+        }
+        logger.info("requestData: "+JSON.stringify(requestData))
+        const PaymentCancellationURL = process.env.PaymentCancellationURL ||'https://stg-spl.kcp.co.kr/gw/mod/v1/cancel' //일단 결제가안되는 url 넣어놓음
+        const response = await fetch(PaymentCancellationURL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -29,6 +205,7 @@ router.post('/', async (req: Request, res: Response) => {
         });
 
         const result = await response.json();
+        logger.info("result: "+JSON.stringify(result))
         res.json({ success: true, data: result });
     } catch (error:any) {
         res.json({ success: false, error: error.message });
