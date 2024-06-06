@@ -445,7 +445,6 @@ router.post('/filter', async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string, 10) || 1; // 페이지 번호
   const pageSize = parseInt(req.query.pageSize as string, 10) || 20; // 한 페이지에 보여줄 항목 수
   const offset = (page - 1) * pageSize; // offset 계산
-
   if (pccd === 'P0601') {
     const countQuery = `
       SELECT 

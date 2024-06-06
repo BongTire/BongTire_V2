@@ -2,15 +2,73 @@
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import {  XMarkIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import defaultLogo from '../../assets/image/Company/BongTireLogo.png'
+import {PropType} from "vue";
+import {IBrand} from "@type/brand.ts";
+import {FilterService} from "primevue/api";
+import filter = FilterService.filter;
+import {ICar, ICarTrim} from "@type/car.ts";
 
 
 const props = defineProps({
   isOpen: Boolean,
+  brand:{
+    type: Array as PropType<IBrand> | undefined
+  },
+  car:{
+    type: Array as PropType<ICar> | undefined
+  },
+  carTrim:{
+    type: Array as PropType<ICarTrim> | undefined
+  }
 })
 
-const emits = defineEmits(['closeSearch'])
+const emits = defineEmits(['closeSearch', 'clickBrand', 'clickCar', 'clickCarTrim'])
 const regulateFirstHeight = ref(true)
 const regulateSecondHeight = ref(true)
+
+const setOrigin = ref(1)
+const visibleBrand = ref()
+const selectCarYear = ref(0)
+const selectCarTrim = ref(0)
+
+watch(props,()=>{
+  visibleBrand.value = props.brand.filter(x=>x.origin)
+  console.log(props.car)
+},{deep:true})
+
+const clickBrandOriginTab = (tab:any) =>{
+  visibleBrand.value = props.brand.filter(x=>x.origin === tab.origin)
+
+  if(tab.origin){
+    setOrigin.value = (1)
+    tab.current = true
+    tabs.value[1].current = false
+  }else{
+    setOrigin.value = (0)
+    tab.current = true
+    tabs.value[0].current = false
+  }
+}
+
+const clickBrand = (brandId:number) =>{
+  emits('clickBrand', brandId)
+}
+
+const clickCar = (carId : number) =>{
+  regulateFirstHeight.value = false
+  emits('clickCar', carId)
+}
+
+const selectCarTrimYear = (index:number) =>{
+  selectCarYear.value = index
+}
+
+const selectCarTrimList = (index:number, frontTire:string, rearTire:string) =>{
+  selectCarTrim.value = index
+  const tireSize = [frontTire, rearTire]
+
+  emits('clickCarTrim',tireSize )
+}
 
 const closeTireSearch = () =>{
   emits('closeSearch')
@@ -26,10 +84,10 @@ const regulateHeight = (state:number) =>{
 
 }
 
-const tabs = [
+const tabs = ref([
   { name: '국산', origin: true, current: true },
   { name: '수입', origin: false, current: false },
-]
+])
 
 const products = [
   {
@@ -115,51 +173,27 @@ const products = [
                             <label for="tabs" class="sr-only">Select a tab</label>
                             <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
                             <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-orange-500 focus:ring-orange-500">
-                              <option class="w-full" v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{ tab.name }}</option>
+                              <option class="w-full" v-for="tab in tabs" :key="tab.name" @click="clickBrandOriginTab(tab)" :selected="tab.current">{{ tab.name }}</option>
                             </select>
                           </div>
                           <div class="hidden sm:block">
                             <div class="border-b border-gray-200">
                               <nav class="-mb-px flex" aria-label="Tabs">
-                                <p v-for="tab in tabs" :key="tab.name" :class="[tab.current ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'w-1/2 border-b-2 py-4 px-1 text-center text-sm font-medium']" :aria-current="tab.current ? 'page' : undefined">{{ tab.name }}</p>
+                                <p v-for="tab in tabs" :key="tab.name" @click="clickBrandOriginTab(tab)" :class="[tab.current ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'w-1/2 border-b-2 py-4 px-1 text-center text-sm font-medium']" :aria-current="tab.current ? 'page' : undefined">{{ tab.name }}</p>
                               </nav>
                             </div>
                           </div>
                         </div>
                         <div class="mt-4 overflow-y-auto h-56 w-full flex flex-wrap justify-evenly">
                           <!-- 브랜드 선택 란 삽입 -->
-                          <div class="w-24 h-24 bg-slate-200 rounded-lg flex flex-col justify-evenly items-center mt-3">
-                            <img :src="defaultLogo" class="w-full">
-                            <p>현대</p>
-                          </div>
-                          <div class="w-24 h-24 bg-slate-200 rounded-lg flex flex-col justify-evenly items-center mt-3">
-                            <img :src="defaultLogo" class="w-full">
-                            <p>기아</p>
-                          </div>
-                          <div class="w-24 h-24 bg-slate-200 rounded-lg flex flex-col justify-evenly items-center mt-3">
-                            <img :src="defaultLogo" class="w-full">
-                            <p>현대</p>
-                          </div>
-                          <div class="w-24 h-24 bg-slate-200 rounded-lg flex flex-col justify-evenly items-center mt-3">
-                            <img :src="defaultLogo" class="w-full">
-                            <p>현대</p>
-                          </div>
-                          <div class="w-24 h-24 bg-slate-200 rounded-lg flex flex-col justify-evenly items-center mt-3">
-                            <img :src="defaultLogo" class="w-full">
-                            <p>현대</p>
-                          </div>
-                          <div class="w-24 h-24 bg-slate-200 rounded-lg flex flex-col justify-evenly items-center mt-3">
-                            <img :src="defaultLogo" class="w-full">
-                            <p>현대</p>
-                          </div>
-                          <div class="w-24 h-24 bg-slate-200 rounded-lg flex flex-col justify-evenly items-center mt-3">
-                            <img :src="defaultLogo" class="w-full">
-                            <p>르노</p>
+                          <div v-for="brand in visibleBrand" @click="clickBrand(brand.BrandId)" class="w-24 h-24 bg-slate-200 rounded-lg flex flex-col justify-evenly items-center mt-3">
+                            <img :src="brand.brandLogo ? brand.brandLogo : defaultLogo" class="h-10">
+                            <p>{{ brand.name }}</p>
                           </div>
                         </div>
                       </div>
                       <!-- 차량 서칭 -->
-                      <div class="w-2/3 ml-2">
+                      <div class="w-2/3 ml-2 h-72">
                         <div class="flex justify-between items-center">
                           <p class="text-lg">차량 선택</p>
                           <ChevronDownIcon v-if="regulateFirstHeight" class="h-6 hover:bg-slate-100 rounded cursor-pointer" @click="regulateHeight(1)"/>
@@ -168,21 +202,19 @@ const products = [
                         <div class="w-full overflow-y-auto h-full">
                           <!-- 차량 선택 란 삽입 -->
                           <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-                            <div v-for="product in products" :key="product.id" class="group relative">
-                              <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                                <img :src="product.imageSrc" :alt="product.imageAlt" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
+                            <div v-for="car in props.car" :key="car?.CarId" class="group relative" @click="clickCar(car?.CarId)">
+                              <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 min-h-30 lg:h-30">
+                                <img :src="car?.image ? car?.image : null" :alt="car?.image ? car?.image : null" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
                               </div>
                               <div class="mt-4 flex justify-between">
                                 <div>
                                   <h3 class="text-sm text-gray-700">
-                                    <a :href="product.href">
+                                    <p >
                                       <span aria-hidden="true" class="absolute inset-0" />
-                                      {{ product.name }}
-                                    </a>
+                                      {{ car.name }}
+                                    </p>
                                   </h3>
-                                  <p class="mt-1 text-sm text-gray-500">{{ product.color }}</p>
                                 </div>
-                                <p class="text-sm font-medium text-gray-900">{{ product.price }}</p>
                               </div>
                             </div>
                           </div>
@@ -193,14 +225,36 @@ const products = [
                     <div class="mt-5">
 
                       <!-- 차량 연식 선택-->
-                      <div class="flex justify-between items-center">
+                      <div class="flex justify-between items-center ">
                         <p class="text-lg">차량 연식 및 트림 선택</p>
                         <ChevronDownIcon v-if="regulateSecondHeight" class="h-6 hover:bg-slate-100 rounded cursor-pointer" @click="regulateHeight(2)"/>
                         <ChevronUpIcon v-else class="h-6 hover:bg-slate-100 rounded cursor-pointer" @click="regulateHeight(2)"/>
                       </div>
                       <!-- 차량 트림 선택 -->
-                      <div>
+                      <div class="flex overflow-y-auto h-64">
+<!--                        year select -->
+                        <div class="flex flex-col overflow-y-auto h-full">
+                          <div v-for="(year, index) in props.carTrim?.yearList" >
+                            <div
+                                :class="`${index === selectCarYear ? 'bg-orange-600 text-white' : 'bg-slate-100'} w-24 h-10 flex justify-center items-center hover:bg-orange-500 hover:text-white cursor-pointer` "
+                                @click="selectCarTrimYear(index)"
+                            >
+                              {{ year.year }}
+                            </div>
+                          </div>
+                        </div>
 
+<!--                        trim select-->
+                        <div class="overflow-y-auto h-full">
+                          <div v-if="props.carTrim" v-for="(trim, index) in props.carTrim?.yearList[selectCarYear].trimList"
+                            :class="`${selectCarTrim === index ? 'bg-orange-600 text-white' : 'bg-slate-100'} min-w-48 h-10 px-2 flex justify-center items-center hover:bg-orange-500 hover:text-white cursor-pointer`"
+                               @click="selectCarTrimList(index, trim.frontTire, trim.rearTire)"
+                          >
+                            <div>
+                              <p>{{trim.name}}<span>{{ trim.frontTire }}</span> / <span> {{trim.rearTire }}</span> </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 

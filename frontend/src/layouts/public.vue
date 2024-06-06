@@ -150,7 +150,7 @@
   </header>
   <div>
     <TireSearch :isOpen="isOpenSearch" @closeSearch="closeSearch" :conf="tireSearch" @searchProduct="tireSearchFunc"/>
-    <TireSearchForCar :isOpen="isOpenCarSearch" @closeSearch="closeCarSearch" />
+    <TireSearchForCar :isOpen="isOpenCarSearch" @closeSearch="closeCarSearch" :brand="searchCarBrand" @clickBrand="clickBrandSearch" :car="searchCar" @clickCar="clickCarSearch" :carTrim="searchCarTrim" @clickCarTrim="clickCarTrim"/>
     <slot/>
   </div>
   <footer className="bg-white">
@@ -217,7 +217,9 @@
   import Success from '@component/Alert/Success.vue'
   import { initSesstionStorage } from '../util/func/common'
   import {IProduct} from "@type/product.ts";
+  import {IBrand} from "@type/brand.ts";
   import TireSearchForCar from "@component/Common/TireSearchForCar.vue";
+  import {ICar, ICarTrim} from '@type/car'
 
   const PTCD = ref<IPTCD[]>([])
   const PCCD = ref<IPCCD[]>([])
@@ -235,7 +237,12 @@
 const tireSearch = ref('')
 const tireSearchResult = ref<IProduct[]>()
 
-const tireSearchFunc = async (search:string) => {
+const searchCarBrand = ref<IBrand[]>()
+const searchCar = ref<ICar[]>()
+const searchCarTrim = ref<ICarTrim[]>()
+
+
+  const tireSearchFunc = async (search:string) => {
   const searchPromise:Promise<IFetchType> = fetchPostData('/search', {}, {data:search})
   const searchData = await searchPromise
 
@@ -254,6 +261,12 @@ onMounted(async () => {
   PTCD.value = await ptcd.data
 
   store.initCommon(PTCD.value, PCCD.value)
+
+  const carBrandPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/search/brand', {})
+  const carBrandState = await carBrandPromise
+  searchCarBrand.value = carBrandState.data
+
+
 })
 
 const userNavigation = [
@@ -305,6 +318,10 @@ const navigation = {
 
 const isOpenSearch = ref(false)
 const isOpenCarSearch = ref(false)
+
+
+
+
 const clickMenuBtn = (state:string) =>{
     if(state==='tire'){
       isOpenSearch.value = true
@@ -312,8 +329,34 @@ const clickMenuBtn = (state:string) =>{
     if(state==='car'){
       isOpenCarSearch.value = true
     }
+}
+
+const clickBrandSearch = async (brandId:number) =>{
+  const postData = {
+    BrandId : brandId
+  }
+  const carPromise:Promise<IFetchType> = fetchPostData('/search/car',{},postData )
+  const carState = await carPromise
+  searchCar.value = carState.data
+}
+
+const clickCarSearch = async (carId : number) =>{
+  const carTrimPromise:Promise<IFetchType> = fetchGetData(`/search/cartrim/${carId}`,{})
+  const carTrimStae = await carTrimPromise
+  searchCarTrim.value = carTrimStae.data
+}
+
+const clickCarTrim = async (tireSize:string[]) =>{
+    console.log(tireSize)
+
+  const tireReulstPromise = fetchPostData('/search/fitTires', {}, { data: {
+      size: tireSize
+    }})
+  const tireResultState = await tireReulstPromise
+  console.log(tireResultState.data)
 
 }
+
 const clickSubUserMenu = async (url:string)=>{
   if(url === '/logout'){
     const logoutPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/logout', {},{data:''})
