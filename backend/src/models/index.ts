@@ -27,7 +27,7 @@ import TireHashTagConnection from './TireHashTagConnection';
 import User from './User';
 import Wheel from './Wheel';
 import WheelHashTagConnection from './WheelHashTagConnection';
-import Payment from './payment';
+import Payment from './Payment';
 
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
