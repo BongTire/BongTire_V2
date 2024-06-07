@@ -439,7 +439,7 @@ function transformCarData(data: any[]) {
                 let trim = {
                     id: carTrim.CarTrimId,
                     name: carTrim.name,
-                    price: carTrim.price.toLocaleString(),
+                    price: carTrim.price? carTrim.price.toLocaleString():null,
                     image: carTrim.image,
                     frontTire: carTrim.frontTireSize,
                     rearTire: carTrim.rearTireSize,

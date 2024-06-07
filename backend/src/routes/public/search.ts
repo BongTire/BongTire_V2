@@ -197,7 +197,7 @@ router.post('/fitwheels',async (req:Request , res: Response)=>{
   const sizeArray = req.body.data.size
   try {
     const extractedPortions = sizeArray.map(extractNumericPortion);
-    logger.info(extractNumericPortion)
+    logger.info(JSON.stringify(extractNumericPortion))
 
     // Construct the `where` clause dynamically
     const whereClause = {
@@ -240,18 +240,18 @@ router.post('/fitTires',async (req:Request , res: Response)=>{
       where: whereClause
     })
     if(tireDatas.length!== 0){
-      logger.info('맞는 wheel 데이터 조회 성공')
-      const result = returnFormat(2000,'맞는 wheel 데이터 조회 성공',tireDatas)
+      logger.info('맞는 tire 데이터 조회 성공')
+      const result = returnFormat(2000,'맞는 tire 데이터 조회 성공',tireDatas)
       return res.json(result);
     }else{
-      logger.info('맞는 wheel 데이터 미존재')
-      const result = returnFormat(4000,'맞는 wheel 데이터 미존재',tireDatas)
+      logger.info('맞는 tire 데이터 미존재')
+      const result = returnFormat(4000,'맞는 tire 데이터 미존재',tireDatas)
       return res.json(result);
     }
     
   } catch (error) {
-    logger.error('맞는 wheel 조회 실패'+error);
-    const result = returnFormat(4000,'맞는 wheel 조회 실패',error)
+    logger.error('맞는 tire 조회 실패'+error);
+    const result = returnFormat(4000,'맞는 tire 조회 실패',error)
     res.json(result);
   }
 })
@@ -271,7 +271,7 @@ function transformCarData(data: any[]) {
               let trim = {
                   id: carTrim.CarTrimId,
                   name: carTrim.name,
-                  price: carTrim.price.toLocaleString(),
+                  price: carTrim.price? carTrim.price.toLocaleString(): null,
                   image: carTrim.image,
                   frontTire: carTrim.frontTireSize,
                   rearTire: carTrim.rearTireSize,
