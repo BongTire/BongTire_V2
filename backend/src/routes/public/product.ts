@@ -165,7 +165,7 @@ router.get('/', async function (req: Request, res: Response) {
           isActive, isRecommanded, T.createdAt AS createdAt, T.updatedAt AS updatedAt, name AS brandName, B.origin AS brandOrigin, nation AS brandNation, brandLogo
         FROM Tires T
         JOIN Brands B ON T.BrandId = B.BrandId
-        WHERE isSecond = :isSecond AND T.deletedAt IS NULL AND B.deletedAt IS NULL
+        WHERE isSecond = :isSecond AND T.deletedAt IS NULL AND B.deletedAt IS NULL AND T.isVisible = 1
         ORDER BY T.createdAt DESC
         LIMIT :pageSize OFFSET :offset
       `, {
@@ -173,7 +173,7 @@ router.get('/', async function (req: Request, res: Response) {
         replacements: { isSecond: second, pageSize, offset }
       });
 
-      logger.info(findData);
+      logger.info(JSON.stringify(findData));
 
       res.json({
         status: {
@@ -267,7 +267,7 @@ router.get('/', async function (req: Request, res: Response) {
           isActivate, isContinue, W.createdAt AS createdAt, W.updatedAt AS updatedAt, name AS brandName, B.origin AS brandOrigin, nation AS brandNation, brandLogo, PCD, hole
         FROM Wheels W
         JOIN Brands B ON W.BrandId = B.BrandId
-        WHERE W.isSecond = :isSecond AND W.deletedAt IS NULL AND B.deletedAt IS NULL
+        WHERE W.isSecond = :isSecond AND W.deletedAt IS NULL AND B.deletedAt IS NULL AND W.isVisible = 1
         ORDER BY W.createdAt DESC
         LIMIT :pageSize OFFSET :offset
       `, {
@@ -275,7 +275,7 @@ router.get('/', async function (req: Request, res: Response) {
         replacements: { isSecond: second, pageSize, offset }
       });
 
-      logger.info(findData);
+      logger.info(JSON.stringify(findData));
 
       res.json({
         status: {
