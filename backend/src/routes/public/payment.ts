@@ -121,7 +121,7 @@ router.post('/', async (req: Request, res: Response) => { //주소 바꿔야함
             },
             body: JSON.stringify(requestData)
         });
-        const result = await response.json();
+        const result:any = await response.json();
         if(result.res_cd === "0000"){ //정상승인이 이루어졌을때
             const paymentResponse = await Payment.create({
                 ReservationMasterId: ReservationMasterId,
