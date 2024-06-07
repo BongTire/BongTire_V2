@@ -150,7 +150,7 @@
   </header>
   <div>
     <TireSearch :isOpen="isOpenSearch" @closeSearch="closeSearch" :conf="tireSearch" @searchProduct="tireSearchFunc"/>
-    <TireSearchForCar :isOpen="isOpenCarSearch" @closeSearch="closeCarSearch" :brand="searchCarBrand" @clickBrand="clickBrandSearch" :car="searchCar" @clickCar="clickCarSearch" :carTrim="searchCarTrim" @clickCarTrim="clickCarTrim"/>
+    <TireSearchForCar :isOpen="isOpenCarSearch" @closeSearch="closeCarSearch" :brand="searchCarBrand" @clickBrand="clickBrandSearch" :car="searchCar" @clickCar="clickCarSearch" :carTrim="searchCarTrim" @clickCarTrim="clickCarTrim" :product="searchTire"/>
     <slot/>
   </div>
   <footer className="bg-white">
@@ -240,7 +240,7 @@ const tireSearchResult = ref<IProduct[]>()
 const searchCarBrand = ref<IBrand[]>()
 const searchCar = ref<ICar[]>()
 const searchCarTrim = ref<ICarTrim[]>()
-
+const searchTire = ref<IProduct[]>()
 
   const tireSearchFunc = async (search:string) => {
   const searchPromise:Promise<IFetchType> = fetchPostData('/search', {}, {data:search})
@@ -354,6 +354,7 @@ const clickCarTrim = async (tireSize:string[]) =>{
     }})
   const tireResultState = await tireReulstPromise
   console.log(tireResultState.data)
+  searchTire.value = tireResultState.data
 
 }
 
@@ -383,6 +384,8 @@ const clickSubUserMenu = async (url:string)=>{
 }
 
 const closeSearch = () =>{
+
+
     isOpenSearch.value = false
 }
 

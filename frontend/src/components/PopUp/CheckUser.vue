@@ -95,13 +95,13 @@ const comfirmReservation = ()=>{
                       <p>결제 방법</p>
                       <div class="flex w-full justify-center items-center">
                         <div :class="`${paymentMethod ? 'bg-orange-600 text-white' : 'bg-slate-50'} rounded-l-lg hover:bg-orange-500 hover:text-white w-24 h-24 flex flex-col justify-center items-center cursor-pointer`"
-                             @click="clickPaymentMehod(true)"
+                             @click="clickPaymentMehod(1)"
                         >
                           <CreditCardIcon class="w-14"/>
                           <p>온라인 결제</p>
                         </div>
                         <div :class="`${!paymentMethod ? 'bg-orange-600 text-white' : 'bg-slate-50'}  rounded-r-lg hover:bg-orange-500 hover:text-white w-24 h-24 flex flex-col justify-center items-center cursor-pointer`"
-                             @click="clickPaymentMehod(false)"
+                             @click="clickPaymentMehod(0)"
                         >
                           <BuildingStorefrontIcon class="w-14"/>
                           <p>현장 결제</p>

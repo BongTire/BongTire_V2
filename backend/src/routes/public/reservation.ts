@@ -314,7 +314,7 @@ router.post('/',async function(req,res){
                     //logger.info("reservationMasterId: "+newReservation.ReservationMasterId)
                    
                     // 비회원 - 유저 조인 안함
-                    if (userId == -1) {
+                    if (userId === -1) {
                         reservationMasterDatabaseQuery = `SELECT * FROM ReservationMasters JOIN ReservationTimes ON ReservationTimes.ReservationTimeId = ReservationMasters.ReservationTimeId WHERE ReservationMasterId = :reservationMasterId AND ReservationMasters.deletedAt IS NULL`;
                         logger.info('비회원')
                     }

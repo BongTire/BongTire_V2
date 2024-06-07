@@ -436,9 +436,12 @@ router.post('/delete', async (req: Request, res: Response) => {
   logger.info(PostId);
   
   if (!PostId) {
-    res.status(400).json({
-      success: false,
-      message: '삭제하려면 PostId가 필요합니다.',
+    res.json({
+      status:{
+        code: 4002,
+        message: '삭제하려면 PostId가 필요합니다.',
+      },
+      data: ''
     });
     return;
   }
@@ -451,14 +454,20 @@ router.post('/delete', async (req: Request, res: Response) => {
     });
 
     if (deletedPost > 0) {
-      res.status(200).json({
-        success: true,
-        message: 'Post 삭제 성공.',
+      res.json({
+        status:{
+          code: 2000,
+          message: 'Post 삭제 성공.',
+        },
+        data: ''
       });
     } else {
-      res.status(404).json({
-        success: false,
-        message: '해당 PostId에 대한 Post를 찾을 수 없습니다.',
+      res.json({
+        status:{
+          code: 4004,
+          message: '해당 PostId에 대한 Post를 찾을 수 없습니다.',
+        },
+        data: ''
       });
     }
 

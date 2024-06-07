@@ -14,6 +14,7 @@ export const usePageStore = defineStore('page', {
     // 여기서 this 쓰는거 유의하기!
     actions: {
         setPostDetail(post:IPost){
+            console.log(post)
             this.pageInfo=post
         }
 

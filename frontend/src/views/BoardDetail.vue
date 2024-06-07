@@ -4,23 +4,30 @@
     <div class="bg-white px-6 py-32 lg:px-8">
       <div class="mx-auto max-w-3xl text-base leading-7 text-gray-700">
         <!-- 현재 페이지 명 -->
-        <p class="text-base font-semibold leading-7 text-orange-600">
-          {{ category }}
-        </p>
-        <!-- 해당 게시물에 대한 제목 -->
-        <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          {{ detail?.title ?? '' }}
-        </h1>
-        <!-- 작성자 -->
-        <p class="text-base font-semibold leading-7 text-gray-600">
-          {{ detail?.writerName ?? '' }}
-        </p>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-base font-semibold leading-7 text-orange-600">
+              {{ category }}
+            </p>
+            <!-- 해당 게시물에 대한 제목 -->
+            <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              {{ detail?.title ?? '' }}
+            </h1>
+            <!-- 작성자 -->
+            <p class="text-base font-semibold leading-7 text-gray-600">
+              {{ detail?.writerName ?? '' }}
+            </p>
+          </div>
+          <div v-if="userInfo?.grade === 0 || pccd==='C0501'" class="flex">
+            <TrashIcon class="h-6 w-6 hover:bg-slate-100 rounded-lg text-gray-400 mr-2" @click="clickTrash(detail?.PostId)"/>
+            <PencilIcon class="h-6 hover:bg-slate-100 rounded-lg text-gray-400" @click="clickEdit" />
+          </div>
+        </div>
         <div v-if="detail?.thumbnail">
           <img :src="detail?.thumbnail ?? ''" alt="" />
         </div>
-        <div v-html="detail?.content" class="min-h-screen">
 
-        </div>
+        <div v-html="detail?.content" class="min-h-screen"></div>
         <!-- 댓글 시작 -->
       <div v-if="detail?.isAnswer === 1" class="flex items-start space-x-4 mt-10">
         <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
@@ -66,7 +73,10 @@
 <script setup lang="ts">
 
 import { IPost } from '../util/type/post';
-
+import {
+  PencilIcon,
+  TrashIcon
+} from '@heroicons/vue/24/outline'
 import {IFetchType, IPCCD} from '../util/type/common'
 import { useCommonStore } from '../stores/common'
 import { fetchPostData } from '@api/common.ts'
@@ -81,6 +91,8 @@ const pccd = computed(()=>route.query.pccd ?? 'N0401')
 const ptcd = computed(()=>route.query.ptcd ?? 'C0202')
 
 const route = useRoute()
+const router = useRouter()
+
 const detail = ref<IPost>()
 const store = useCommonStore()
 const pageStore = usePageStore()
@@ -90,7 +102,6 @@ const PCCDArray = store.getPCCD
 const userInfo = exportUserInfo()
 const postDetailInfo = pageStore.getPostDetail
 
-console.log(postDetailInfo)
 
 const comment = ref('')
 
@@ -168,8 +179,35 @@ const categoryFunc = (pagePCCD:string = '') =>{
   if(categoryInfo.value?.length >= 1){
     category.value = categoryInfo.value[0]?.secondName ?? ''
   }
+}
 
-  console.log(category.value)
+const clickEdit = () =>{
+  pageStore.setPostDetail(detail.value)
+  router.push(`/edit`)
+}
+
+const clickTrash = async (id:number) =>{
+
+  console.log(id)
+
+  const postData = {
+    data: {
+      PostId : id
+    }
+  }
+
+  const removePostPromise:Promise<IFetchType> = await fetchPostData('/post/delete', {}, postData)
+  const removeState = await removePostPromise
+
+  if(removeState.status.code === 2000){
+    router.push(`/board?pccd=${pccd.value}`)
+  }else{
+    notiMessage.value= {
+      title: '실패',
+      message: removeState.status.message
+    }
+    isOpenError.value = true
+  }
 
 }
 

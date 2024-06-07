@@ -8,7 +8,7 @@
           <div v-for="product in props.conf" 
             :key="product.id" 
             class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white cursor-pointer"
-            @click="clickProductCard(product.id)"
+            @click="clickProductCard(product?.id ?? product?.TireId ?? product?.WheelId)"
             >
             <img :src="product.brandLogo ?? null" class="absolute h-6 top-1 left-3"/>
             <div class="h-96 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-80 flex justify-center items-center">

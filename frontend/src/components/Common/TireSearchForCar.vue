@@ -7,7 +7,10 @@ import {IBrand} from "@type/brand.ts";
 import {FilterService} from "primevue/api";
 import filter = FilterService.filter;
 import {ICar, ICarTrim} from "@type/car.ts";
+import {IProduct} from "@type/product.ts";
+import ProductCard from "@component/Product/ProductCard.vue";
 
+const router = useRouter()
 
 const props = defineProps({
   isOpen: Boolean,
@@ -19,21 +22,33 @@ const props = defineProps({
   },
   carTrim:{
     type: Array as PropType<ICarTrim> | undefined
+  },
+  product:{
+    type: Array as PropType<IProduct> | undefined
   }
 })
 
 const emits = defineEmits(['closeSearch', 'clickBrand', 'clickCar', 'clickCarTrim'])
 const regulateFirstHeight = ref(true)
 const regulateSecondHeight = ref(true)
+const regulateThirdHeight = ref(false)
 
 const setOrigin = ref(1)
 const visibleBrand = ref()
+
+const selectBrand = ref(-1)
 const selectCarYear = ref(0)
 const selectCarTrim = ref(0)
+
+
+
+
+const visibleProduct = ref<IProduct[]>()
 
 watch(props,()=>{
   visibleBrand.value = props.brand.filter(x=>x.origin)
   console.log(props.car)
+  visibleProduct.value  = props.product
 },{deep:true})
 
 const clickBrandOriginTab = (tab:any) =>{
@@ -50,7 +65,8 @@ const clickBrandOriginTab = (tab:any) =>{
   }
 }
 
-const clickBrand = (brandId:number) =>{
+const clickBrand = (brandId:number, index:number) =>{
+  selectBrand.value = index
   emits('clickBrand', brandId)
 }
 
@@ -66,6 +82,8 @@ const selectCarTrimYear = (index:number) =>{
 const selectCarTrimList = (index:number, frontTire:string, rearTire:string) =>{
   selectCarTrim.value = index
   const tireSize = [frontTire, rearTire]
+  regulateSecondHeight.value = false
+  regulateThirdHeight.value = true
 
   emits('clickCarTrim',tireSize )
 }
@@ -81,63 +99,21 @@ const regulateHeight = (state:number) =>{
   if(state === 2){
     regulateSecondHeight.value = !regulateSecondHeight.value
   }
+  if(state === 3){
+    regulateThirdHeight.value = !regulateThirdHeight.value
+  }
 
+}
+
+const moveDetailPage = (id:number) =>{
+  router.push(`/product/${id}?pccd=P0601`)
+  closeTireSearch()
 }
 
 const tabs = ref([
   { name: '국산', origin: true, current: true },
   { name: '수입', origin: false, current: false },
 ])
-
-const products = [
-  {
-    id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 2,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 3,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 4,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 5,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  // More products...
-]
-
 
 </script>
 
@@ -186,7 +162,7 @@ const products = [
                         </div>
                         <div class="mt-4 overflow-y-auto h-56 w-full flex flex-wrap justify-evenly">
                           <!-- 브랜드 선택 란 삽입 -->
-                          <div v-for="brand in visibleBrand" @click="clickBrand(brand.BrandId)" class="w-24 h-24 bg-slate-200 rounded-lg flex flex-col justify-evenly items-center mt-3">
+                          <div v-for="(brand, index) in visibleBrand" @click="clickBrand(brand.BrandId, index)" :class="`hover:bg-slate-100 w-24 h-24 ${selectBrand === index ? 'bg-slate-50' : 'bg-slate-200'} rounded-lg flex flex-col justify-evenly items-center mt-3`">
                             <img :src="brand.brandLogo ? brand.brandLogo : defaultLogo" class="h-10">
                             <p>{{ brand.name }}</p>
                           </div>
@@ -231,7 +207,7 @@ const products = [
                         <ChevronUpIcon v-else class="h-6 hover:bg-slate-100 rounded cursor-pointer" @click="regulateHeight(2)"/>
                       </div>
                       <!-- 차량 트림 선택 -->
-                      <div class="flex overflow-y-auto h-64">
+                      <div class="flex overflow-y-auto h-64" v-if="regulateSecondHeight">
 <!--                        year select -->
                         <div class="flex flex-col overflow-y-auto h-full">
                           <div v-for="(year, index) in props.carTrim?.yearList" >
@@ -257,13 +233,22 @@ const products = [
                         </div>
                       </div>
                     </div>
+                    <div>
+                      <div class="flex justify-between items-center ">
+                        <p class="text-lg mt-3">상품 목록</p>
+                        <ChevronDownIcon v-if="regulateThirdHeight" class="h-6 hover:bg-slate-100 rounded cursor-pointer" @click="regulateHeight(3)"/>
+                        <ChevronUpIcon v-else class="h-6 hover:bg-slate-100 rounded cursor-pointer" @click="regulateHeight(3)"/>
+                      </div>
+                      <div v-if="regulateThirdHeight">
+                        <ProductCard :conf="visibleProduct" @moveDetailPage="moveDetailPage"/>
+                      </div>
+                    </div>
 
                   </div>
                 </div>
               </div>
               <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                <button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto" @click="closeTireSearch">Deactivate</button>
-                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="closeTireSearch">Cancel</button>
+                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" @click="closeTireSearch">닫기</button>
               </div>
             </DialogPanel>
           </TransitionChild>

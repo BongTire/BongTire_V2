@@ -86,3 +86,18 @@ export interface IDate{
     month: number
     day: number
 }
+
+export interface IPaymentParams {
+    site_cd?: string | null
+    ordr_idxx: string | null
+    pay_method?: string | number
+    good_name: string
+    good_mny: string
+    currency: string
+    buyr_name: string
+    buyr_tel1: string
+    buyr_mail: string
+    enc_info?: string | null
+    enc_data?: string | null
+    tran_cd?: string | null
+}

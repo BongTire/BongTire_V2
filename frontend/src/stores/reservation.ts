@@ -16,7 +16,7 @@ export const useReservationStore = defineStore('reservation', {
     UserId: null,
     OwnCarId : -1,
     reservationCode: '',
-    paymentMethod: false,
+    paymentMethod: 0,
     request: '',
     totalPrice: 0,
     reservationPossible: -1,
@@ -109,12 +109,12 @@ export const useReservationStore = defineStore('reservation', {
       this.totalPrice += product.price
       this.product.push(productData)
     },
-    setReservationUser(user:IUser, payment:boolean ){
+    setReservationUser(user:IUser, payment:number ){
       console.log(user)
       this.name = user?.name ?? ''
       this.number = user?.number ?? ''
       this.UserId = user?.UserId ?? -1
-      this.paymentMethod = payment ?? false
+      this.paymentMethod = payment ?? 0
     },
     setDeleteProduct(ProductId:number){
       const index = this.product.findIndex((x:IReservationProduct)=>x.ProductId === ProductId)
