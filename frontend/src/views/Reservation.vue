@@ -333,7 +333,7 @@ const initiatePayment = (payParams:IPaymentParams) => {
   const params = {
     ReservationMasterId: payParams.ReservationMasterId,
     site_cd: 'T0000',
-    ordr_idxx: '1',
+    ordr_idxx: payParams.ordr_idxx,
     pay_method: 100000000000,
     good_name: payParams.good_name,
     good_mny: payParams.good_mny,
