@@ -7,7 +7,7 @@
           <div class="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
             <p class="text-lg leading-8 text-gray-600">봉타이어는 최고의 첨단 장비와 최고의 기술 인력을 통해 고객 분들에게 최상의 서비스를 제공하고 있습니다.</p>
             <div class="mt-10 flex items-center gap-x-6">
-              <a href="#" class="rounded-md bg-orange-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">문의사항</a>
+              <p @click="moveQnA" class="rounded-md bg-orange-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">문의사항</p>
             </div>
           </div>
           <img src="@image/Company/main.jpeg" alt="" class="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 xl:mt-36" />
@@ -17,18 +17,16 @@
     </div>
   </template>
   
-  <script setup type="ts">
+<script setup type="ts">
   import { ref } from 'vue'
   import { Dialog, DialogPanel } from '@headlessui/vue'
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 
-  
-  const navigation = [
-    { name: 'Product', href: '#' },
-    { name: 'Features', href: '#' },
-    { name: 'Marketplace', href: '#' },
-    { name: 'Company', href: '#' },
-  ]
+const router = useRouter()
+
+  const moveQnA = () =>{
+    router.push('/board?pccd=C0501')
+  }
   
   const mobileMenuOpen = ref(false)
-  </script>
+</script>

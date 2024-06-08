@@ -78,7 +78,7 @@
   <Loading v-if="productLoading && filterLoading"/>
   <main v-else class="mx-auto max-w-2xl px-4 py-5 sm:px-6 lg:max-w-7xl lg:px-8">
     <div class="border-b border-gray-200 pb-10">
-      <h1 class="text-4xl font-bold tracking-tight text-gray-900">상품</h1>
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900">{{ productTitle[0].secondName }}</h1>
     </div>
 
     <div class="pt-12 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
@@ -144,12 +144,23 @@ import { ChevronDownIcon, PlusIcon } from '@heroicons/vue/20/solid'
 import { IFetchType } from '../util/type/common'
 import { fetchGetData, fetchPostData } from '@api/common'
 import {IBrand} from "@type/brand.ts";
+import {useCommonStore} from "@store/common.ts";
 
-
+const store = useCommonStore()
 const route = useRoute();
 const router = useRouter()
 
-const PCCD = computed(()=>{return route.query.pccd})  
+const PCCD = computed(()=>{return route.query.pccd})
+const isSecond = computed(()=> {
+  return route.query?.isSecond ?? 0
+})
+
+const PCCDArray = store.getProductType
+console.log(PCCDArray)
+
+const productTitle = ref(PCCDArray.filter(x=>x.PCCD===PCCD.value))
+
+
 const mobileFiltersOpen = ref(false)
 
 const products = ref<IProduct[]>()
@@ -158,8 +169,6 @@ const productFilters = ref<IFilter | null>(null)
 const filterLoading = ref(true)
 
 const productLoading = ref(true)
-
-console.log(productLoading.value)
 
 // pageNation할 때 필요한 변수
 const totalProduct = ref(-1)
@@ -190,7 +199,7 @@ const selectFilterFunc = async (filter:IBrand) =>{
     })
     productState = await productPromise;
   }else{
-    const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1})
+    const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1, isSecond:isSecond.value})
     productState = await productPromise;
   }
 
@@ -200,20 +209,20 @@ const selectFilterFunc = async (filter:IBrand) =>{
 
 onMounted(async () => {
 
-  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1})
+  const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1, isSecond:isSecond.value})
   const productState = await productPromise;
   products.value = productState.data
 
   totalProduct.value = productState.total ?? -1
 
   if(PCCD.value==='P0601'){
-    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301', pccd:'F0901'})
+    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301', pccd:'F0901', isSecond:isSecond.value})
     const filterState= await filterPromise
     productFilters.value = filterState.data
   }
   
   if(PCCD.value==='P0602'){
-    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: 'F0902'})
+    const filterPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: 'F0902', isSecond:isSecond.value})
     const filterState= await filterPromise
     productFilters.value = filterState.data
   }
@@ -236,6 +245,7 @@ watch(()=>PCCD.value,async ()=>{
 
   filterLoading.value = true
   productLoading.value = true
+  productTitle.value = PCCDArray.filter(x=>x.PCCD===PCCD.value)
 
   const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1})
   const productState = await productPromise;

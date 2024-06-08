@@ -63,42 +63,42 @@ const favWigetData = [
         isUrl : true,
         url: "/tire?pccd=P0601",
         title: "타이어",
-        icon: "/src/assets/image/systemIcon/Car/tire-icon.png"
+        icon: "http://www.test-devdubu.com/images/systemIcon/Car/tire-icon.png"
     },
     {
         id: 2,
         isUrl : true,
         url: "/tire?pccd=P0601&isSecond=1",
         title: "중고 타이어",
-        icon: `/src/assets/image/systemIcon/Car/tire-test-icon.png`
+        icon: `http://www.test-devdubu.com/images/systemIcon/Car/tire-test-icon.png`
     },
     {
         id: 2,
         isUrl : true,
         url: "/wheel?pccd=P0602",
         title: "휠",
-        icon: `/src/assets/image/systemIcon/Car/wheel-icon.png`
+        icon: `http://www.test-devdubu.com/images/systemIcon/Car/wheel-icon.png`
     },
     {
         id: 3,
-        isUrl : false,
+        isUrl : true,
         url: "/wheel?pccd=P0602&isSecond=1",
         title: "중고 휠",
-        icon: `/src/assets/image/systemIcon/Car/wheel-icon 1.png`
+        icon: `http://www.test-devdubu.com/images/systemIcon/Car/wheel-icon 1.png`
     },
     {
         id: 4,
         isUrl : true,
         url: "/reservation?pccd=R0801",
         title: "예약",
-        icon: `/src/assets/image/systemIcon/Car/car-repair-icon.png`
+        icon: `http://www.test-devdubu.com/images/systemIcon/Car/car-repair-icon.png`
     },
     {
         id: 4,
         isUrl : false,
         url: '',
         title: "예약 조회",
-        icon: `/src/assets/image/systemIcon/Car/car-repair-icon.png`
+        icon: `http://www.test-devdubu.com/images/systemIcon/Car/car-repair-icon.png`
     },
 ]
 const router = useRouter()

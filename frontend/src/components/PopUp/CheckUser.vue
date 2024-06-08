@@ -11,6 +11,7 @@ const props = defineProps({
 
 const emits = defineEmits(['closePopup', 'confirm'])
 
+const checkPersonalInfo = ref(false)
 const name = ref('')
 const isNameInput = ref(true)
 
@@ -27,7 +28,14 @@ const clickPaymentMehod = (newValue:boolean) =>{
   paymentMethod.value = newValue
 }
 
+
+
 const comfirmReservation = ()=>{
+  if(!checkPersonalInfo.value){
+    alert('개인 정보 수집에 동의 해주세요')
+  }
+
+
   if(name.value===''){
     isNameInput.value = false
   }else{
@@ -110,7 +118,14 @@ const comfirmReservation = ()=>{
                     </div>
 
                   </div>
-
+                  <div class="flex">
+                    <div class="flex h-6 items-center">
+                      <input id="comments" aria-describedby="comments-description" v-model="checkPersonalInfo" name="comments" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
+                    </div>
+                    <div class="ml-3 text-sm leading-6">
+                      <label for="comments" class="font-medium text-gray-900">봉타이어의 개인 정보 수집에 동의 합니다.</label>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
