@@ -7,6 +7,8 @@ const ReservationTime = db.ReservationTime
 const Calendar = db.Calendar
 const ReservationProduct = db.ReservationProduct
 const ReservationMaster = db.ReservationMaster
+const Tire = db.Tire
+const Wheel = db.Wheel
 
 export function returnPastOrNot(comparisonDate:any, todayData:any) {
     // logger.info('comparisonDate: ' + JSON.stringify(comparisonDate));
@@ -658,4 +660,58 @@ export async function reservationTransaction(reservationTimeDataDB:any,calendarD
     } catch (error) {
         logger.error(error)
     }
+}
+
+export async function returnPaymentParameter (reservationMasterId:any) {
+    const reservationData = await ReservationMaster.findOne({
+        where:{
+            ReservationMasterId:reservationMasterId
+        },
+        raw:true
+    })
+    const reservationCode = reservationData?.ReservationCode
+    const ordr_idxx = reservationCode ? ("R0401"+reservationCode.replace(/[-]/g, '')) : null//영문+숫자 (R0401 + 예약번호에서 - 뺀거)
+    const reservationProducts = await ReservationProduct.findAll({
+        where:{
+            ReservationMasterId:reservationMasterId
+        }
+    })
+    let good_name;
+    if(reservationProducts[0].PCCD === "P0601"){ //타이어
+        const product = await Tire.findOne({
+            where:{
+                TireId : reservationProducts[0].ProductId
+            }
+        })
+        good_name = product?.productName
+    }else if(reservationProducts[0].PCCD === "P0602"){ //휠
+        const product = await Wheel.findOne({
+            where:{
+                WheelId : reservationProducts[0].ProductId
+            }
+        })
+        
+        good_name = product?.productName
+    }else{
+        logger.info('상품 찾기 실패')
+        //returnFormatData = returnFormat(4000,'상품 찾기 실패',{})
+        //res.json(returnFormatData);
+    }
+    logger.info('good_name: '+ good_name)
+    
+    const pay_method = 100000000000
+    // 외부 결제 게이트웨이에 보낼 데이터 구성
+    const requestData = {
+        site_cd: process.env.site_cd,
+        ordr_idxx:ordr_idxx,
+        pay_method:pay_method,
+        good_name:good_name,
+        good_mny:reservationData?.totalPrice,
+        currency: 410,
+        shop_user_id: reservationCode, //
+        site_name:"BONGTIRE",
+    };
+    logger.info('주문 요청 파라미터 출력완료')
+
+    return requestData
 }
