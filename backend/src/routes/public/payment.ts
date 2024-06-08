@@ -2,12 +2,14 @@ import express, { Request, Response } from 'express';
 import logger from '../../config/logger';
 import db from '../../models'
 import { returnFormat } from '../../utils/return';
+import Calendar from '../../models/Calendar';
+import { Sequelize, DataTypes, QueryTypes, Op } from 'sequelize';
 const ReservationMaster = db.ReservationMaster
 const RservationProduct = db.ReservationProduct
 const Tire = db.Tire
 const Wheel = db.Wheel
 const Payment = db.Payment
-
+const sequelize = db.sequelize;
 const router = express.Router();
 interface RequestData {
     site_cd?: string; 
@@ -87,13 +89,31 @@ router.post('/', async (req: Request, res: Response) => { //주소 바꿔야함
     logger.info(req.body)
     console.log(JSON.stringify(req.body));
     try {
-        const reservationData = await ReservationMaster.findOne({
-            where:{
-                ReservationMasterId:ReservationMasterId
-            },
-            raw:true
-        })
-        const reservationCode = reservationData?.ReservationCode
+        
+        const query = `SELECT 
+        *, 
+        LEFT(ReservationTimes.startTime, LENGTH(ReservationTimes.startTime) - 2) AS ReservationStartTime
+    FROM 
+        ReservationMasters
+    JOIN
+        Calendars ON Calendars.CalendarId = ReservationMasters.CalendarId
+    JOIN
+        ReservationTimes ON ReservationTimes.ReservationTimeId = ReservationMasters.ReservationTimeId
+    WHERE 
+        ReservationMasters.ReservationMasterId = :ReservationMasterId
+        AND ReservationMasters.deletedAt IS NULL 
+        AND ReservationTimes.deletedAt IS NULL 
+        AND Calendars.deletedAt IS NULL;
+    `
+
+    const reservationData:any = await sequelize.query(query, {
+      replacements: {
+        ReservationMasterId: ReservationMasterId,
+      },
+      type: QueryTypes.SELECT,
+    });
+    
+        const reservationCode = reservationData[0]?.ReservationCode
         //const ordr_idxx = reservationCode ? ("R0401"+reservationCode.replace(/[-]/g, '')) : null//영문+숫자 (R0401 + 예약번호에서 - 뺀거)
         const reservationProducts = await RservationProduct.findAll({
             where:{
@@ -122,6 +142,7 @@ router.post('/', async (req: Request, res: Response) => { //주소 바꿔야함
             body: JSON.stringify(requestData)
         });
         const result:any = await response.json();
+        let paymentStatus;
         if(result.res_cd === "0000"){ //정상승인이 이루어졌을때
             const paymentResponse = await Payment.create({
                 ReservationMasterId: ReservationMasterId,
@@ -133,12 +154,34 @@ router.post('/', async (req: Request, res: Response) => { //주소 바꿔야함
                 amount: result.amount,
                 PCCD:'R0801' //'a'지점
             })
+            paymentStatus = '결제 성공'
             logger.info("paymentResponse: "+JSON.stringify(paymentResponse))
         }else{
+            paymentStatus = '결제 실패'
             logger.info("결제가 승인되지 않았습니다.")
         }
+        const calendarData = await Calendar.findOne({
+            where:{
+                CalendarId:reservationData[0]?.CalendarId
+            },
+            raw:true
+        })
+        const reservationStartTime = reservationData[0].ReservationStartTime
+        res.render('kcp_api_pay', {
+            req_data : JSON.stringify(requestData),
+            res_data : JSON.stringify(result),
+            reservationData:JSON.stringify(reservationData[0]),
+            year:reservationData[0].year,
+            month:reservationData[0].month,
+            day:reservationData[0].day,
+            name:reservationData[0].name,
+            ordr_mony:requestData.ordr_mony,
+            paymentStatus:paymentStatus,
+            ReservationStartTime:reservationData[0].ReservationStartTime,
+            BongTireURL:process.env.BongTireURL
+        });
         logger.info("result: "+JSON.stringify(result))
-        res.json({ success: true, data: result });
+        //res.json({ success: true, data: result });
     } catch (error:any) {
         res.json({ success: false, error: error.message });
     }
