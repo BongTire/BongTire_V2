@@ -4,7 +4,7 @@ import { Sequelize, DataTypes, QueryTypes } from 'sequelize';
 import logger from '../../config/logger';
 import { Json } from 'sequelize/types/utils';
 import { isAuthenticatedUser, isAuthenticatedAdmin } from '../../middleware/auth';
-import {returnPastOrNot,returnReservationPossible,splitArray,returnCalendarResult,returnResult,returnReservationContent,returnTodayReservation,returnResercationDatasWithDate,returnBasicResult,returnNonPastReservationDatas,returnReservations,returnTodayReservations, pastMonthData, thisMonthData, nextMonthDataArray, availableTime} from '../../utils/reservationUtil'
+import {returnPastOrNot,returnReservationPossible,splitArray,returnCalendarResult,returnResult,returnReservationContent,returnTodayReservation,returnResercationDatasWithDate,returnBasicResult,returnNonPastReservationDatas,returnReservations,returnTodayReservations, pastMonthData, thisMonthData, nextMonthDataArray, availableTime, returnPaymentParameter} from '../../utils/reservationUtil'
 import {returnFormat} from '../../utils/return'
 
 const router: Router = express.Router();
@@ -343,7 +343,8 @@ router.post('/',isAuthenticatedAdmin,async function(req,res){
                 
                 //logger.info(JSON.stringify(reservationMasterData))
                 logger.info('예약 데이터 성공적으로 저장')
-                const returnFormatData = returnFormat(2000,'예약 성공',[{date, ...reTodayReservation}])
+                const paymentParameter = await returnPaymentParameter(newReservation.ReservationMasterId)
+                const returnFormatData = returnFormat(2000,'예약 성공',[{date, ...reTodayReservation,...paymentParameter}])
                 res.json(returnFormatData);
             }catch(error){
                 logger.error('예약 트랜잭션 오류: ',error)
