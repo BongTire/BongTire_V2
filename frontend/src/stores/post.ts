@@ -49,6 +49,9 @@ export const usePostStore = defineStore('post', {
       }
 
       return data
+    },
+    getContent:state => {
+      return state.content
     }
   },
   // 상태값을 바꾸고 싶을 떄! 

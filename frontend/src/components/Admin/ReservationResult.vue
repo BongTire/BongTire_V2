@@ -12,7 +12,7 @@
       <div class="w-full border">
         <div v-if="isReserveData" class="flex overflow-auto">
           <!-- <ReservationProductCard :conf="visibleReservation"/> -->
-          <div v-for="reserve in visibleReservation" class="m-5 w-100">
+          <div v-for="reserve in visibleReservation" class="m-5 min-w-100">
             <div class="w-full flex px-5 justify-between items-center h-24 bg-slate-50 rounded-t-lg">
               <p class="text-lg">{{ reserve.name }}님</p>
               <div>
@@ -35,6 +35,30 @@
                   정비 완료
                 </span>
               </div>
+              <span v-if="reserve.paymentMethod === '0'" class="inline-flex items-center gap-x-1.5 rounded-md bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600">
+                          <svg class="h-1.5 w-1.5 fill-gray-400" viewBox="0 0 6 6" aria-hidden="true">
+                            <circle cx="3" cy="3" r="3" />
+                          </svg>
+                          현장 결제
+                        </span>
+              <span v-if="reserve.paymentMethod === '1'" class="inline-flex items-center gap-x-1.5 rounded-md bg-green-100 px-1.5 py-0.5 text-xs font-medium text-green-700">
+                          <svg class="h-1.5 w-1.5 fill-green-500" viewBox="0 0 6 6" aria-hidden="true">
+                            <circle cx="3" cy="3" r="3" />
+                          </svg>
+                          결제 완료
+                        </span>
+              <span v-if="reserve.paymentMethod === '2'" class="inline-flex items-center gap-x-1.5 rounded-md bg-yellow-100 px-1.5 py-0.5 text-xs font-medium text-yellow-800">
+                          <svg class="h-1.5 w-1.5 fill-yellow-500" viewBox="0 0 6 6" aria-hidden="true">
+                            <circle cx="3" cy="3" r="3" />
+                          </svg>
+                           미결제
+                        </span>
+              <span v-if="!reserve.paymentMethod" class="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700">
+                          <svg class="h-1.5 w-1.5 fill-red-500" viewBox="0 0 6 6" aria-hidden="true">
+                            <circle cx="3" cy="3" r="3" />
+                          </svg>
+                          Badge
+                        </span>
               
             </div>
             <div v-for="product in reserve.product" class="py-5 bg-slate-50">
@@ -42,25 +66,25 @@
             </div>
             <div class="bg-slate-50 flex px-5 justify-between items-center pb-5 ">
               <p>총 금액 : {{ reserve.totalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }}</p>
-              <div>
+              <div class="flex">
                 <button
                     v-if="reserve.isCancel===0&& reserve.isReceive === 1 && reserve.isComplete === 0 " type="button"
                     class="rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 ml-5"
-                    @click="clickReservatioOption('confirm', reserve.ReservationMasterId)"
+                    @click="clickReservatioOption('confirm', reserve.ReservationMasterId, reserve?.paymentMethod)"
                 >
                   정비 완료
                 </button>
                 <button
                     v-if="reserve.isCancel===0 && reserve.isComplete === 0" type="button"
                         class="rounded-md bg-red-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ml-5"
-                    @click="clickReservatioOption('cancel', reserve.ReservationMasterId)"
+                    @click="clickReservatioOption('cancel', reserve.ReservationMasterId, reserve?.paymentMethod)"
                 >
                   예약 취소
                 </button>
                 <button
                     v-if="reserve.isCancel===0 && reserve.isReceive === 0 && reserve.isComplete === 0" type="button"
                     class="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 ml-5"
-                    @click="clickReservatioOption('receive', reserve.ReservationMasterId)"
+                    @click="clickReservatioOption('receive', reserve.ReservationMasterId, reserve?.paymentMethod)"
                 >
                   예약 접수
                 </button>
@@ -152,8 +176,8 @@ const selectTimeFunc = (time:number) =>{
   console.log(visibleReservation.value.length)
 }
 
-const clickReservatioOption = (state:string, id:number) =>{
-  emits('clickOption',state, id)
+const clickReservatioOption = (state:string, id:number, payment:string) =>{
+  emits('clickOption',state, id, payment)
 
 }
 

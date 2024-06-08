@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="w-full min-h-256 mb-10">
-            <Edit :content="content"></Edit>
+            <Edit ></Edit>
         </div>
         <div class="flex justify-between mt-10 mx-5">
             <div class="flex">
@@ -115,9 +115,14 @@ import Confirm from "@component/PopUp/Confirm.vue";
 import ResultDialog from "@component/Notification/ResultDialog.vue";
 import {fetchPostData} from "@api/common.ts";
 import {removeSpaces, validationPhoneNumber} from "../util/func/edit.ts";
+import {usePageStore} from "@store/page.ts";
 
 
 const store = usePostStore()
+const pageStore = usePageStore()
+
+const editData = pageStore.getPostDetail
+
 const enabled = ref(false)
 
 const userInfo = exportUserInfo()
@@ -142,6 +147,21 @@ const dialogMessage = ref({
   message : '',
   status: ''
 })
+
+if(editData){
+  const category = {
+    PTCD: editData?.PTCD,
+    PCCD: editData?.PCCD,
+    isAnswer: editData?.isAnswer,
+    isThumbnail: editData?.isThumbnail,
+    isSecret: editData?.isSecret
+  }
+
+  store.setCategory(category)
+  title.value = editData?.title
+  store.setContent(editData?.content)
+
+}
 
 
 const clickCategory = (type: number) =>{

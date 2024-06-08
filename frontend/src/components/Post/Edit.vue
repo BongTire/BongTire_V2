@@ -5,6 +5,7 @@
         :options="options"
         ref="quillEditor"
         @text-change="contentChange"
+        @ready="readyEditor"
     />
   </div>
 </template>
@@ -18,6 +19,9 @@ import {usePostStore} from "../../stores/post.ts";
 const store = usePostStore()
 const content = ref<string>()
 const quillEditor = ref(null)
+
+content.value = store.getContent
+
 
 async function ImageHandler(this: any) {
   const input = document.createElement('input');
@@ -34,13 +38,13 @@ async function ImageHandler(this: any) {
       try {
         console.log('Uploading file:', file); // 디버깅을 위해 추가
 
-        const response = await fetchPostData('/file-upload/post','','',0, formData);
+        const response = await fetchPostData('/file-upload/post',{}, formData);
         const responsStatus = await response
 
         console.log(responsStatus)
 
-        if (responsStatus.status.code ===  4004) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (responsStatus?.status.code ===  4004) {
+          throw new Error(`HTTP error! status: ${response?.status}`);
         }
 
         const data = responsStatus.data
@@ -75,6 +79,13 @@ const options = {
   },
   placeholder: '내용을 입력해주세요',
   theme: 'snow'
+}
+
+const readyEditor = (editor) =>{
+  console.log('Editor is ready:', editor);
+  // 초기화 이후에 추가적인 작업을 여기서 수행할 수 있습니다.
+  // 예를 들어, 기존 내용을 설정할 수 있습니다.
+  editor.clipboard.dangerouslyPasteHTML(content.value);
 }
 
 const contentChange = () =>{

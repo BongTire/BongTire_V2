@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="min-w-96">
       <ReservationResult :conf="reserve" :date="date" @clickOption="clickReservationOption"/>
     </div>
   </div>
@@ -96,6 +96,7 @@ const visibleTime = ref<IReservationTime[]>()
 const reserve = ref<IReservationMaster[]>([])
 const selectTime = computed(()=>store.getReservationAdmin)
 
+const paymentMethod = ref('')
 const actionState = ref('')
 const reservationAction = ref({
   ReservationMasterId: -1,
@@ -199,7 +200,7 @@ const cancelResultDialog = () =>{
   isOpenConfirm.value = false
 }
 
-const clickReservationOption = (state:string, id:number)=>{
+const clickReservationOption = async (state:string, id:number, payment:string)=>{
 
   if(state==='receive'){
     dialogMessage.value={
@@ -228,6 +229,8 @@ const clickReservationOption = (state:string, id:number)=>{
       isReceive: 0,
       isComplete: 0,
     }
+
+    paymentMethod.value = payment
   }
   if(state==='confirm'){
     actionState.value = state
@@ -249,6 +252,8 @@ const clickReservationOption = (state:string, id:number)=>{
 
 const isPostData = async (state:string) => {
   isOpenConfirm.value = false
+
+  console.log(paymentMethod.value)
 
   if(state === 'time'){
 
@@ -297,6 +302,37 @@ const isPostData = async (state:string) => {
         status: 'error'
       }
       isOpenResult.value = true
+    }
+
+    if(reservationAction.value.isCancel === 1 && paymentMethod.value === "1"){
+      const data = {
+        mod_type : "STSC",
+        mod_mny: "",
+        rem_mny: "",
+        mod_desc: "관리자 결제 취소",
+        ReservationMasterId: reservationAction.value.ReservationMasterId,
+      }
+
+
+        const payResponsePromise = fetchPostData('/payment/cancellation', {}, data)
+        const payResponse = await payResponsePromise
+
+      if(payResponse?.status.code === 2000){
+        dialogMessage.value={
+          title: '성공',
+          message: '결제 취소하는데 성공했습니다.',
+          status: 'success'
+        }
+        isOpenResult.value = true
+      }else{
+        dialogMessage.value={
+          title: '실패',
+          message: '결제 취소하는데 실패 했습니다. 관리자에게 문의 해주세요',
+          status: 'error'
+        }
+        isOpenResult.value = true
+      }
+
     }
   }
 }

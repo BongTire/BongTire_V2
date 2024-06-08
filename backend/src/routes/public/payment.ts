@@ -87,6 +87,7 @@ router.post('/order', async (req: Request, res: Response) => { //주문 요청
 router.post('/', async (req: Request, res: Response) => { //주소 바꿔야함
     const {enc_info , enc_data, tran_cd, ordr_idxx,good_mny,ReservationMasterId} = req.body; // 결제 창에서 내려 주는 값
     logger.info(req.body)
+
     console.log(JSON.stringify(req.body));
     try {
         

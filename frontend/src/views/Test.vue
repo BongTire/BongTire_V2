@@ -10,9 +10,17 @@
 
 <script lang="ts" setup>
 
+import { usePageStore } from "../stores/page.ts";
+
+const router = useRouter()
+const store = usePageStore()
+
 const enc_info = ref('')
 const enc_data = ref('')
 const tran_cd = ref('')
+const res_cd = ref('')
+const ret_pay_method = ref('')
+const use_pay_method = ref('')
 
 onMounted(()=>{
   loadExternalScript('https://testspay.kcp.co.kr/plugin/kcp_spay_hub.js')
@@ -36,8 +44,11 @@ const loadExternalScript = (src) => {
 const initiatePayment = () => {
   // 결제 폼 생성 및 필요한 필드 추가
   const form = document.createElement('form');
+  form.setAttribute('id', 'order_info');
   form.setAttribute('method', 'POST');
-  form.setAttribute('action', 'http://localhost:4000/api/payment'); // 실제 결제 요청 URL 필요시 변경
+  form.setAttribute('action', 'http://localhost:4000/api/payment/nhn'); // 실제 결제 요청 URL 필요시 변경
+
+
 
   const params = {
     site_cd: 'T0000',
@@ -52,7 +63,12 @@ const initiatePayment = () => {
     enc_info : enc_info.value,
     enc_data: enc_info.value,
     tran_cd: tran_cd.value,
+    res_cd : res_cd.value,
+    ret_pay_method : ret_pay_method.value,
+    use_pay_method : use_pay_method.value
   };
+
+  store.setPayment(params)
 
   for (let key in params) {
     if (params.hasOwnProperty(key)) {
@@ -75,12 +91,16 @@ const initiatePayment = () => {
 }
 
 function m_Completepayment( FormOrJson, closeEvent ) {
-  var frm = document.order_info;
+  let frm = document.order_info;
   GetField( frm, FormOrJson );
 
   if( frm.res_cd.value == "0000" )
   {
     frm.submit();
+    store.setPayment(FormOrJson)
+    console.log(FormOrJson)
+    router.push('/payment')
+
   }
   else
   {

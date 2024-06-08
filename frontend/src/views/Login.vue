@@ -108,8 +108,6 @@ const submitLogin = async () =>{
   const LoginPromise:Promise<IFetchType> = fetchPostData<IFetchType>('/auth/local/login',{} ,postLoginData)
   const response = await LoginPromise
 
-
-  console.log(response)
   if(!response?.status || response?.status?.code/1000 === 4){
     errorMessage.value = response?.status?.message ?? '로그인 시 오류가 발생했습니다 관리자에 문의 바랍니다'
   }else{

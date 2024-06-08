@@ -48,7 +48,7 @@ export interface IReservationMaster{
     UserId : number | null
     OwnCarId ?: number | null
     reservationCode?: string|null
-    paymentMethod: number | null
+    paymentMethod: number | null | string
     request: string | null
     totalPrice: number
     isCancel: number
@@ -88,6 +88,7 @@ export interface IDate{
 }
 
 export interface IPaymentParams {
+    ReservationMasterId?: number | null
     site_cd?: string | null
     ordr_idxx: string | null
     pay_method?: string | number

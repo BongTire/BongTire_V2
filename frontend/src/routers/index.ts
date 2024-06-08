@@ -16,6 +16,7 @@ import Introduction from "../views/Introduction.vue";
 import Reservation from "../views/Reservation.vue";
 import Login from "../views/Login.vue"
 import Edit from '../views/Edit.vue'
+import Payment from '../views/Payment.vue'
 
 // Admin
 import Dashboard from "../views/admin/Dashboard.vue";
@@ -92,6 +93,12 @@ const routes: Array<RouteRecordRaw> = [
     name: "Edit",
     component: Edit,
     meta: { layout: PublicLayout },
+  },
+  {
+    path : "/payment",
+    name: "Payment",
+    component: Payment,
+    meta:{layout: PublicLayout}
   },
   {
     path: "/admin",

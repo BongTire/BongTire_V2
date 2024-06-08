@@ -38,9 +38,6 @@
     >
       예약
     </button>
-    <input type="hidden" name="enc_info" v-model="enc_info"/>
-    <input type="hidden" name="enc_data" v-model="enc_data"/>
-    <input type="hidden" name="tran_cd"  v-model="tran_cd"/>
   </div>
   
 </template>
@@ -56,9 +53,11 @@ import { fetchGetData, fetchPostData } from '../api/common'
 import Warning from "@component/Notification/Warning.vue";
 import {IUser} from "@type/user.ts";
 import {useReservationStore} from "@store/reservation.ts";
+
 import {exportUserInfo } from '../util/func/common'
 import ResultDialog from "../components/Notification/ResultDialog.vue";
 import axios from "axios";
+import {usePageStore} from "@store/page.ts";
 
 // 캘린더 관련 변수
 const visibleCalendar = ref<ICalendar[][]>()
@@ -73,6 +72,7 @@ const date = ref({
 })
 // 스토어 지정
 const store = useReservationStore()
+const pageStore = usePageStore
 const userInfo = exportUserInfo()
 
 const router = useRouter()
@@ -104,7 +104,9 @@ const isReserveResultMessage = ref({
 const enc_info = ref('')
 const enc_data = ref('')
 const tran_cd = ref('')
-
+const res_cd = ref('')
+const ret_pay_method = ref('')
+const use_pay_method = ref('')
 
 const closeCheckUser = ( ) =>{
   isOpenCheckUser.value = false
@@ -178,21 +180,21 @@ onMounted(async ()=>{
     day: calendarData.data.today.day,
   }
 
-  const postData = {
-    data: date.value
-  }
+  // const postData = {
+  //   data: date.value
+  // }
   // 시간
-  const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time', {ptcd:'R0401', pccd:'R0801'}, postData)
-  const time = await timePromise
-  visibleTime.value = time.data
+  // const timePromise:Promise<IFetchType> = fetchPostData<IFetchType>('/reservation/time', {ptcd:'R0401', pccd:'R0801'}, postData)
+  // const time = await timePromise
+  // visibleTime.value = time.data
 
   if(visibleCalendar.value){
     calendarLoading.value = false
   }
-
-  if(visibleTime.value){
+  //
+  // if(visibleTime.value){
     timeLoading.value = false
-  }
+  // }
 
 })
 
@@ -243,17 +245,11 @@ const postReservation = async () =>{
   const responsePromise:Promise<IFetchType> = fetchPostData('/reservation',{},reserve)
   const response = await responsePromise
 
+
   console.log(response)
 
-  const paymentParams = {
-    ordr_idxx: response.data?.ordr_idxx ?? '1',
-    good_name:  response.data?.good_name ?? '상품명',
-    good_mny:  response.data?.good_mny ?? '10000',
-    currency: response.data?.currency ?? 'WON',
-    buyr_name: response.data?.buyr_name ?? '진민',
-    buyr_tel1: response.data?.buyr_tel1 ?? '01012345678',
-    buyr_mail: response.data?.buyr_mail ?? 'example@example.com',
-  }
+  const payData = response.data[0] ?? {}
+
 
 
   if(response.status.code === 2000){
@@ -264,6 +260,20 @@ const postReservation = async () =>{
       status: 'success'
     }
     if(reserve.paymentMethod === 1){
+
+      const paymentParams = {
+        ReservationMasterId: payData?.ReservationMasterId,
+        ordr_idxx: payData?.ordr_idxx,
+        good_name:  payData?.good_name,
+        good_mny:  payData?.good_mny,
+        currency: payData?.currency ?? 'WON',
+        buyr_name: payData.name,
+        buyr_tel1: payData.number,
+        buyr_mail: payData?.buyr_mail ?? 'example@example.com',
+      }
+
+      console.log(paymentParams)
+
       await initiatePayment(paymentParams)
     }
     else if(reserve.paymentMethod === 0){
@@ -287,18 +297,16 @@ const closeResultDialog = () =>{
 }
 
 // nhn 결제 모듈 함수
-
-
-function m_Completepayment( FormOrJson, closeEvent ) {
-  var frm = document.order_info;
+function m_Completepayment( FormOrJson, closeEvent ){
+  let frm = document.kcpForm; // submit  시킬 폼데이터 지정
   GetField( frm, FormOrJson );
+  if( frm.res_cd.value == "0000"){
+    console.log(FormOrJson)
+    pageStore.setPayment(FormOrJson)
 
-  if( frm.res_cd.value == "0000" )
-  {
+    /* 가맹점 리턴값 처리 영역 */
     frm.submit();
-  }
-  else
-  {
+  }else{
     alert( "[" + frm.res_cd.value + "] " + frm.res_msg.value );
     closeEvent();
   }
@@ -313,25 +321,32 @@ const loadExternalScript = (src) => {
     document.head.appendChild(script);
   });
 }
-const initiatePayment = () => {
+const initiatePayment = (payParams:IPaymentParams) => {
   // 결제 폼 생성 및 필요한 필드 추가
   const form = document.createElement('form');
+  form.setAttribute('id', 'kcpForm');
   form.setAttribute('method', 'POST');
   form.setAttribute('action', 'http://localhost:4000/api/payment'); // 실제 결제 요청 URL 필요시 변경
 
+  console.log(payParams)
+
   const params = {
+    ReservationMasterId: payParams.ReservationMasterId,
     site_cd: 'T0000',
     ordr_idxx: '1',
     pay_method: 100000000000,
-    good_name: '상품명',
-    good_mny: '10000',
-    currency: 'WON',
-    buyr_name: '진민',
-    buyr_tel1: '01012345678',
+    good_name: payParams.good_name,
+    good_mny: payParams.good_mny,
+    currency: payParams.currency,
+    buyr_name: payParams.buyr_name,
+    buyr_tel1: payParams.buyr_tel1,
     buyr_mail: 'example@example.com',
     enc_info : enc_info.value,
     enc_data: enc_info.value,
     tran_cd: tran_cd.value,
+    res_cd : res_cd.value,
+    ret_pay_method : ret_pay_method.value,
+    use_pay_method : use_pay_method.value
   };
 
   for (let key in params) {
@@ -346,18 +361,23 @@ const initiatePayment = () => {
 
   document.body.appendChild(form);
 
+  console.log(params)
+
   // jsf_pay 함수를 통해 KCP_Pay_Execute_Web 호출
   if (typeof jsf_pay === 'function') {
     jsf_pay(form);
   } else {
     console.error('jsf_pay function is not available');
   }
+
+
 }
 
 
 
 function jsf_pay(form) {
   try {
+    console.log(form)
     KCP_Pay_Execute_Web(form);
   } catch (e) {
     // IE에서 결제 정상종료시 throw로 스크립트 종료

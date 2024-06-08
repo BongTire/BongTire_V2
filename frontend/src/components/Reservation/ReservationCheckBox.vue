@@ -107,7 +107,31 @@ const initData = () =>{
                         <p class="text-xl">{{ reserve?.name ?? '' }} 님</p>
                         <p class="text-xl">{{ (reserve?.date ?? '00000000').slice(0,4) }}년 {{ (reserve?.date ?? '00000000').slice(4,6) }}월 {{ (reserve?.date ?? '00000000').slice(6,8) }}일 </p>
                       </div>
-                      <div class="w-full flex justify-end items-center p-2">
+                      <div   class="w-full flex justify-between items-center p-2">
+                        <span v-if="reserve.paymentMethod === '0'" class="inline-flex items-center gap-x-1.5 rounded-md bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600">
+                          <svg class="h-1.5 w-1.5 fill-gray-400" viewBox="0 0 6 6" aria-hidden="true">
+                            <circle cx="3" cy="3" r="3" />
+                          </svg>
+                          현장 결제
+                        </span>
+                        <span v-if="reserve.paymentMethod === '1'" class="inline-flex items-center gap-x-1.5 rounded-md bg-green-100 px-1.5 py-0.5 text-xs font-medium text-green-700">
+                          <svg class="h-1.5 w-1.5 fill-green-500" viewBox="0 0 6 6" aria-hidden="true">
+                            <circle cx="3" cy="3" r="3" />
+                          </svg>
+                          결제 완료
+                        </span>
+                        <span v-if="reserve.paymentMethod === '2'" class="inline-flex items-center gap-x-1.5 rounded-md bg-yellow-100 px-1.5 py-0.5 text-xs font-medium text-yellow-800">
+                          <svg class="h-1.5 w-1.5 fill-yellow-500" viewBox="0 0 6 6" aria-hidden="true">
+                            <circle cx="3" cy="3" r="3" />
+                          </svg>
+                           미결제
+                        </span>
+                        <span v-if="!reserve.paymentMethod" class="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700">
+                          <svg class="h-1.5 w-1.5 fill-red-500" viewBox="0 0 6 6" aria-hidden="true">
+                            <circle cx="3" cy="3" r="3" />
+                          </svg>
+                          Badge
+                        </span>
                         <p class="text-xl"> {{ (reserve?.time ?? 100)/100 }}시</p>
                       </div>
                       <div class="flex w-full  overflow-auto ">
