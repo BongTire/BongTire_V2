@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import {  XMarkIcon } from '@heroicons/vue/24/outline'
-import { ICarTrim } from '../../../util/type/car'
+import {ICarTrim, ICarTrimList} from '../../../util/type/car'
 import defaultImage from '../../../assets/image/Company/BongTireLogo.png'
 
 const open = ref(true)
 const props = defineProps({
   conf: {
-    type: Object as PropType<ICarTrim>
+    type: Object as PropType<ICarTrimList>
   },
   isOpen:{
     type: Boolean,
@@ -25,7 +25,7 @@ const editCarTrim = ref<ICarTrim>()
 const editMode = ref(false)
 
 const closeTrim = () =>{
-  changeEditMode()
+  editMode.value = false
   emits('closeTrim')
 }
 
@@ -121,19 +121,19 @@ const editTrimPostData = () =>{
                       <!-- 차량 연식 정보-->
                       <div class="w-full">
                         <div class="w-full h-32 flex justify-center items-center">
-                          <img class="h-full" v-if="editCarTrim.yearList.length >= 1" :src="editCarTrim.yearList[props.selectYear].image ?? defaultImage">
+                          <img class="h-full" v-if="editCarTrim.yearList.length >= 1" :src="editCarTrim.yearList[props.selectYear]?.image ?? defaultImage">
                         </div>
-                        <div class="flex w-full h-full ">
-                          <div class="flex flex-col justify-center w-52 max-h-64 overflow-auto items-center">
-                            <div @click="selectTrim(index)" :class="`${props.selectTrim === index ? 'bg-slate-200' : 'bg-slate-50'} hover:bg-slate-100 min-h-8 px-2 w-full flex justify-start items-center cursor-pointer truncate `"
+                        <div class="flex w-full h-full justify-center items-stretch ">
+                          <div class="flex flex-col justify-center w-52 max-h-64 overflow-auto items-start w-80">
+                            <div @click="selectTrim(index)" :class="`${props.selectTrim === index ? 'bg-slate-200' : 'bg-slate-50'} hover:bg-slate-100 min-h-8 px-2 w-full flex justify-start items-start cursor-pointer truncate `"
                                  v-for="(trim,index) in editCarTrim.yearList[props.selectYear].trimList">
                               <p  class="w-full flex justify-start px-2">{{trim.name}}</p>
                             </div>
                           </div>
-                          <div class="w-full max-h-64 overflow-y-auto  rounded-r-lg flex flex-col justify-start items-end border">
+                          <div class="w-80 max-h-64 overflow-y-auto  rounded-r-lg flex flex-col justify-start items-end border">
                             <input class="w-11/12 min-h-12 px-2 text-lg"
                                    type="text"
-                                   :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].name"
+                                   :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].name ?? ''"
                                    :disabled="!editMode"
                             />
                             <div class="w-full flex justify-end items-center border-t border-b">
@@ -192,7 +192,7 @@ const editTrimPostData = () =>{
                             </div>
                             <div class="w-full flex justify-end items-center border-b">
                               <label>
-                                공차 중량(Kg)
+                                공차 중량
                                 <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="text"
                                        :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].curbWeight ?? ''"
                                        :disabled="!editMode"
@@ -202,7 +202,7 @@ const editTrimPostData = () =>{
                             </div>
                             <div class="w-full flex justify-end items-center border-b">
                               <label>
-                                복합 연비 (kg/l)
+                                복합 연비
                                 <input class="h-8 px-2 text-md text-end bg-slate-50 rounded" type="text"
                                        :value="editCarTrim.yearList[props.selectYear].trimList[props.selectTrim].combinedEfficiency ?? ''"
                                        :disabled="!editMode"

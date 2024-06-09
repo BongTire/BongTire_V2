@@ -2,7 +2,7 @@
   <Loading v-if="wheelLoading"/>
   <div v-else>
     <Confirm :conf="popupData" :isOpen="isOpenConfirm" @isCancelPopup="isCancelPopup" @isPostData="isPostWheelData"/>
-    <EditProduct :conf="editWheelData" :state="state" :brand="productBrand" :isOpen="openEditDialog" @postTireData="postWheelData" @closeDialog="isCloseEditDialog"/>
+    <EditProduct :conf="editWheelData" :state="state" :brand="productBrand" :isOpen="openEditDialog" @postTireData="postWheelData" @closeDialog="isCloseEditDialog" :productImage="imageUrl" @imageUpload="wheelImageUpload"/>
     <div class="flex justify-end items-center mt-5">
       <button @click="isOpenEditDialog" type="button"
               class="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
@@ -92,6 +92,22 @@ const isCancelPopup = () =>{
   isOpenConfirm.value = false
   editWheelData.value = ''
 }
+
+const imageUrl = ref('')
+const wheelImageUpload = async (file, codeName:string) =>{
+  const formData = new FormData()
+  formData.append('image', file)
+
+  const imagePromise:Promise<IFetchType> = await fetchPostData('admin/file-upload/product', {brand:`Wheel/${codeName}`}, formData)
+  const imageState = await imagePromise
+
+  if(imageState?.status.code === 2000){
+    imageUrl.value = imageState.data.imageUrl
+  }else{
+    alert('업로드에 실패했습니다.')
+  }
+}
+
 
 </script>
 

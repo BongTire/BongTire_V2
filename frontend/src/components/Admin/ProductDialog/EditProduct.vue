@@ -50,6 +50,30 @@
                     <!-- 상품 -->
                     <div>
                       <p class="text-xl">상품 특징</p>
+                      <div >
+                        <div class="flex justify-between">
+                          <p class="text-medium">상품 이미지</p>
+                          <ChevronUpIcon class="h-6" />
+                        </div>
+                        <div v-if="editProduct.image" class="h-40">
+                          <img :src="editProduct.image" class="h-full"/>
+                        </div>
+                        <div v-else class="col-span-full">
+                          <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                            <div class="text-center">
+                              <PhotoIcon class="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                              <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                                <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-orange-600 focus-within:ring-offset-2 hover:text-orange-500">
+                                  <span>이미지 업로드</span>
+                                  <input id="file-upload" name="file-upload" type="file" class="sr-only" @change="uploadProductImage" />
+                                </label>
+                                <p class="pl-1">or drag and drop</p>
+                              </div>
+                              <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       <div class="flex justify-between w-full mt-5">
                         <div class="w-1/2 mr-5">
                           <label for="productName" class="block text-sm font-medium leading-6 text-gray-900">상품 명</label>
@@ -171,6 +195,7 @@
                                    class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6"
                                    placeholder="타이어 사이즈"
                                    :value="editProduct?.tireSize"
+                                   @input="changeInputData('tireSize', $event.target)"
                             />
                           </div>
                         </div>
@@ -181,6 +206,7 @@
                                    class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6"
                                    placeholder="mCode"
                                    :value="editProduct?.mCode"
+                                   @input="changeInputData('mCode', $event.target)"
                             />
                           </div>
                         </div>
@@ -342,12 +368,12 @@
 <script lang="ts" setup>
 import {PropType, ref} from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot, Switch } from '@headlessui/vue'
-import { XMarkIcon } from '@heroicons/vue/24/outline'
+import { XMarkIcon, ChevronUpIcon,ChevronDownIcon } from '@heroicons/vue/24/outline'
 import { IProduct } from '../../../util/type/product';
 import { IBrand } from '../../../util/type/brand';
 import defaultLogo from '../../../assets/image/Company/BongTireLogo.png'
 
-
+const selectBrandFileName=ref('')
 const props = defineProps({
   conf:{
     type: Object as PropType<IProduct> | undefined
@@ -360,6 +386,9 @@ const props = defineProps({
   },
   brand:{
     type: Array as PropType<IBrand>
+  },
+  productImage:{
+    type: String
   }
 })
 const enabled = ref(false)
@@ -372,7 +401,7 @@ const title = (()=>{
     return '유저'
   }
 })()
-const emit = defineEmits(['closeDialog', 'postTireData'])
+const emit = defineEmits(['closeDialog', 'postTireData', 'imageUpload'])
 
 const tabs = ref([
   { name: '국산', origin: true, current: true },
@@ -403,6 +432,7 @@ const clickBrand = (brand:IBrand)=>{
   editProduct.value.brandOrigin = brand.origin
   editProduct.value.brandLogo = brand.brandLogo
   editProduct.value.brandNation = brand.nation
+  selectBrandFileName.value = brand?.codeName
 }
 
 const closeDialog = () =>{
@@ -411,8 +441,11 @@ const closeDialog = () =>{
 
 const editProduct = ref<IProduct>()
 
+watch(()=>props.productImage, ()=>{
+  editProduct.value.image = props.productImage
+})
 
-watch(()=>props.conf,(newValue)=>{
+watch(()=>props.conf,()=>{
   initData()
   if(props.brand){
     visibleKoreaBrand.value = props?.brand.filter(x=>x.origin)
@@ -552,6 +585,18 @@ const postTireData = () =>{
   }
 
   emit('postTireData', sendMessage,editProduct.value)
+}
+
+const uploadProductImage = (event:any) =>{
+  if(!selectBrandFileName){
+    alert('브랜드를 선택해주세요')
+    return
+  }
+
+  console.log(selectBrandFileName.value)
+  const file = event.target.files[0];
+
+  emit('imageUpload', file, selectBrandFileName.value)
 }
 
 </script>

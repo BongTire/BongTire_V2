@@ -2,7 +2,7 @@
   <Loading v-if="tireLoading"/>
   <div>
     <Confirm :conf="popupData" :isOpen="isOpenConfirm" @isCancelPopup="isCancelPopup" @isPostData="isPostTireData"/>
-    <EditProduct :conf="editTireData" :state="state" :brand="productBrand" :isOpen="openEditDialog" @postTireData="postTireData" @closeDialog="isCloseEditDialog"/>
+    <EditProduct :conf="editTireData" :productImage="imageUrl" :state="state" :brand="productBrand" :isOpen="openEditDialog" @postTireData="postTireData" @closeDialog="isCloseEditDialog" @imageUpload="tireImageUpload"/>
     <div class=" flex justify-end items-center mt-5">
 
       <button @click="isOpenEditDialog" type="button" class="rounded-md bg-orange-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">+ 타이어 추가</button>
@@ -31,6 +31,8 @@ const state = 'tire'
 const editTireData = ref<IProduct>({})
 const isOpenConfirm = ref(false)
 const productBrand = ref<IBrand[]>()
+
+const imageUrl = ref('')
 
 const popupData = ref({
   title: '',
@@ -93,6 +95,19 @@ const isCancelPopup = () =>{
   editTireData.value = ''
 }
 
+const tireImageUpload = async (file, codeName:string) =>{
+  const formData = new FormData()
+  formData.append('image', file)
+
+  const imagePromise:Promise<IFetchType> = await fetchPostData(`/admin/file-upload/product`,{brand: `Tire/${codeName}`},formData)
+  const imageState = await imagePromise
+
+  if(imageState?.status.code === 2000){
+    imageUrl.value = imageState.data.imageUrl
+  }else{
+    alert('이미지 업로드에 실패했습니다.')
+  }
+}
 
 
 </script>

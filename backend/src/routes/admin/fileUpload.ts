@@ -72,9 +72,9 @@ router.post('/product', isAuthenticatedAdmin, function (req: Request, res: Respo
     console.log(req.query.brand);
 
     const brandCodeName = req.query.brand;
-    let imageURL = `http://${process.env.DNS_SERVER_NAME}/images/Product/Brand/` + brandCodeName;
+    let imageURL = `http://${process.env.DNS_SERVER_NAME}/images/PCCD/Product/` + brandCodeName;
 
-    const imagePath = '../../../image/Product/Brand/' + brandCodeName;
+    const imagePath = '../../../image/PCCD/Product/' + brandCodeName;
     //저장 경로 설정, 일단 같은 back 폴더 안으로 테스트
 
     console.log(req.body.image);

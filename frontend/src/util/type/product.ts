@@ -20,10 +20,12 @@ export interface IProduct {
     image: string | null
     viewers: number | null
     isSecond: number | null
+    isVisible: number | null
     content: string | null
     feature: null;
     isActive: number | null
     isRecommanded: number | null
+    numberOfDataUpadate : number | null
     // 타이어 옵션
     tireSize?: string | null
     mCode?: string | null
