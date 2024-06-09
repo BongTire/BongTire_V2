@@ -34,7 +34,7 @@
   
               <div class="mt-3">
                 <h2 class="sr-only">Product information</h2>
-                <p class="text-3xl tracking-tight text-gray-900">{{ productDetail?.discountPrice?.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }}원</p>
+                <p class="text-3xl tracking-tight text-gray-900">{{ productDetail?.discountPrice === 0 ? '가격 문의' : productDetail?.discountPrice?.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") }}</p>
               </div>
   
               <!-- Reviews -->
@@ -48,10 +48,12 @@
                 </div>
               </div>
    -->
-              <div class="mt-6">
+              <div class="mt-6 h-40">
                 <h3 class="sr-only">특징</h3>
-  
-                <div class="space-y-6 text-base text-gray-700" v-html="productDetail?.content ?? ''" />
+                <div>
+                  <p>{{ productDetail?.feature ?? '' }}</p>
+                </div>
+
               </div>
   
               
@@ -95,7 +97,7 @@
             <h2 id="related-heading" class="text-xl font-bold text-gray-900">세부사항</h2>
   
             <div class="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-
+              <div class="space-y-6 text-base text-gray-700" v-html="productDetail?.content ?? ''" />
             </div>
           </section>
         </div>

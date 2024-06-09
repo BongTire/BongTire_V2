@@ -54,7 +54,10 @@
       <div v-if="isThumb">
         <div class="col-span-full">
           <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">표지 이미지</label>
-          <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+          <div v-if="isUploadThumbnail" class="h-64">
+            <image :src='isUploadThumbnail' class="h-full w-auto" />
+          </div>
+          <div v-else class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
             <div class="text-center">
               <PhotoIcon class="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
               <div class="mt-4 flex text-sm leading-6 text-gray-600">
@@ -174,6 +177,8 @@ const userName = ref(userInfo?.name ?? '')
 const phoneNumber = ref('')
 
 const categoryPCCD = computed(()=>store.getPCCD)
+
+const isUploadThumbnail = computed(()=>store.getThumbnail)
 
 // 경고용 변수
 const isOpenWarning = ref(false)
@@ -392,6 +397,7 @@ const uploadThumbnail = async (event) =>{
 
   if(imageState?.status.code === 2000){
     store.setThumbnail(imageState.data.imageUrl)
+    console.log(isUploadThumbnail)
   }else{
     alert(imageState?.status.message ?? '이미지 업로드에 실패했습니다.')
   }

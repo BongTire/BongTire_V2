@@ -6,6 +6,7 @@
         ref="quillEditor"
         @text-change="contentChange"
         @ready="readyEditor"
+        contentType="html"
     />
   </div>
 </template>
@@ -19,7 +20,6 @@ import {usePostStore} from "../../stores/post.ts";
 const store = usePostStore()
 const content = ref<string>()
 const quillEditor = ref(null)
-
 content.value = store.getContent
 
 
@@ -89,8 +89,7 @@ const readyEditor = (editor) =>{
 }
 
 const contentChange = () =>{
-  console.log('Current content:', content.value.ops[0].insert);
-  store.setContent(content.value.ops[0].insert)
+  store.setContent(content.value)
 }
 
 

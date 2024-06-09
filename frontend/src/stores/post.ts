@@ -57,6 +57,9 @@ export const usePostStore = defineStore('post', {
     },
     getIsMainPost:state => {
       return state.isMainPost
+    },
+    getThumbnail:state => {
+      return state.thumbnail
     }
   },
   // 상태값을 바꾸고 싶을 떄! 
