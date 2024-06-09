@@ -157,20 +157,20 @@
       <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
         <nav className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
           
-            <div v-for="item in navigation.main" className="pb-6">
-              <a className="text-sm leading-6 text-gray-600 hover:text-gray-900">
+            <div v-for="item in navigation.main" className="pb-6 cursor-pointer" @click="router(item.href)">
+              <p className="text-sm leading-6 text-gray-600 hover:text-gray-900">
                 {{item.name}}
-              </a>
+              </p>
             </div>
           
         </nav>
         <div  className="mt-10 flex items-center justify-center space-x-10">
           
-            <a v-for="item in navigation.social" className="text-gray-400 hover:text-gray-500">
+            <p v-for="item in navigation.social" className="text-gray-400 hover:text-gray-500 cursor-pointer" >
               <span className="sr-only">{item.name}</span>
               <!-- <item.icon className="h-6 w-6" aria-hidden="true" /> -->
               <div v-html="item.icon"></div>
-            </a>
+            </p>
           
         </div>
         <p className="mt-5 text-center text-xs leading-5 text-gray-500">제이에이치모터스</p>
@@ -294,9 +294,9 @@ const mobileMenuOpen = ref(false)
 
 const navigation = {
   main: [
-    { name: '매장소개', href: '#' },
-    { name: '제휴문의', href: '#' },
-    { name: '각종 문의 및 제안', href: '#' },
+    { name: '매장소개', href: '/introduction' },
+    { name: '제휴문의', href: '/edit' },
+    { name: '각종 문의 및 제안', href: '/edit' },
     { name: '환불 정책', href: '#' },
     { name: '이메일 무단 수집 거부', href: '#' },
   ],

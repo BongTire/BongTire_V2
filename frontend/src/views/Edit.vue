@@ -51,11 +51,28 @@
                 </div>
             </div>
         </div>
-        <div class="w-full min-h-256 mb-10">
+      <div v-if="isThumb">
+        <div class="col-span-full">
+          <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">표지 이미지</label>
+          <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+            <div class="text-center">
+              <PhotoIcon class="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+              <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-orange-600 focus-within:ring-offset-2 hover:text-orange-500">
+                  <span>메인 이미지 업로드</span>
+                  <input id="file-upload" name="file-upload" type="file" class="sr-only" @change="uploadThumbnail" />
+                </label>
+              </div>
+              <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="w-full min-h-256 mb-10 mt-10">
             <Edit ></Edit>
         </div>
         <div class="flex justify-between mt-10 mx-5">
-            <div class="flex">
+            <div class="flex w-128 justify-around">
                 <Switch v-model="enabled" :class="[enabled ? 'bg-orange-600' : 'bg-gray-200', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2']">
                     <span class="sr-only">잠금 여부</span>
                     <span :class="[enabled ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']">
@@ -76,6 +93,14 @@
                 <LockClosedIcon v-if="enabled" class="h-6 ml-2"/>
                 <LockOpenIcon v-else class="h-6 ml-2"/>
 
+                <div class="relative flex items-start" v-if="categoryPCCD === 'N0402'">
+                  <div class="flex h-6 items-center">
+                    <input id="comments" aria-describedby="comments-description" name="comments"  :checked="mainPostBoolean" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600" @click="clickMainPost" />
+                  </div>
+                  <div class="ml-3 text-sm leading-6">
+                    <label for="comments" class="font-medium text-gray-900" >메인 페이지에 게시</label>
+                  </div>
+                </div>
             </div>
             <div class="w-full flex justify-end items-center ">
                 <button
@@ -116,16 +141,33 @@ import ResultDialog from "@component/Notification/ResultDialog.vue";
 import {fetchPostData} from "@api/common.ts";
 import {removeSpaces, validationPhoneNumber} from "../util/func/edit.ts";
 import {usePageStore} from "@store/page.ts";
+import {IFetchType} from "@/util/type/common.ts";
 
 
 const store = usePostStore()
 const pageStore = usePageStore()
+const router= useRouter()
 
 const editData = pageStore.getPostDetail
 
 const enabled = ref(false)
 
 const userInfo = exportUserInfo()
+store.setUserId(userInfo?.UserId ?? -1)
+
+const isThumb = ref(false)
+
+const mainPostBoolean = computed(()=>{
+  const boolean = store.getIsMainPost
+
+  if(boolean === 1){
+    return true
+  }else{
+    return false
+  }
+})
+
+const mainPost = ref(false)
 
 const title = ref('')
 const userName = ref(userInfo?.name ?? '')
@@ -176,6 +218,7 @@ const clickCategory = (type: number) =>{
             isSecret : 1
         }
         enabled.value = true
+      isThumb.value = false
     }else if(type===1){
         category = {
             PTCD : 'P0202',
@@ -185,6 +228,7 @@ const clickCategory = (type: number) =>{
             isSecret : 0
         }
       enabled.value = false
+      isThumb.value = true
     }else if(type===2){
         category = {
             PTCD : 'P0202',
@@ -194,6 +238,7 @@ const clickCategory = (type: number) =>{
             isSecret : 0
         }
       enabled.value = false
+      isThumb.value = true
     }else{
         return
     }
@@ -257,12 +302,14 @@ const clickSavePost = () =>{
     }
   }
 
-  if(!phoneNumber.value && userInfo?.grade !== 0){
-    isOpenWarning.value = true
-    dialogMessage.value = {
-      title: '주의',
-      message:'전화번호를 입력해주세요',
-      status: ''
+  if(!phoneNumber.value){
+    if(userInfo?.grade !== 0){
+      isOpenWarning.value = true
+      dialogMessage.value = {
+        title: '주의',
+        message:'전화번호를 입력해주세요',
+        status: ''
+      }
     }
   }
   isOpenWarning.value = false
@@ -281,15 +328,17 @@ const sendPostData = async () =>{
   const isNumber = validationPhoneNumber(phoneNumber.value)
 
   if(isNumber){
-    isOpenConfirm.value = false
+    if(userInfo?.grade !== 0){
+      isOpenConfirm.value = false
 
-    isOpenWarning.value = true
-    dialogMessage.value = {
-      title: '주의',
-      message:'전화번호 형식에 맞게 작성해주세요',
-      status: ''
+      isOpenWarning.value = true
+      dialogMessage.value = {
+        title: '주의',
+        message:'전화번호 형식에 맞게 작성해주세요',
+        status: ''
+      }
+      return
     }
-    return
   }
 
   const post = store.getPostData
@@ -310,6 +359,7 @@ const sendPostData = async () =>{
       message:'글 등록에 성공하였습니다.',
       status: 'success'
     }
+
   }else{
     dialogMessage.value = {
       title: '등록 실패',
@@ -319,11 +369,48 @@ const sendPostData = async () =>{
   }
 
   isOpenResult.value = true
+
+
 }
 
 const closeResult = () =>{
   isOpenResult.value = false
+  router.push('/')
 }
+
+const uploadThumbnail = async (event) =>{
+  const formData = new FormData()
+
+  const file = event.target.files[0]
+
+  formData.append('image', file)
+
+  const imagePromise:Promise<IFetchType> = await fetchPostData('/file-upload/post',{}, formData)
+  const imageState = await imagePromise
+
+  console.log(imageState)
+
+  if(imageState?.status.code === 2000){
+    store.setThumbnail(imageState.data.imageUrl)
+  }else{
+    alert(imageState?.status.message ?? '이미지 업로드에 실패했습니다.')
+  }
+
+}
+
+
+const clickMainPost = (event:any) =>{
+  mainPost.value = event.target.checked
+
+  console.log(mainPost.value)
+
+  if(mainPost.value){
+    store.setIsMainPost(1)
+  }else{
+    store.setIsMainPost(0)
+  }
+}
+
 
 </script>
 

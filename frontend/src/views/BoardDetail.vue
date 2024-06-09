@@ -188,7 +188,6 @@ const clickEdit = () =>{
 
 const clickTrash = async (id:number) =>{
 
-  console.log(id)
 
   const postData = {
     data: {

@@ -11,6 +11,7 @@ export interface IPost{
     isActive: number
     isAnswer: number
     isThumbnail: number
+    isMainPost?: number
     thumbnail: string | null
     answer: string | null
     viewers: number | null

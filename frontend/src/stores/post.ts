@@ -17,6 +17,7 @@ export const usePostStore = defineStore('post', {
     isActive: 1,
     isAnswer: -1,
     isThumbnail: -1,
+    isMainPost: 0,
     thumbnail: '',
     answer: '',
     viewers: 0,
@@ -39,6 +40,7 @@ export const usePostStore = defineStore('post', {
         isPin: state.isPin,
         isActive: state.isActive,
         isAnswer: state.isAnswer,
+        isMainPost: state.isMainPost,
         isThumbnail: state.isThumbnail,
         thumbnail: state.thumbnail,
         answer: state.answer,
@@ -52,6 +54,9 @@ export const usePostStore = defineStore('post', {
     },
     getContent:state => {
       return state.content
+    },
+    getIsMainPost:state => {
+      return state.isMainPost
     }
   },
   // 상태값을 바꾸고 싶을 떄! 
@@ -72,6 +77,15 @@ export const usePostStore = defineStore('post', {
     },
     setPostSecret(isSecret: number){
       this.isSecret = isSecret
+    },
+    setThumbnail(thumbnail: string){
+      this.thumbnail = thumbnail ?? ''
+    },
+    setIsMainPost(isMainPost: number){
+      this.isMainPost = isMainPost ?? 0
+    },
+    setUserId(userId: number){
+      this.WriterId = userId
     }
   },
 })

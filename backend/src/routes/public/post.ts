@@ -342,7 +342,6 @@ router.get('/', async (req: Request, res: Response) => { //card, list 추가
       const result = await Post.findAll({
         where: {
           PCCD: pccd,
-          isMainPost: 1
         }
       });
   
