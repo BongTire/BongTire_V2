@@ -350,6 +350,11 @@ router.get('/', async (req: Request, res: Response) => { //card, list 추가
         const sendEvent = result.map((data :any , index :any) => ({
           PostId: data.PostId,
           PCCD: data.PCCD,
+          writerId:data.UserId,
+          writerName:data.name,
+          titel:data.title,
+          createdAt:data.createdAt,
+          updatedAt:data.updatedAt,
           thumbnail: data.thumbnail,
           isMainPost: data.isMainPost,
           viewers: data.viewers,
