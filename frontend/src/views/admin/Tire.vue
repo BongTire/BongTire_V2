@@ -21,10 +21,7 @@ import EditProduct from '@component/Admin/ProductDialog/EditProduct.vue'
 import Confirm from "@component/PopUp/Confirm.vue";
 import { isAuthenticatedAdmin } from '../../util/func/common'
 
-const tireLoading = computed(()=>{
-  if(tire) return false
-  else return true
-})
+const tireLoading = ref(true)
 
 const tire = ref<IProduct[]>([])
 const state = 'tire'
@@ -47,10 +44,18 @@ onMounted(async ()=>{
   const filterState= await filterPromise
   productBrand.value = filterState.data[0].value
 
-  console.log(productBrand.value)
+
 
   isAuthenticatedAdmin(tireFetch?.status.code)
+
   tire.value =  tireFetch.data
+
+  if(tire.value){
+    tireLoading.value = false
+  }else{
+    tireLoading.value = true
+  }
+
 })
 
 const openEditDialog = ref(false)

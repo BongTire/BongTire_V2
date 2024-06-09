@@ -21,6 +21,9 @@
         <div class="flex justify-between overflow-auto min-h-32">
             <favWiget v-for="fav in favWigetData"  :conf="fav" @clickBox="clickFavBox"/>
         </div>
+      <div>
+        <RecommandProduct :products="recommandTire"/>
+      </div>
         <div class="mt-10">
             <IntroService/>
         </div>
@@ -41,6 +44,8 @@ import {fetchGetData,fetchPostData } from "@api/common.ts";
 import ReservationCheckBox from "@component/Reservation/ReservationCheckBox.vue";
 import {IUser} from "@type/user.ts";
 import {IReservationMaster} from "@type/reservation.ts";
+import RecommandProduct from "@component/Common/RecommandProduct.vue";
+import {IProduct} from "@/util/type/product.ts";
 
 const responsiveOptions=  [
   {
@@ -105,14 +110,25 @@ const router = useRouter()
 const homeLoading = ref(true)
 const event = ref<IEvent>()
 
+const recommandTire = ref<IProduct[]>()
+
 onMounted( async()=>{
   const eventPromise:Promise<IFetchType> = fetchGetData('/post/event', {})
   const eventState = await eventPromise
   event.value = eventState.data
 
+
+
+  const recommandProductPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/common/product/rank', {})
+  const recommandProductState = await recommandProductPromise
+
+  console.log(recommandProductState)
+
   if(event.value){
     homeLoading.value = false
   }
+
+  recommandTire.value = recommandProductState.data
 
 })
 

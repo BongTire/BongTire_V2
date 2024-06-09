@@ -78,7 +78,7 @@
   <Loading v-if="productLoading && filterLoading"/>
   <main v-else class="mx-auto max-w-2xl px-4 py-5 sm:px-6 lg:max-w-7xl lg:px-8">
     <div class="border-b border-gray-200 pb-10">
-      <h1 class="text-4xl font-bold tracking-tight text-gray-900">{{ productTitle[0].secondName }}</h1>
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900">{{ productTitle?.secondName ?? '상품' }}</h1>
     </div>
 
     <div class="pt-12 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
@@ -155,11 +155,11 @@ const isSecond = computed(()=> {
   return route.query?.isSecond ?? 0
 })
 
-const PCCDArray = store.getProductType
-console.log(PCCDArray)
+const PCCDArray = computed(()=>store.getProductType)
+console.log(PCCDArray.value)
 
-const productTitle = ref(PCCDArray.filter(x=>x.PCCD===PCCD.value))
-
+const productTitle = ref(PCCDArray.value.filter(x=>x.PCCD===PCCD.value))
+productTitle.value = productTitle.value[0]
 
 const mobileFiltersOpen = ref(false)
 
@@ -199,7 +199,7 @@ const selectFilterFunc = async (filter:IBrand) =>{
     })
     productState = await productPromise;
   }else{
-    const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1, isSecond:isSecond.value})
+    const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', { ptcd:'P0301',pccd: PCCD.value, page:1, isSecond:isSecond.value })
     productState = await productPromise;
   }
 
@@ -241,11 +241,11 @@ onMounted(async () => {
 
 })
 
-watch(()=>PCCD.value,async ()=>{
+watch(()=>PCCD.value, async ()=>{
 
   filterLoading.value = true
   productLoading.value = true
-  productTitle.value = PCCDArray.filter(x=>x.PCCD===PCCD.value)
+  productTitle.value = PCCDArray.value.filter(x=>x.PCCD===PCCD.value)
 
   const productPromise:Promise<IFetchType> = fetchGetData<IFetchType>('/product', {ptcd:'P0301',pccd: PCCD.value, page:1})
   const productState = await productPromise;
@@ -268,7 +268,7 @@ watch(()=>PCCD.value,async ()=>{
   if(productFilters?.value){
     filterLoading.value = false
   }else {
-    filterLoading.value = false
+    filterLoading.value = true
   }
 
   if(products?.value){

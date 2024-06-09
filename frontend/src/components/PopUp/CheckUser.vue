@@ -25,6 +25,10 @@ const closePopup = (): void => {
 }
 
 const clickPaymentMehod = (newValue:boolean) =>{
+  if(newValue === 1){
+    alert('곧 업데이트 될 예정입니다')
+    return
+  }
   paymentMethod.value = newValue
 }
 
@@ -33,6 +37,7 @@ const clickPaymentMehod = (newValue:boolean) =>{
 const comfirmReservation = ()=>{
   if(!checkPersonalInfo.value){
     alert('개인 정보 수집에 동의 해주세요')
+    return
   }
 
 
@@ -78,7 +83,7 @@ const comfirmReservation = ()=>{
               <div class="">
                 <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                   <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">
-                    얘약 정보 입력
+                    예약 정보 입력
                   </DialogTitle>
                   <div class="mt-2 flex">
                     <div class="isolate -space-y-px rounded-md shadow-sm">

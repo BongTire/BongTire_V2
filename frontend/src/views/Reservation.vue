@@ -245,7 +245,8 @@ const postReservation = async () =>{
   const responsePromise:Promise<IFetchType> = fetchPostData('/reservation',{},reserve)
   const response = await responsePromise
 
-
+  console.log(reserve.paymentMethod)
+  console.log(typeof reserve.paymentMethod)
   console.log(response)
 
   const payData = response.data[0] ?? {}
@@ -254,13 +255,8 @@ const postReservation = async () =>{
 
   if(response.status.code === 2000){
     // TODO 예약 성공
-    isReserveResultMessage.value = {
-      title: '예약 성공',
-      message: '예약에 성공 했습니다.',
-      status: 'success'
-    }
-    if(reserve.paymentMethod === 1){
 
+    if(reserve.paymentMethod){
       const paymentParams = {
         ReservationMasterId: payData?.ReservationMasterId,
         ordr_idxx: payData?.ordr_idxx,
@@ -276,7 +272,12 @@ const postReservation = async () =>{
 
       await initiatePayment(paymentParams)
     }
-    else if(reserve.paymentMethod === 0){
+    else{
+      isReserveResultMessage.value = {
+        title: '예약 성공',
+        message: '예약에 성공 했습니다.',
+        status: 'success'
+      }
       isOpenResultReserve.value = true
     }
   }else{
