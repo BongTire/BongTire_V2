@@ -40,6 +40,7 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
         charset: 'utf8mb4',
         collate: 'utf8mb4_unicode_ci',
     },
+    timezone: '+09:00',
 });
 User.initModel(sequelize)
 Calendar.initModel(sequelize)
